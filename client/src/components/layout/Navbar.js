@@ -1,0 +1,125 @@
+import React, { Component } from "react";
+import { BrowserRouter as Route, Router, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import setAuthToken from "../../utils/setAuthToken";
+import checkAuth from "../common/checkAuth";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+import MenuItem from "@material-ui/core/MenuItem";
+const styles = {
+  navbar: {
+    borderRadius: "20px",
+    display: "flex",
+    height: "70px",
+    backgroundColor: "#333333",
+    marginBottom: "10px",
+    color: "white"
+  },
+  button: {
+    color: "white"
+  },
+  logo: {
+    color: "white",
+    display: "inline-block",
+    fontSize: "20px",
+    marginRight: "40px",
+    marginLeft: "20px"
+  }
+};
+
+class Navbar extends Component {
+  onLogoutClick = e => {
+    //remove token from localstorage
+    localStorage.removeItem("jwtToken");
+    //remove auth header for future request
+    setAuthToken(false);
+  };
+
+  render() {
+    const {
+      location: { pathname }
+    } = this.props;
+    const authLinks = (
+      <ul className="navbar-nav ml-auto">
+        <li>
+          <MenuItem
+            style={styles.button}
+            component={Link}
+            to="/addproduct"
+            selected={"/addproduct" === pathname}
+          >
+            Add Product
+          </MenuItem>
+        </li>
+        <li>
+          <MenuItem
+            component={Link}
+            style={styles.button}
+            to="/cart"
+            selected={"/cart" === pathname}
+          >
+            <AddShoppingCartIcon />
+            Cart
+          </MenuItem>
+        </li>
+        <li>
+          <MenuItem
+            style={styles.button}
+            component={Link}
+            to="/users/current"
+            selected={"/users/current" === pathname}
+          >
+            Account
+          </MenuItem>
+        </li>
+        <li>
+          <MenuItem
+            style={styles.button}
+            component={Link}
+            to="/login"
+            onClick={this.onLogoutClick}
+            className="nav-link"
+          >
+            Logout
+          </MenuItem>
+        </li>
+      </ul>
+    );
+    const guestLinks = (
+      <ul className="navbar-nav ml-auto">
+        <li>
+          <MenuItem
+            style={styles.button}
+            component={Link}
+            to="/register"
+            selected={"/register" === pathname}
+          >
+            Sign Up
+          </MenuItem>
+        </li>
+        <li>
+          <MenuItem
+            style={styles.button}
+            component={Link}
+            to="/login"
+            selected={"/login" === pathname}
+          >
+            Login
+          </MenuItem>
+        </li>
+      </ul>
+    );
+
+    return (
+      <nav style={styles.navbar} className="navbar  navbar-expand-sm">
+        <div className="container">
+          <Link style={styles.logo} to="/">
+            Mobile Shop App
+          </Link>
+          <div>{checkAuth() ? authLinks : guestLinks}</div>
+        </div>
+      </nav>
+    );
+  }
+}
+
+export default withRouter(Navbar);
