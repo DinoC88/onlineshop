@@ -56,7 +56,8 @@ const styles = {
     fontSize: 20
   },
   clearButton: {
-    marginLeft: 40
+    marginLeft: 40,
+    backgroundColor: "#ea075d"
   },
   productSort: {
     marginLeft: "100px",
@@ -236,7 +237,6 @@ export default class Mainpage extends Component {
                 style={styles.clearButton}
                 variant="contained"
                 href="/dashboard"
-                color="secondary"
               >
                 Clear filters
               </Button>
