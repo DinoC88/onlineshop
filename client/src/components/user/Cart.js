@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import Button from "@material-ui/core/Button";
+import { Button, DialogTitle, DialogActions, Dialog } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import setAuthToken from "../../utils/setAuthToken";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
 import {
   getCartData,
   deleteCart,

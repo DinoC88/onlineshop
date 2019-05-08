@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-import Divider from "@material-ui/core/Divider";
-import Button from "@material-ui/core/Button";
+import {
+  Divider,
+  Button,
+  DialogTitle,
+  DialogActions,
+  Dialog
+} from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import setAuthToken from "../../utils/setAuthToken";
 import * as numeral from "numeral";
 import * as moment from "moment";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogActions from "@material-ui/core/DialogActions";
-import Dialog from "@material-ui/core/Dialog";
 import { getCurrentUser, deleteCurrentUser } from "./user-helper";
 
 const styles = {

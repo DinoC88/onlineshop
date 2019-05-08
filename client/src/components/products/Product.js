@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import Spinner from "../common/Spinner";
 import * as numeral from "numeral";
-import Button from "@material-ui/core/Button";
+import { Button, Snackbar } from "@material-ui/core";
 import decode from "jwt-decode";
-import Snackbar from "@material-ui/core/Snackbar";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import { getProductById, addProductToCart } from "./product-helper";

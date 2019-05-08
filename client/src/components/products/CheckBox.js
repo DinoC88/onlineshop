@@ -1,12 +1,13 @@
 import React, { Component } from "../../../node_modules/react";
-import List from "../../../node_modules/@material-ui/core/List/List";
-import ListItem from "../../../node_modules/@material-ui/core/ListItem/ListItem";
-import ListItemText from "../../../node_modules/@material-ui/core/ListItemText/ListItemText";
-import Collapse from "../../../node_modules/@material-ui/core/Collapse/Collapse";
-import ExpandLess from "../../../node_modules/@material-ui/icons/ExpandLess";
-import ExpandMore from "../../../node_modules/@material-ui/icons/ExpandMore";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Checkbox from "../../../node_modules/@material-ui/core/Checkbox/Checkbox";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import {
+  ListItemSecondaryAction,
+  Checkbox,
+  Collapse,
+  ListItemText,
+  ListItem,
+  List
+} from "@material-ui/core";
 
 const styles = {
   listItem: {

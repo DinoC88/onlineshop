@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import { Button, FormControl, Input, InputLabel } from "@material-ui/core";
 import { addNewProduct } from "./admin-helper";
 
 export default class AddProduct extends Component {

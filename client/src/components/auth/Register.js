@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import {
+  Button,
+  FormControl,
+  Input,
+  InputAdornment,
+  InputLabel,
+  IconButton
+} from "@material-ui/core";
 import classnames from "classnames";
 import checkAuth from "../common/checkAuth";
-import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { registerSubmit } from "./auth-helper";
 
 const styles = {

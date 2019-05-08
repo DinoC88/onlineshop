@@ -1,7 +1,6 @@
-import React, { Component } from "../../../node_modules/react";
-import TextField from "../../../node_modules/@material-ui/core/TextField";
-import SearchIcon from "../../../node_modules/@material-ui/icons/Search";
-import Button from "@material-ui/core/Button";
+import React, { Component } from "react";
+import SearchIcon from "@material-ui/icons/Search";
+import { Button, TextField } from "@material-ui/core";
 
 const styles = {
   searchPosition: {

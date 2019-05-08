@@ -3,10 +3,7 @@ import Spinner from "../common/Spinner";
 import ProductItem from "./ProductItem";
 import SearchBox from "./SearchBox";
 import CheckBox from "./CheckBox";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
-import Drawer from "@material-ui/core/Drawer";
+import { Select, MenuItem, Button, Drawer } from "@material-ui/core";
 import { getProduct, sortProductsByName } from "./product-helper";
 import {
   brand,
@@ -238,7 +235,7 @@ export default class Mainpage extends Component {
               <Button
                 style={styles.clearButton}
                 variant="contained"
-                href="/"
+                href="/dashboard"
                 color="secondary"
               >
                 Clear filters

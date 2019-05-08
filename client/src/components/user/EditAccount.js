@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import { FormControl, Input, InputLabel } from "@material-ui/core";
 import setAuthToken from "../../utils/setAuthToken";
 import { getCurrentUser, editUserInfo } from "./user-helper";
 
