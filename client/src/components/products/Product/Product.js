@@ -278,11 +278,6 @@ export default class Product extends Component {
     return (
       <div style={styles.productPage}>
         <div>{productItem}</div>
-        <div className="comment section">
-          <div>Comments1</div>
-          <input type="text" />
-          <textarea />
-        </div>
       </div>
     );
   }

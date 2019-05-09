@@ -45,9 +45,6 @@ const styles = {
   contentInfo: {
     width: "100% !important",
     textAlign: "left !important"
-  },
-  seeMoreButton: {
-    backgroundColor: "#495acc"
   }
 };
 
@@ -103,8 +100,8 @@ export default class Productitem extends Component {
                 {numeral(product.price).format("$0,0.00")}
               </h2>
               <Button
-                style={styles.seeMoreButton}
                 variant="contained"
+                color="primary"
                 href={`/product/${product._id}`}
               >
                 See more

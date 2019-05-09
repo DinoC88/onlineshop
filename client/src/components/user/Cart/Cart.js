@@ -73,16 +73,7 @@ const styles = {
   },
   cartItemButton: {
     padding: "1px 5px",
-    background: "#ffffff00",
-    color: "#f44336",
-    fontWeight: "bold",
-    border: "none",
-    borderRadius: "50%",
-    cursor: "pointer",
-    ":hover": {
-      background: "#f44336",
-      color: "white"
-    }
+    borderRadius: "50%"
   }
 };
 

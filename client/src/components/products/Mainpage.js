@@ -56,11 +56,7 @@ const styles = {
     fontSize: 20
   },
   clearButton: {
-    marginLeft: 40,
-    backgroundColor: "#ea075d",
-    "&:hover": {
-      backgroundColor: "white"
-    }
+    marginLeft: 40
   },
   productSort: {
     marginLeft: "100px",
@@ -238,6 +234,7 @@ export default class Mainpage extends Component {
             <div>
               <Button
                 style={styles.clearButton}
+                color="secondary"
                 variant="contained"
                 href="/dashboard"
               >

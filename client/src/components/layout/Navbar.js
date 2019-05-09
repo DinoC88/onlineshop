@@ -42,7 +42,13 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li>
           <MenuItem
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             component={Link}
             to="/addproduct"
             selected={"/addproduct" === pathname}
@@ -53,7 +59,13 @@ class Navbar extends Component {
         <li>
           <MenuItem
             component={Link}
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             to="/cart"
             selected={"/cart" === pathname}
           >
@@ -63,7 +75,13 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             component={Link}
             to="/users/current"
             selected={"/users/current" === pathname}
@@ -73,7 +91,13 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             component={Link}
             to="/login"
             onClick={this.onLogoutClick}
@@ -88,7 +112,13 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li>
           <MenuItem
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             component={Link}
             to="/register"
             selected={"/register" === pathname}
@@ -98,7 +128,13 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={{
+              backgroundColor: "#333333",
+              color: "white",
+              borderRadius: 20
+            }}
+            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
             component={Link}
             to="/login"
             selected={"/login" === pathname}
