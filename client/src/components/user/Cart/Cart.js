@@ -73,7 +73,8 @@ const styles = {
   },
   cartItemButton: {
     padding: "1px 5px",
-    borderRadius: "50%"
+    borderRadius: "60%",
+    backgroundColor: "#ce1e4d"
   }
 };
 
@@ -301,6 +302,12 @@ export default class Cart extends Component {
                             style={styles.cartItemButton}
                             title="Remove this item from the cart"
                             onClick={() => this.removeItem(item._id)}
+                            onMouseEnter={e =>
+                              (e.target.style.backgroundColor = "gray")
+                            }
+                            onMouseLeave={e =>
+                              (e.target.style.backgroundColor = "#ce1e4d")
+                            }
                           >
                             X
                           </button>

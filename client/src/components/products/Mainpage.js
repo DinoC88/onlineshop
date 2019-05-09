@@ -132,13 +132,11 @@ export default class Mainpage extends Component {
   //Searchbox input
   handleSearchInput = e => {
     this.setState({ searchProduct: e.target.value });
-    console.log(this.state.searchProduct);
   };
   //Searchbox click
   onSearchButtonClick = e => {
     if (this.state.searchProduct) {
       this.showSearchResults({ name: this.state.searchProduct });
-      console.log(this.state.searchProduct);
     }
   };
   //Searchbox hit enter
