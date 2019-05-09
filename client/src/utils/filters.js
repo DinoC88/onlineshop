@@ -25,18 +25,18 @@ const ram = [
   }
 ];
 
-const pricetag = [
+const priceTag = [
   {
     _id: 0,
-    name: "<$250"
+    name: "<$249"
   },
   {
     _id: 1,
-    name: "$250-$500"
+    name: "$250-$499"
   },
   {
     _id: 3,
-    name: "$500-$750"
+    name: "$500-$749"
   },
   {
     _id: 4,
@@ -63,7 +63,7 @@ const color = [
   }
 ];
 
-const internalmemory = [
+const internalMemory = [
   {
     _id: 0,
     name: "16 GB"
@@ -82,7 +82,7 @@ const internalmemory = [
   }
 ];
 
-const displaysize = [
+const displaySize = [
   {
     _id: 0,
     name: '4.5"'
@@ -109,7 +109,7 @@ const displaysize = [
   }
 ];
 
-const displayresolution = [
+const displayResolution = [
   {
     _id: 0,
     name: "540 x 960"
@@ -138,9 +138,9 @@ const displayresolution = [
 export {
   brand,
   ram,
-  pricetag,
+  priceTag,
   color,
-  internalmemory,
-  displaysize,
-  displayresolution
+  internalMemory,
+  displaySize,
+  displayResolution
 };

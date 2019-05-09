@@ -8,11 +8,11 @@ import { getProduct, sortProductsByName } from "./product-helper";
 import {
   brand,
   ram,
-  pricetag,
+  priceTag,
   color,
-  internalmemory,
-  displaysize,
-  displayresolution
+  internalMemory,
+  displaySize,
+  displayResolution
 } from "../../utils/filters";
 const styles = {
   homepageContainer: {
@@ -51,13 +51,16 @@ const styles = {
     display: "flex",
     flexDirection: "row"
   },
-  productFound: {
+  productFoundHeader: {
     marginTop: 5,
     fontSize: 20
   },
   clearButton: {
     marginLeft: 40,
-    backgroundColor: "#ea075d"
+    backgroundColor: "#ea075d",
+    "&:hover": {
+      backgroundColor: "white"
+    }
   },
   productSort: {
     marginLeft: "100px",
@@ -185,7 +188,7 @@ export default class Mainpage extends Component {
           />
           <CheckBox
             title={<b>Price</b>}
-            list={pricetag}
+            list={priceTag}
             handleFilters={filters => this.handleFilters(filters, "pricetag")}
           />
           <CheckBox
@@ -195,7 +198,7 @@ export default class Mainpage extends Component {
           />
           <CheckBox
             title={<b>Internal Memory</b>}
-            list={internalmemory}
+            list={internalMemory}
             handleFilters={filters => this.handleFilters(filters, "memory")}
           />
           <CheckBox
@@ -205,14 +208,14 @@ export default class Mainpage extends Component {
           />
           <CheckBox
             title={<b>Display size</b>}
-            list={displaysize}
+            list={displaySize}
             handleFilters={filters =>
               this.handleFilters(filters, "displaySize")
             }
           />
           <CheckBox
             title={<b>Display Resolution</b>}
-            list={displayresolution}
+            list={displayResolution}
             handleFilters={filters =>
               this.handleFilters(filters, "displayResolution")
             }
@@ -227,7 +230,7 @@ export default class Mainpage extends Component {
             />
           </div>
           <div style={styles.productsHandle}>
-            <div style={styles.productFound}>
+            <div style={styles.productFoundHeader}>
               <p>
                 <b>Products found:</b> {products.length}
               </p>

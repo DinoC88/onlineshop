@@ -1,18 +1,13 @@
-const bodyParser = require("body-parser");
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const keys = require("../config/keys").secretOrKey;
 
 //Load model
 const Product = require("../models/Product");
 
-//@route POST api/product/all
+//@route POST /product/list
 //@desc  POST all product
 //@access Public
-router.post("/all", (req, res) => {
+router.post("/list", (req, res) => {
   let findArgs = {};
   for (let key in req.body) {
     if (req.body[key].length > 0) {
@@ -27,7 +22,7 @@ router.post("/all", (req, res) => {
       }
       res.json(product);
     })
-    .catch(err => res.status(404).json({ profile: "There are no products" }));
+    .catch(err => res.json(err));
 });
 
 //@route POST /product
@@ -43,7 +38,7 @@ router.post("/", (req, res) => {
       }
       res.json(product);
     })
-    .catch(err => res.status(404).json({ profile: "There are no products" }));
+    .catch(err => res.json(err));
 });
 
 //@route POST /product/product
@@ -71,7 +66,7 @@ router.post("/product", (req, res) => {
     .catch(err => console.log(err));
 });
 
-//@route GET api/product/:product_id
+//@route GET /product/:product_id
 //@desc  Get product by id
 //@access Public
 router.get("/:id", (req, res) => {
@@ -84,10 +79,7 @@ router.get("/:id", (req, res) => {
       }
       res.json(product);
     })
-    .catch(err =>
-      res
-        .status(404)
-        .json({ product: "There is no information for this product" })
-    );
+    .catch(err => err => res.json(err));
 });
+
 module.exports = router;

@@ -2,13 +2,13 @@ import React, { Component } from "react";
 import * as numeral from "numeral";
 import { Button, DialogTitle, DialogActions, Dialog } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import setAuthToken from "../../utils/setAuthToken";
+import setAuthToken from "../../../utils/setAuthToken";
 import {
   getCartData,
   deleteCart,
   removeOneItem,
   getOrder
-} from "./user-helper";
+} from "../user-helper";
 
 const styles = {
   cartContainer: {

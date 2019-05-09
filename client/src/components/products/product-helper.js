@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getProduct = filters => {
-  return axios.post(`/product/all`, filters);
+  return axios.post(`/product/list`, filters);
 };
 
 export const sortProductsByName = filters => {

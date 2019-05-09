@@ -3,6 +3,9 @@ const User = require("../models/User");
 const passport = require("passport");
 const router = express.Router();
 
+//@route POST /orders
+//@desc  POST return user orders
+//@access Private
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),

@@ -8,10 +8,10 @@ import {
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import setAuthToken from "../../utils/setAuthToken";
+import setAuthToken from "../../../utils/setAuthToken";
 import * as numeral from "numeral";
 import * as moment from "moment";
-import { getCurrentUser, deleteCurrentUser } from "./user-helper";
+import { getCurrentUser, deleteCurrentUser } from "../user-helper";
 
 const styles = {
   accountContainer: {

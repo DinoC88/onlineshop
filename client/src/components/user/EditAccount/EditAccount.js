@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { FormControl, Input, InputLabel } from "@material-ui/core";
-import setAuthToken from "../../utils/setAuthToken";
-import { getCurrentUser, editUserInfo } from "./user-helper";
+import setAuthToken from "../../../utils/setAuthToken";
+import { getCurrentUser, editUserInfo } from "../user-helper";
 
 export default class EditAccount extends Component {
   constructor() {
