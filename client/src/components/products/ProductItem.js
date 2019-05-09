@@ -9,11 +9,8 @@ const styles = {
     width: "100%",
     height: "auto",
     margin: "10px 0",
-    boxShadow: "0 0 7px #d6d6d6",
-    transition: "0.3s",
-    ":hover": {
-      boxShadow: "0 0 7px #b3b3b3"
-    }
+    boxShadow: "0 0 7px #b7b2b3",
+    transition: "0.3s"
   },
   productImage: {
     width: "30%",
