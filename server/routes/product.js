@@ -5,7 +5,7 @@ const router = express.Router();
 const Product = require("../models/Product");
 
 //@route POST /product/list
-//@desc  POST all product
+//@desc  POST list of products
 //@access Public
 router.post("/list", (req, res) => {
   let findArgs = {};
@@ -15,6 +15,22 @@ router.post("/list", (req, res) => {
     }
   }
   Product.find(findArgs)
+    .then(product => {
+      if (!product) {
+        errors.noproduct = "There are no products";
+        return res.status(404).json(errors);
+      }
+      res.json(product);
+    })
+    .catch(err => res.json(err));
+});
+
+//@route POST /product/search
+//@desc  POST searched product
+//@access Public
+router.post("/search", (req, res) => {
+  let search = { name: { $regex: req.body.name, $options: "i" } };
+  Product.find(search)
     .then(product => {
       if (!product) {
         errors.noproduct = "There are no products";
@@ -44,7 +60,7 @@ router.post("/", (req, res) => {
 //@route POST /product/product
 //@desc  POST product
 //@access public (should change to private)
-router.post("/product", (req, res) => {
+router.post("/addproduct", (req, res) => {
   const newProduct = new Product({
     name: req.body.name,
     image: req.body.image,

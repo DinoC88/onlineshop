@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import Spinner from "../common/Spinner";
 import ProductItem from "./ProductItem";
-import SearchBox from "./SearchBox";
 import CheckBox from "./CheckBox";
-import { Select, MenuItem, Button, Drawer } from "@material-ui/core";
-import { getProduct, sortProductsByName } from "./product-helper";
+import SearchIcon from "@material-ui/icons/Search";
+import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
+import {
+  getProduct,
+  sortProductsByAlphabet,
+  getProductBySearch
+} from "./product-helper";
 import {
   brand,
   ram,
@@ -61,6 +65,20 @@ const styles = {
   productSort: {
     marginLeft: "100px",
     marginBottom: "20px"
+  },
+  searchPosition: {
+    position: "relative",
+    marginTop: 10,
+    marginRight: -80
+  },
+  iconStyle: {
+    position: "absolute",
+    top: 17,
+    right: 75,
+    width: 40,
+    height: 40,
+    backgroundColor: "#96999e",
+    borderRadius: "5px"
   }
 };
 
@@ -71,6 +89,7 @@ export default class Mainpage extends Component {
       isLoading: false,
       errors: null,
       searchProduct: "",
+      searched: false,
       products: [],
       filters: {},
       input: "Name: A-Z",
@@ -82,7 +101,7 @@ export default class Mainpage extends Component {
     this.setState({ isLoading: true });
     this.showFilterResults();
   }
-
+  //Sort by alphabet - drawer
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
@@ -95,27 +114,11 @@ export default class Mainpage extends Component {
       isLoading: true,
       input: e.target.value
     });
-    this.showProductsByAlphabetOrder(this.state.sortByName);
+    this.sortProductByAlphabet(this.state.sortByName);
   };
-
-  handleSearchInput = e => {
-    this.setState({ searchProduct: e.target.value });
-    console.log(this.state.searchProduct);
-  };
-
-  onSearchButtonClick = e => {
-    let newFilters = Object.assign(this.state.filters);
-    newFilters.brand = this.state.searchProduct;
-    console.log(newFilters);
-    this.setState({
-      filters: newFilters,
-      isLoading: true
-    });
-    this.showFilterResults(this.state.filters);
-  };
-
-  showProductsByAlphabetOrder = sort => {
-    sortProductsByName(sort)
+  //Sort by alphabet - function
+  sortProductByAlphabet = sort => {
+    sortProductsByAlphabet(sort)
       .then(product => {
         this.setState({ products: product.data, isLoading: false });
       })
@@ -126,7 +129,39 @@ export default class Mainpage extends Component {
         })
       );
   };
-
+  //Searchbox input
+  handleSearchInput = e => {
+    this.setState({ searchProduct: e.target.value });
+    console.log(this.state.searchProduct);
+  };
+  //Searchbox click
+  onSearchButtonClick = e => {
+    if (this.state.searchProduct) {
+      this.showSearchResults({ name: this.state.searchProduct });
+      console.log(this.state.searchProduct);
+    }
+  };
+  //Searchbox hit enter
+  enterKey = event => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      this.onSearchButtonClick();
+    }
+  };
+  //Searchbox function
+  showSearchResults = search => {
+    getProductBySearch(search)
+      .then(product => {
+        this.setState({ products: product.data, isLoading: false });
+      })
+      .catch(errors =>
+        this.setState({
+          errors,
+          isLoading: false
+        })
+      );
+  };
+  //Filter function
   showFilterResults = filter => {
     getProduct(filter)
       .then(product => {
@@ -139,7 +174,7 @@ export default class Mainpage extends Component {
         })
       );
   };
-
+  //Filter checkbox click function
   onCheckboxClick = e => {
     let newFilters = Object.assign(this.state.filters);
     newFilters[e.target.name] = e.target.value;
@@ -149,7 +184,7 @@ export default class Mainpage extends Component {
     });
     this.showFilterResults(this.state.filters);
   };
-
+  //Filter handler
   handleFilters = (filters, category) => {
     const newFilters = Object.assign(this.state.filters);
     newFilters[category] = filters;
@@ -219,11 +254,20 @@ export default class Mainpage extends Component {
         </div>
         <div style={styles.products}>
           <div style={styles.search}>
-            <SearchBox
-              handleInput={this.handleSearchInput}
-              enterSearch={this.enterKeyPressed}
-              handleClick={this.onSearchButtonClick}
-            />
+            <div style={styles.searchPosition}>
+              <TextField
+                id="outlined-search"
+                label="Search phone"
+                type="search"
+                margin="normal"
+                variant="outlined"
+                onChange={this.handleSearchInput}
+                onKeyDown={this.enterKey}
+              />
+              <Button type="submit" onClick={this.onSearchButtonClick}>
+                <SearchIcon style={styles.iconStyle} />
+              </Button>
+            </div>
           </div>
           <div style={styles.productsHandle}>
             <div style={styles.productFoundHeader}>
