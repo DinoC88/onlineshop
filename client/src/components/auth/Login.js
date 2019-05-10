@@ -14,12 +14,8 @@ import { loginSubmit } from "./auth-helper";
 
 const styles = {
   loginStyle: {
-    position: "relative",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "65vh",
-    marginTop: "200px",
-    marginBottom: "-50px"
+    height: "90vh",
+    display: "flex"
   }
 };
 

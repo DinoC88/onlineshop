@@ -22,62 +22,50 @@ const styles = {
   homepageContainer: {
     display: "flex",
     justifyContent: "space-between",
-    minHeight: "100%",
-    margin: "0 6px",
-    marginTop: "-72px",
-    border: "1px solid #ffffff00"
+    minHeight: "90vh",
+    border: "1px solid #ffffff00",
+    marginTop: "-70px"
   },
-  filtersListDesktop: {
+  filtersList: {
     width: "25%",
     height: "100%",
     minHeight: "auto",
-    marginTop: "90px",
-    marginBottom: "40px",
-    marginRight: "20px",
+    margin: "90px 20px 40px 0px",
     backgroundColor: "#f5f5f5"
   },
-  filterHeader: {
+  filtersListHeader: {
     fontSize: "20px",
     fontWeight: "bold",
     textAlign: "center"
   },
-  products: {
+  productList: {
     width: "78%",
     marginTop: "90px",
     marginBottom: "10px"
   },
-  search: {
-    float: "right",
-    marginTop: "-50px"
-  },
   productsHandle: {
     borderBottom: "1px solid #81d4fa",
     display: "flex",
-    flexDirection: "row"
+    flexDirection: "row",
+    justifyContent: "space-around"
   },
-  productFoundHeader: {
-    marginTop: 5,
-    fontSize: 20
+  productFound: {
+    fontSize: 20,
+    marginTop: 10
+  },
+  search: {
+    marginTop: -20,
+    justifyContent: "flex-end"
   },
   clearButton: {
-    marginLeft: 40
-  },
-  productSort: {
-    marginLeft: "100px",
-    marginBottom: "20px"
-  },
-  searchPosition: {
-    position: "relative",
-    marginTop: 10,
-    marginRight: -80
+    color: "white",
+    marginBottom: 17
   },
   iconStyle: {
-    position: "absolute",
-    top: 17,
-    right: 75,
     width: 40,
     height: 40,
-    backgroundColor: "#96999e",
+    backgroundColor: "#333333",
+    color: "white",
     borderRadius: "5px"
   }
 };
@@ -135,9 +123,7 @@ export default class Mainpage extends Component {
   };
   //Searchbox click
   onSearchButtonClick = e => {
-    if (this.state.searchProduct) {
-      this.showSearchResults({ name: this.state.searchProduct });
-    }
+    this.showSearchResults({ name: this.state.searchProduct });
   };
   //Searchbox hit enter
   enterKey = event => {
@@ -208,8 +194,8 @@ export default class Mainpage extends Component {
     }
     return (
       <div style={styles.homepageContainer}>
-        <div style={styles.filtersListDesktop}>
-          <p style={styles.filterHeader}>Search by</p>
+        <div style={styles.filtersList}>
+          <p style={styles.filtersListHeader}>Search by</p>
           <CheckBox
             title={<b>Brand</b>}
             list={brand}
@@ -250,28 +236,10 @@ export default class Mainpage extends Component {
             }
           />
         </div>
-        <div style={styles.products}>
-          <div style={styles.search}>
-            <div style={styles.searchPosition}>
-              <TextField
-                id="outlined-search"
-                label="Search phone"
-                type="search"
-                margin="normal"
-                variant="outlined"
-                onChange={this.handleSearchInput}
-                onKeyDown={this.enterKey}
-              />
-              <Button type="submit" onClick={this.onSearchButtonClick}>
-                <SearchIcon style={styles.iconStyle} />
-              </Button>
-            </div>
-          </div>
+        <div style={styles.productList}>
           <div style={styles.productsHandle}>
-            <div style={styles.productFoundHeader}>
-              <p>
-                <b>Products found:</b> {products.length}
-              </p>
+            <div style={styles.productFound}>
+              <b>Products found:</b> {products.length}
             </div>
             <div>
               <Button
@@ -283,7 +251,7 @@ export default class Mainpage extends Component {
                 Clear filters
               </Button>
             </div>
-            <div style={styles.productSort}>
+            <div>
               <span>
                 <b>Sort By:</b>
               </span>
@@ -304,6 +272,18 @@ export default class Mainpage extends Component {
                 open={this.state.drawerOpen}
                 onRequestChange={this.toggleDrawer}
               />
+            </div>
+            <div style={styles.search}>
+              <TextField
+                label="Search phone"
+                type="search"
+                variant="outlined"
+                onChange={this.handleSearchInput}
+                onKeyDown={this.enterKey}
+              />
+              <Button type="submit" onClick={this.onSearchButtonClick}>
+                <SearchIcon style={styles.iconStyle} />
+              </Button>
             </div>
           </div>
           {productItems}

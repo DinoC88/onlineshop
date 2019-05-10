@@ -15,12 +15,7 @@ import { registerSubmit } from "./auth-helper";
 
 const styles = {
   registerStyle: {
-    position: "relative",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "65vh",
-    marginTop: "200px",
-    marginBottom: "-50px"
+    height: "90vh"
   }
 };
 

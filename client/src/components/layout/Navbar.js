@@ -5,6 +5,7 @@ import setAuthToken from "../../utils/setAuthToken";
 import checkAuth from "../common/checkAuth";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import MenuItem from "@material-ui/core/MenuItem";
+
 const styles = {
   navbar: {
     borderRadius: "20px",
@@ -23,8 +24,7 @@ const styles = {
     color: "white",
     display: "inline-block",
     fontSize: "20px",
-    marginRight: "40px",
-    marginLeft: "20px"
+    margin: "0 40px 0 20px"
   }
 };
 

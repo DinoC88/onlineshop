@@ -4,15 +4,13 @@ import { Link } from "react-router-dom";
 const styles = {
   footer: {
     borderRadius: "20px",
-    position: "relative",
-    bottom: -70,
     backgroundColor: "#333333"
   },
   logo: {
     color: "white",
-    display: "inline-block",
-    fontSize: "20px",
-    marginLeft: 550
+    display: "flex",
+    justifyContent: "center",
+    fontSize: "20px"
   }
 };
 

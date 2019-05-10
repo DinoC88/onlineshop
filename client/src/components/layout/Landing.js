@@ -1,15 +1,27 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import checkAuth from "../common/checkAuth";
-
+import Button from "@material-ui/core/Button";
 const styles = {
   landingStyle: {
-    position: "relative",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "65vh",
-    marginTop: "200px",
-    marginBottom: "-50px"
+    height: "90vh",
+    textAlign: "center",
+    justifyContent: "center"
+  },
+  header: {
+    marginTop: 50,
+    fontSize: "60px"
+  },
+  registerButton: {
+    color: "white",
+    width: 120,
+    height: 50,
+    marginTop: 50
+  },
+  loginButton: {
+    width: 120,
+    height: 50,
+    marginLeft: 15,
+    marginTop: 50
   }
 };
 
@@ -22,16 +34,24 @@ export default class Landing extends Component {
   render() {
     return (
       <div style={styles.landingStyle}>
-        <div className="col-md-12 text-center">
-          <h3 className="display-3 mb-4">Mobile shop App</h3>
-          <div className="mt-6">
-            <Link to="/register" className="btn btn-lg btn-info mr-2">
-              Sign Up
-            </Link>
-            <Link to="/login" className="btn btn-lg btn-light">
-              Login
-            </Link>
-          </div>
+        <h3 style={styles.header}>Mobile shop App</h3>
+        <div>
+          <Button
+            style={styles.registerButton}
+            variant="contained"
+            color="primary"
+            href="/register"
+          >
+            Sign Up
+          </Button>
+          <Button
+            style={styles.loginButton}
+            href="/login"
+            variant="contained"
+            color="white"
+          >
+            Login
+          </Button>
         </div>
       </div>
     );

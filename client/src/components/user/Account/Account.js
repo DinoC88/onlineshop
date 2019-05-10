@@ -37,8 +37,12 @@ const styles = {
   userInfo: {
     marginTop: "20px"
   },
-  button: {
-    marginRight: "20px"
+  editButton: {
+    marginRight: "20px",
+    color: "white"
+  },
+  deleteButton: {
+    color: "white"
   },
   accountHistory: {
     width: "50%",
@@ -146,8 +150,8 @@ export default class Account extends Component {
                 {this.state.phone}
               </p>
               <Button
-                style={styles.button}
-                variant="outlined"
+                style={styles.editButton}
+                variant="contained"
                 color="primary"
                 href={`/user/${this.state.userId}`}
               >
@@ -155,7 +159,8 @@ export default class Account extends Component {
                 <EditIcon />
               </Button>
               <Button
-                variant="outlined"
+                style={styles.deleteButton}
+                variant="contained"
                 color="secondary"
                 onClick={this.handleClickOpen}
               >
