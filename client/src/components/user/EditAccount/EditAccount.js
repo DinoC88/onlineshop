@@ -4,6 +4,26 @@ import { FormControl, Input, InputLabel } from "@material-ui/core";
 import setAuthToken from "../../../utils/setAuthToken";
 import { getCurrentUser, editUserInfo } from "../user-helper";
 
+const styles = {
+  editAccount: {
+    height: "90vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerStyle: {
+    textAlign: "center"
+  },
+  buttonStyle: {
+    display: "flex",
+    justifyContent: "space-around",
+    paddingTop: 25
+  },
+  formStyle: {
+    marginTop: 25,
+    width: 350
+  }
+};
 export default class EditAccount extends Component {
   constructor() {
     super();
@@ -55,12 +75,12 @@ export default class EditAccount extends Component {
   };
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-4 mt-5 mx-auto">
-            <h3 style={{ textAlign: "center" }}>Edit Account Info</h3>
-            <form noValidate onSubmit={this.onSubmit}>
-              <FormControl style={{ marginTop: 25 }}>
+      <div style={styles.editAccount}>
+        <div>
+          <h3 style={styles.headerStyle}>Edit Account Info</h3>
+          <form noValidate onSubmit={this.onSubmit}>
+            <div>
+              <FormControl style={styles.formStyle}>
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <Input
                   id="name"
@@ -70,11 +90,9 @@ export default class EditAccount extends Component {
                   onChange={this.onChange}
                 />
               </FormControl>
-              <FormControl
-                style={{ marginTop: 25 }}
-                className="input-field col s12"
-                required
-              >
+            </div>
+            <div>
+              <FormControl style={styles.formStyle} required>
                 <InputLabel htmlFor="email">Email</InputLabel>
                 <Input
                   id="email"
@@ -84,11 +102,9 @@ export default class EditAccount extends Component {
                   onChange={this.onChange}
                 />
               </FormControl>
-              <FormControl
-                style={{ marginTop: 25 }}
-                className="input-field col s12"
-                required
-              >
+            </div>
+            <div>
+              <FormControl style={styles.formStyle} required>
                 <InputLabel htmlFor="address">Address</InputLabel>
                 <Input
                   id="address"
@@ -98,11 +114,9 @@ export default class EditAccount extends Component {
                   onChange={this.onChange}
                 />
               </FormControl>
-              <FormControl
-                style={{ marginTop: 25 }}
-                className="input-field col s12"
-                required
-              >
+            </div>
+            <div>
+              <FormControl style={styles.formStyle} required>
                 <InputLabel htmlFor="phone">Phone</InputLabel>
                 <Input
                   id="phone"
@@ -112,16 +126,14 @@ export default class EditAccount extends Component {
                   onChange={this.onChange}
                 />
               </FormControl>
+            </div>
 
-              <div className="row" style={{ paddingTop: 25, paddingLeft: 25 }}>
-                <div className="form-group">
-                  <Button type="submit" variant="contained" color="primary">
-                    Confirm changes
-                  </Button>
-                </div>
-              </div>
-            </form>
-          </div>
+            <div style={styles.buttonStyle}>
+              <Button type="submit" variant="contained" color="primary">
+                Confirm changes
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
     );

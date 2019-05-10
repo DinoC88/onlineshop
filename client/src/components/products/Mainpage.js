@@ -22,7 +22,7 @@ const styles = {
   homepageContainer: {
     display: "flex",
     justifyContent: "space-between",
-    minHeight: "90vh",
+    minHeight: "100vh",
     border: "1px solid #ffffff00",
     marginTop: "-70px"
   },
@@ -256,7 +256,6 @@ export default class Mainpage extends Component {
                 <b>Sort By:</b>
               </span>
               <Select
-                className="sort-field"
                 value={this.state.input}
                 onChange={this.handleDrawerChange}
               >

@@ -28,7 +28,6 @@ const styles = {
   },
   buttonStyle: {
     paddingTop: 25,
-    paddingLeft: 25,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around"
