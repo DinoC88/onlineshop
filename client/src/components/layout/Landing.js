@@ -4,24 +4,29 @@ import Button from "@material-ui/core/Button";
 const styles = {
   landingStyle: {
     height: "90vh",
-    textAlign: "center",
-    justifyContent: "center"
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  header: {
-    marginTop: 50,
-    fontSize: "60px"
+  headerStyle: {
+    textAlign: "center",
+    fontSize: "50px"
+  },
+  buttonStyle: {
+    paddingTop: 25,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around"
   },
   registerButton: {
     color: "white",
     width: 120,
-    height: 50,
-    marginTop: 50
+    height: 50
   },
   loginButton: {
     width: 120,
     height: 50,
-    marginLeft: 15,
-    marginTop: 50
+    color: "#333333"
   }
 };
 
@@ -34,24 +39,25 @@ export default class Landing extends Component {
   render() {
     return (
       <div style={styles.landingStyle}>
-        <h3 style={styles.header}>Mobile shop App</h3>
         <div>
-          <Button
-            style={styles.registerButton}
-            variant="contained"
-            color="primary"
-            href="/register"
-          >
-            Sign Up
-          </Button>
-          <Button
-            style={styles.loginButton}
-            href="/login"
-            variant="contained"
-            color="white"
-          >
-            Login
-          </Button>
+          <h3 style={styles.headerStyle}>Mobile shop App</h3>
+          <div style={styles.buttonStyle}>
+            <Button
+              style={styles.registerButton}
+              variant="contained"
+              color="primary"
+              href="/register"
+            >
+              Sign Up
+            </Button>
+            <Button
+              style={styles.loginButton}
+              href="/login"
+              variant="contained"
+            >
+              Login
+            </Button>
+          </div>
         </div>
       </div>
     );
