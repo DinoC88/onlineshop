@@ -1,29 +1,29 @@
 import axios from "axios";
 
 export const getCurrentUser = () => {
-  return axios.get("/users/current");
+  return axios.get("/api/users/current");
 };
 
 export const deleteCurrentUser = () => {
-  return axios.delete("/users/delete");
+  return axios.delete("/api/users/delete");
 };
 
 export const getCartData = () => {
-  return axios.get("/cart");
+  return axios.get("/api/cart");
 };
 
 export const deleteCart = cartId => {
-  return axios.delete("/cart", cartId);
+  return axios.delete("/api/cart", cartId);
 };
 
 export const removeOneItem = (cartId, itemId) => {
-  return axios.put("/cart", cartId, itemId);
+  return axios.put("/api/cart", cartId, itemId);
 };
 
 export const getOrder = order => {
-  return axios.post("/order", order);
+  return axios.post("/api/order", order);
 };
 
 export const editUserInfo = userInfo => {
-  return axios.post("/users/edit", userInfo);
+  return axios.post("/api/users/edit", userInfo);
 };

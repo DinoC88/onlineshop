@@ -7,7 +7,8 @@ const styles = {
     maxHeight: "250px",
     display: "flex",
     margin: "10px 0",
-    boxShadow: "0 0 7px #b7b2b3"
+    boxShadow: "0 0 7px #b7b2b3",
+    padding: "8px"
   },
   productImage: {
     width: "200px",
