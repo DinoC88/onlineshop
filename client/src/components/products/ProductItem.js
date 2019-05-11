@@ -3,7 +3,8 @@ import * as numeral from "numeral";
 import Button from "@material-ui/core/Button";
 
 const styles = {
-  productDetails: {
+  productDetailsContainer: {
+    maxHeight: "250px",
     display: "flex",
     margin: "10px 0",
     boxShadow: "0 0 7px #b7b2b3"
@@ -36,7 +37,7 @@ export default class Productitem extends Component {
 
     return (
       <div>
-        <div style={styles.productDetails}>
+        <div style={styles.productDetailsContainer}>
           <img
             style={styles.productImage}
             src={product.image}
