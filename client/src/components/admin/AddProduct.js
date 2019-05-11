@@ -108,6 +108,7 @@ export default class AddProduct extends Component {
                   name="name"
                   value={this.state.name}
                   autoComplete="name"
+                  onChange={this.onProductChange}
                 />
               </FormControl>
             </div>
