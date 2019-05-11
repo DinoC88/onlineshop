@@ -10,7 +10,7 @@ const styles = {
     boxShadow: "0 0 7px #b7b2b3"
   },
   productImage: {
-    width: "30%",
+    width: "250px",
     margin: "15px"
   },
   contentLeft: {
