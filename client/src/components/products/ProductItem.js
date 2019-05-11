@@ -10,9 +10,9 @@ const styles = {
     boxShadow: "0 0 7px #b7b2b3"
   },
   productImage: {
-    height: "200px",
-    width: "250px",
-    margin: "15px"
+    width: "200px",
+    margin: "15px",
+    objectFit: "contain"
   },
   contentLeft: {
     width: "80%",
