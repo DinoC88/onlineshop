@@ -8,7 +8,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 const styles = {
   navbar: {
-    borderRadius: "20px",
     display: "flex",
     height: "70px",
     backgroundColor: "#333333",

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Spinner from "../common/Spinner";
-import ProductItem from "./ProductItem";
-import CheckBox from "./CheckBox";
+import ProductItem from "./productitem/ProductItem";
+import CheckBox from "./checkbox/CheckBox";
+import CheckBoxPrice from "./checkbox/CheckBoxPrice";
 import SearchIcon from "@material-ui/icons/Search";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
 import {
@@ -12,12 +13,13 @@ import {
 import {
   brand,
   ram,
-  priceTag,
+  price,
   color,
   internalMemory,
   displaySize,
   displayResolution
 } from "../../utils/filters";
+
 const styles = {
   homepageContainer: {
     display: "flex",
@@ -168,10 +170,28 @@ export default class Mainpage extends Component {
     });
     this.showFilterResults(this.state.filters);
   };
+  // handlePrice function for handleFilters
+  handlePrice = value => {
+    const data = price;
+    let array = [];
+    console.log(value);
+    for (let key in data) {
+      if (data[key]._id === parseInt(value, 10)) {
+        array = data[key].array;
+      }
+    }
+    return array;
+  };
   //Filter handler
   handleFilters = (filters, category) => {
-    const newFilters = Object.assign(this.state.filters);
+    const newFilters = { ...this.state.filters };
+    //const newFilters = Object.assign(this.state.filters);
     newFilters[category] = filters;
+    console.log(newFilters);
+    if (category === "price") {
+      let priceValues = this.handlePrice(filters);
+      newFilters[category] = priceValues;
+    }
     this.showFilterResults(newFilters);
     this.setState({
       filters: newFilters
@@ -196,15 +216,16 @@ export default class Mainpage extends Component {
       <div style={styles.homepageContainer}>
         <div style={styles.filtersList}>
           <p style={styles.filtersListHeader}>Search by</p>
+
+          <CheckBoxPrice
+            title={<b>Price</b>}
+            list={price}
+            handleFilters={filters => this.handleFilters(filters, "price")}
+          />
           <CheckBox
             title={<b>Brand</b>}
             list={brand}
             handleFilters={filters => this.handleFilters(filters, "brand")}
-          />
-          <CheckBox
-            title={<b>Price</b>}
-            list={priceTag}
-            handleFilters={filters => this.handleFilters(filters, "pricetag")}
           />
           <CheckBox
             title={<b>Color</b>}

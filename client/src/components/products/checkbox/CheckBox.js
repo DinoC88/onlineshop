@@ -1,4 +1,4 @@
-import React, { Component } from "../../../node_modules/react";
+import React, { Component } from "react";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import {
   ListItemSecondaryAction,
@@ -79,7 +79,7 @@ export default class CheckBox extends Component {
 
   render() {
     return (
-      <div className="filtersList">
+      <div>
         <List>
           <ListItem style={styles.listItem} onClick={this.handleClick}>
             <ListItemText inset primary={this.props.title} />

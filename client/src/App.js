@@ -10,7 +10,7 @@ import Login from "./components/auth/Login";
 import NotFound from "./components/layout/NotFound";
 import Mainpage from "./components/products/Mainpage";
 import PrivateRoute from "./components/common/PrivateRoute";
-import Product from "./components/products/Product/Product";
+import Product from "./components/product/Product";
 import Account from "./components/user/Account/Account";
 import EditAccount from "./components/user/EditAccount/EditAccount";
 import Cart from "./components/user/Cart/Cart";

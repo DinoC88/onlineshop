@@ -11,7 +11,14 @@ router.post("/list", (req, res) => {
   let findArgs = {};
   for (let key in req.body) {
     if (req.body[key].length > 0) {
-      findArgs[key] = req.body[key];
+      if (key === "price") {
+        findArgs[key] = {
+          $gte: req.body[key][0],
+          $lte: req.body[key][1]
+        };
+      } else {
+        findArgs[key] = req.body[key];
+      }
     }
   }
   Product.find(findArgs)

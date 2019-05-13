@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 const styles = {
   footer: {
-    borderRadius: "20px",
     backgroundColor: "#333333"
   },
   logo: {

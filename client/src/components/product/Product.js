@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Spinner from "../../common/Spinner";
+import Spinner from "../common/Spinner";
 import * as numeral from "numeral";
 import { Button, Snackbar } from "@material-ui/core";
 import decode from "jwt-decode";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import { getProductById, addProductToCart } from "../product-helper";
+import { getProductById, addProductToCart } from "../products/product-helper";
 
 const styles = {
   productPageContainer: {

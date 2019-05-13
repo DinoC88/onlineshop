@@ -25,22 +25,27 @@ const ram = [
   }
 ];
 
-const priceTag = [
-  {
-    _id: 0,
-    name: "<$249"
-  },
+const price = [
+  { _id: 0, name: "Any", array: [] },
   {
     _id: 1,
-    name: "$250-$499"
+    name: "<$249",
+    array: [0, 249]
+  },
+  {
+    _id: 2,
+    name: "$250-$499",
+    array: [250, 499]
   },
   {
     _id: 3,
-    name: "$500-$749"
+    name: "$500-$749",
+    array: [500, 749]
   },
   {
     _id: 4,
-    name: "$750>"
+    name: "$750>",
+    array: [750, 500000]
   }
 ];
 
@@ -138,7 +143,7 @@ const displayResolution = [
 export {
   brand,
   ram,
-  priceTag,
+  price,
   color,
   internalMemory,
   displaySize,
