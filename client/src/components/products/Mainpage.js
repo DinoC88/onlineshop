@@ -5,11 +5,7 @@ import CheckBox from "./checkbox/CheckBox";
 import CheckBoxPrice from "./checkbox/CheckBoxPrice";
 import SearchIcon from "@material-ui/icons/Search";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
-import {
-  getProduct,
-  sortProductsByAlphabet,
-  getProductBySearch
-} from "./product-helper";
+import { getProduct, sortProducts, getProductBySearch } from "./product-helper";
 import {
   brand,
   ram,
@@ -69,6 +65,13 @@ const styles = {
     backgroundColor: "#333333",
     color: "white",
     borderRadius: "5px"
+  },
+  noProductFound: {
+    fontSize: "50px",
+    fontWeight: "bold",
+    marginTop: 50,
+    display: "flex",
+    justifyContent: "center"
   }
 };
 
@@ -82,35 +85,41 @@ export default class Mainpage extends Component {
       searched: false,
       products: [],
       filters: {},
-      input: "Name: A-Z",
-      sortByName: {},
+      input: "",
       drawerOpen: false
     };
   }
   componentWillMount() {
     this.setState({ isLoading: true });
-    this.showFilterResults();
+    this.showFilterResults(this.state.filters);
   }
-  //Sort by alphabet - drawer
+  //Sort drawer controller
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
-
+  //Sort products
   handleDrawerChange = e => {
-    let newSort = Object.assign(this.state.sortByName);
-    newSort.name = e.target.value;
+    let newSort = {};
+    if (e.target.value === "Name: A-Z") {
+      newSort.name = "asc";
+    } else if (e.target.value === "Name: Z-A") {
+      newSort.name = "desc";
+    } else if (e.target.value === "Price: Low to High") {
+      newSort.price = "asc";
+    } else {
+      newSort.price = "desc";
+    }
     this.setState({
-      sortByName: newSort,
       isLoading: true,
       input: e.target.value
     });
-    this.sortProductByAlphabet(this.state.sortByName);
+    this.sortProductBy(newSort);
   };
-  //Sort by alphabet - function
-  sortProductByAlphabet = sort => {
-    sortProductsByAlphabet(sort)
-      .then(product => {
-        this.setState({ products: product.data, isLoading: false });
+  //Sort products by - function
+  sortProductBy = sort => {
+    sortProducts(sort)
+      .then(products => {
+        this.setState({ products: products.data, isLoading: false });
       })
       .catch(errors =>
         this.setState({
@@ -123,35 +132,18 @@ export default class Mainpage extends Component {
   handleSearchInput = e => {
     this.setState({ searchProduct: e.target.value });
   };
-  //Searchbox click
-  onSearchButtonClick = e => {
-    this.showSearchResults({ name: this.state.searchProduct });
-  };
   //Searchbox hit enter
-  enterKey = event => {
+  enterKey = (event, filters) => {
     if (event.keyCode === 13) {
       event.preventDefault();
-      this.onSearchButtonClick();
+      this.handleFilters(filters, "name");
     }
-  };
-  //Searchbox function
-  showSearchResults = search => {
-    getProductBySearch(search)
-      .then(product => {
-        this.setState({ products: product.data, isLoading: false });
-      })
-      .catch(errors =>
-        this.setState({
-          errors,
-          isLoading: false
-        })
-      );
   };
   //Filter function
   showFilterResults = filter => {
     getProduct(filter)
-      .then(product => {
-        this.setState({ products: product.data, isLoading: false });
+      .then(products => {
+        this.setState({ products: products.data, isLoading: false });
       })
       .catch(errors =>
         this.setState({
@@ -160,17 +152,7 @@ export default class Mainpage extends Component {
         })
       );
   };
-  //Filter checkbox click function
-  onCheckboxClick = e => {
-    let newFilters = Object.assign(this.state.filters);
-    newFilters[e.target.name] = e.target.value;
-    this.setState({
-      filters: newFilters,
-      isLoading: true
-    });
-    this.showFilterResults(this.state.filters);
-  };
-  // handlePrice function for handleFilters
+  // handle price function for handleFilters
   handlePrice = value => {
     const data = price;
     let array = [];
@@ -183,14 +165,16 @@ export default class Mainpage extends Component {
     return array;
   };
   //Filter handler
-  handleFilters = (filters, category) => {
+  handleFilters = (filters, category, e) => {
     const newFilters = { ...this.state.filters };
     //const newFilters = Object.assign(this.state.filters);
     newFilters[category] = filters;
-    console.log(newFilters);
     if (category === "price") {
       let priceValues = this.handlePrice(filters);
       newFilters[category] = priceValues;
+    } else if (category === "name") {
+      let search = this.state.searchProduct;
+      newFilters[category] = search;
     }
     this.showFilterResults(newFilters);
     this.setState({
@@ -209,7 +193,7 @@ export default class Mainpage extends Component {
           <ProductItem key={product._id} product={product} />
         ));
       } else {
-        productItems = <h4>No products found</h4>;
+        productItems = <h4 style={styles.noProductFound}>No products found</h4>;
       }
     }
     return (
@@ -280,11 +264,17 @@ export default class Mainpage extends Component {
                 value={this.state.input}
                 onChange={this.handleDrawerChange}
               >
-                <MenuItem name="Name: A-Z" value="asc">
+                <MenuItem name="name" id="name" value="Name: A-Z">
                   Name: A-Z
                 </MenuItem>
-                <MenuItem name="Name: Z-A" value="desc">
+                <MenuItem name="name" id="name" value="Name: Z-A">
                   Name: Z-A
+                </MenuItem>
+                <MenuItem name="name" id="name" value="Price: Low to High">
+                  Price: Low to High
+                </MenuItem>
+                <MenuItem name="name" id="name" value="Price: High to Low">
+                  Price: High to Low
                 </MenuItem>
               </Select>
               <Drawer
@@ -301,7 +291,10 @@ export default class Mainpage extends Component {
                 onChange={this.handleSearchInput}
                 onKeyDown={this.enterKey}
               />
-              <Button type="submit" onClick={this.onSearchButtonClick}>
+              <Button
+                type="submit"
+                onClick={filters => this.handleFilters(filters, "name")}
+              >
                 <SearchIcon style={styles.iconStyle} />
               </Button>
             </div>

@@ -5,10 +5,10 @@ export const getProduct = filters => {
 };
 
 export const getProductBySearch = search => {
-  return axios.post(`/api/product/search`, search);
+  return axios.post(`/api/product/list`, search);
 };
-export const sortProductsByAlphabet = filters => {
-  return axios.post(`/api/product`, filters);
+export const sortProducts = filters => {
+  return axios.post(`/api/product/`, filters);
 };
 
 export const getProductById = productId => {

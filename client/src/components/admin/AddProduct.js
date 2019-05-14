@@ -32,6 +32,10 @@ const styles = {
   formStyle: {
     marginTop: 25,
     width: 350
+  },
+  warningStyle: {
+    color: "red",
+    fontSize: "12px"
   }
 };
 
@@ -53,7 +57,8 @@ export default class AddProduct extends Component {
       price: "",
       brand: "",
       pricetag: "",
-      color: ""
+      color: "",
+      errors: {}
     };
   }
 
@@ -91,6 +96,8 @@ export default class AddProduct extends Component {
   };
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div style={styles.addProductContainer}>
         <h3 style={styles.headerStyle}>Add new product</h3>
@@ -110,6 +117,9 @@ export default class AddProduct extends Component {
                   autoComplete="name"
                   onChange={this.onProductChange}
                 />
+                {errors.name && (
+                  <div style={styles.warningStyle}>{errors.name}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -122,6 +132,9 @@ export default class AddProduct extends Component {
                   autoComplete="image"
                   onChange={this.onProductChange}
                 />
+                {errors.image && (
+                  <div style={styles.warningStyle}>{errors.image}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -137,6 +150,11 @@ export default class AddProduct extends Component {
                   autoComplete="displayResolution"
                   onChange={this.onProductChange}
                 />
+                {errors.displayResolution && (
+                  <div style={styles.warningStyle}>
+                    {errors.displayResolution}
+                  </div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -150,6 +168,9 @@ export default class AddProduct extends Component {
                   autoComplete="displaySize"
                   onChange={this.onProductChange}
                 />
+                {errors.displaySize && (
+                  <div style={styles.warningStyle}>{errors.displaySize}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -162,18 +183,39 @@ export default class AddProduct extends Component {
                   autoComplete="cpu"
                   onChange={this.onProductChange}
                 />
+                {errors.cpu && (
+                  <div style={styles.warningStyle}>{errors.cpu}</div>
+                )}
               </FormControl>
             </div>
             <div>
               <FormControl style={styles.formStyle} required>
-                <InputLabel htmlFor="ram">RAM</InputLabel>
-                <Input
-                  id="ram"
-                  name="ram"
+                <InputLabel>Select RAM</InputLabel>
+                <Select
+                  style={{ width: 350 }}
+                  inputProps={{
+                    name: "ram"
+                  }}
                   value={this.state.ram}
-                  autoComplete="ram"
-                  onChange={this.onProductChange}
+                  onChange={this.handleDrawerChange}
+                >
+                  <MenuItem value="1 GB">1 GB</MenuItem>
+                  <MenuItem value="2 GB">2 GB</MenuItem>
+                  <MenuItem value="3 GB">3 GB</MenuItem>
+                  <MenuItem value="4 GB">4 GB</MenuItem>
+                  <MenuItem value="5 GB">5 GB</MenuItem>
+                  <MenuItem value="6 GB">6 GB</MenuItem>
+                  <MenuItem value="7 GB">7 GB</MenuItem>
+                  <MenuItem value="8 GB">8 GB</MenuItem>
+                </Select>
+                <Drawer
+                  docked={false}
+                  open={this.state.drawerOpen}
+                  onRequestChange={this.toggleDrawer}
                 />
+                {errors.ram && (
+                  <div style={styles.warningStyle}>{errors.ram}</div>
+                )}
               </FormControl>
             </div>
           </div>
@@ -189,6 +231,9 @@ export default class AddProduct extends Component {
                   autoComplete="camera"
                   onChange={this.onProductChange}
                 />
+                {errors.camera && (
+                  <div style={styles.warningStyle}>{errors.camera}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -201,6 +246,9 @@ export default class AddProduct extends Component {
                   autoComplete="memory"
                   onChange={this.onProductChange}
                 />
+                {errors.memory && (
+                  <div style={styles.warningStyle}>{errors.memory}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -213,11 +261,14 @@ export default class AddProduct extends Component {
                   autoComplete="price"
                   onChange={this.onProductChange}
                 />
+                {errors.price && (
+                  <div style={styles.warningStyle}>{errors.price}</div>
+                )}
               </FormControl>
             </div>
             <div>
-              <FormControl style={styles.formStyle}>
-                <InputLabel>Select Brand*</InputLabel>
+              <FormControl style={styles.formStyle} required>
+                <InputLabel>Select Brand</InputLabel>
                 <Select
                   style={{ width: 350 }}
                   inputProps={{
@@ -237,29 +288,9 @@ export default class AddProduct extends Component {
                   open={this.state.drawerOpen}
                   onRequestChange={this.toggleDrawer}
                 />
-              </FormControl>
-            </div>
-            <div>
-              <FormControl style={styles.formStyle}>
-                <InputLabel>Select Price tag*</InputLabel>
-                <Select
-                  style={{ width: 350 }}
-                  value={this.state.pricetag}
-                  onChange={this.handleDrawerChange}
-                  inputProps={{
-                    name: "pricetag"
-                  }}
-                >
-                  <MenuItem value="<$249">under $249</MenuItem>
-                  <MenuItem value="$250-$499">$250-$499</MenuItem>
-                  <MenuItem value="$500-$749">$500-$749</MenuItem>
-                  <MenuItem value="$750>">$750></MenuItem>
-                </Select>
-                <Drawer
-                  docked={false}
-                  open={this.state.drawerOpen}
-                  onRequestChange={this.toggleDrawer}
-                />
+                {errors.brand && (
+                  <div style={styles.warningStyle}>{errors.brand}</div>
+                )}
               </FormControl>
             </div>
             <div>
@@ -283,6 +314,9 @@ export default class AddProduct extends Component {
                   open={this.state.drawerOpen}
                   onRequestChange={this.toggleDrawer}
                 />
+                {errors.color && (
+                  <div style={styles.warningStyle}>{errors.color}</div>
+                )}
               </FormControl>
             </div>
             <div style={styles.buttonStyle}>

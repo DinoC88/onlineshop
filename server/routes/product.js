@@ -4,6 +4,9 @@ const router = express.Router();
 //Load model
 const Product = require("../models/Product");
 
+// Load input validation
+const validateProductInput = require("../validation/product");
+
 //@route POST /product/list
 //@desc  POST list of products
 //@access Public
@@ -16,34 +19,20 @@ router.post("/list", (req, res) => {
           $gte: req.body[key][0],
           $lte: req.body[key][1]
         };
+      } else if (key === "name") {
+        findArgs[key] = { $regex: req.body[key], $options: "i" };
       } else {
         findArgs[key] = req.body[key];
       }
     }
   }
   Product.find(findArgs)
-    .then(product => {
-      if (!product) {
+    .then(filterProducts => {
+      if (!filterProducts) {
         errors.noproduct = "There are no products";
         return res.status(404).json(errors);
       }
-      res.json(product);
-    })
-    .catch(err => res.json(err));
-});
-
-//@route POST /product/search
-//@desc  POST searched product
-//@access Public
-router.post("/search", (req, res) => {
-  let search = { name: { $regex: req.body.name, $options: "i" } };
-  Product.find(search)
-    .then(product => {
-      if (!product) {
-        errors.noproduct = "There are no products";
-        return res.status(404).json(errors);
-      }
-      res.json(product);
+      res.json(filterProducts);
     })
     .catch(err => res.json(err));
 });
@@ -68,6 +57,12 @@ router.post("/", (req, res) => {
 //@desc  POST product
 //@access public (should change to private)
 router.post("/addproduct", (req, res) => {
+  const { errors, isValid } = validateProductInput(req.body);
+
+  // Check validation
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
   const newProduct = new Product({
     name: req.body.name,
     image: req.body.image,
