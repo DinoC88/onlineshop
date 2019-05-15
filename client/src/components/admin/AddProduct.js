@@ -238,13 +238,27 @@ export default class AddProduct extends Component {
             </div>
             <div>
               <FormControl style={styles.formStyle} required>
-                <InputLabel htmlFor="memory">Memory</InputLabel>
-                <Input
-                  id="memory"
-                  name="memory"
+                <InputLabel>Select Memory</InputLabel>
+                <Select
+                  style={{ width: 350 }}
+                  inputProps={{
+                    name: "memory"
+                  }}
                   value={this.state.memory}
-                  autoComplete="memory"
-                  onChange={this.onProductChange}
+                  onChange={this.handleDrawerChange}
+                >
+                  <MenuItem value="8 GB">8 GB</MenuItem>
+                  <MenuItem value="16 GB">16 GB</MenuItem>
+                  <MenuItem value="32 GB">32 GB</MenuItem>
+                  <MenuItem value="64 GB">64 GB</MenuItem>
+                  <MenuItem value="128 GB">128 GB</MenuItem>
+                  <MenuItem value="256 GB">256 GB</MenuItem>
+                  <MenuItem value="512 GB">256 GB</MenuItem>
+                </Select>
+                <Drawer
+                  docked={false}
+                  open={this.state.drawerOpen}
+                  onRequestChange={this.toggleDrawer}
                 />
                 {errors.memory && (
                   <div style={styles.warningStyle}>{errors.memory}</div>

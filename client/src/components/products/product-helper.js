@@ -1,14 +1,11 @@
 import axios from "axios";
 
-export const getProduct = filters => {
-  return axios.post(`/api/product/list`, filters);
-};
-
-export const getProductBySearch = search => {
-  return axios.post(`/api/product/list`, search);
-};
-export const sortProducts = filters => {
-  return axios.post(`/api/product/`, filters);
+export const getProduct = (filters, sort) => {
+  const data = {
+    filters,
+    sort
+  };
+  return axios.post(`/api/product/list`, data);
 };
 
 export const getProductById = productId => {

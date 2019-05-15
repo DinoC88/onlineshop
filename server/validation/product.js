@@ -20,37 +20,48 @@ module.exports = function validateProductInput(data) {
   data.color = !isEmpty(data.color) ? data.color : "";
 
   if (Validator.isEmpty(data.name)) {
-    errors.name = "Name field is required";
+    errors.name = "Name field is required.";
   }
   if (Validator.isEmpty(data.image)) {
-    errors.image = "Image field is required";
+    errors.image = "Image field is required.";
+  } else if (!Validator.isURL(data.image)) {
+    errors.image = "Image field must be url.";
   }
   if (Validator.isEmpty(data.displaySize)) {
     errors.displaySize = "Display size field is required";
+  } else if (/^\d{0,1}(\.\d{1,1})?(")$/g.test(data.displaySize) === false) {
+    errors.displaySize = 'Invalid display size. Example 5.3"';
   }
   if (Validator.isEmpty(data.displayResolution)) {
-    errors.displayResolution = "Display resolution field is required";
+    errors.displayResolution = "Display resolution field is required.";
+  } else if (
+    /^(\d{3,4})( x )(\d{3,4})/g.test(data.displayResolution) === false
+  ) {
+    errors.displayResolution =
+      "Invalid display resolution. Example 1080 x 1920";
   }
   if (Validator.isEmpty(data.price)) {
-    errors.price = "Price field is required";
+    errors.price = "Price field is required.";
+  } else if (!Validator.isNumeric(data.price)) {
+    errors.price = "Price must be number.";
   }
   if (Validator.isEmpty(data.cpu)) {
-    errors.cpu = "CPU field is required";
+    errors.cpu = "CPU field is required.";
   }
   if (Validator.isEmpty(data.memory)) {
-    errors.memory = "Memory field is required";
+    errors.memory = "Memory field is required.";
   }
   if (Validator.isEmpty(data.ram)) {
-    errors.ram = "RAM field is required";
+    errors.ram = "RAM field is required.";
   }
   if (Validator.isEmpty(data.camera)) {
-    errors.camera = "Camera field is required";
+    errors.camera = "Camera field is required.";
   }
   if (Validator.isEmpty(data.brand)) {
-    errors.brand = "Brand field is required";
+    errors.brand = "Brand field is required.";
   }
   if (Validator.isEmpty(data.color)) {
-    errors.color = "Color field is required";
+    errors.color = "Color field is required.";
   }
 
   return {

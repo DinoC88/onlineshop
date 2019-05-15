@@ -5,7 +5,7 @@ import CheckBox from "./checkbox/CheckBox";
 import CheckBoxPrice from "./checkbox/CheckBoxPrice";
 import SearchIcon from "@material-ui/icons/Search";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
-import { getProduct, sortProducts, getProductBySearch } from "./product-helper";
+import { getProduct } from "./product-helper";
 import {
   brand,
   ram,
@@ -82,16 +82,16 @@ export default class Mainpage extends Component {
       isLoading: false,
       errors: null,
       searchProduct: "",
-      searched: false,
       products: [],
       filters: {},
+      sort: {},
       input: "",
       drawerOpen: false
     };
   }
   componentWillMount() {
     this.setState({ isLoading: true });
-    this.showFilterResults(this.state.filters);
+    this.showFilterResults(this.state.filters, this.state.sort);
   }
   //Sort drawer controller
   toggleDrawer = () => {
@@ -110,24 +110,13 @@ export default class Mainpage extends Component {
       newSort.price = "desc";
     }
     this.setState({
+      sort: newSort,
       isLoading: true,
       input: e.target.value
     });
-    this.sortProductBy(newSort);
+    this.showFilterResults(this.state.filters, newSort);
   };
-  //Sort products by - function
-  sortProductBy = sort => {
-    sortProducts(sort)
-      .then(products => {
-        this.setState({ products: products.data, isLoading: false });
-      })
-      .catch(errors =>
-        this.setState({
-          errors,
-          isLoading: false
-        })
-      );
-  };
+
   //Searchbox input
   handleSearchInput = e => {
     this.setState({ searchProduct: e.target.value });
@@ -140,8 +129,8 @@ export default class Mainpage extends Component {
     }
   };
   //Filter function
-  showFilterResults = filter => {
-    getProduct(filter)
+  showFilterResults = (filter, sort) => {
+    getProduct(filter, sort)
       .then(products => {
         this.setState({ products: products.data, isLoading: false });
       })
@@ -156,7 +145,7 @@ export default class Mainpage extends Component {
   handlePrice = value => {
     const data = price;
     let array = [];
-    console.log(value);
+    console.log(data);
     for (let key in data) {
       if (data[key]._id === parseInt(value, 10)) {
         array = data[key].array;
@@ -176,7 +165,7 @@ export default class Mainpage extends Component {
       let search = this.state.searchProduct;
       newFilters[category] = search;
     }
-    this.showFilterResults(newFilters);
+    this.showFilterResults(newFilters, this.state.sort);
     this.setState({
       filters: newFilters
     });

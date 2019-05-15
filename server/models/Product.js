@@ -43,7 +43,7 @@ const productSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    required: "Price is required"
+    required: true
   },
   updated: Date,
   created: {

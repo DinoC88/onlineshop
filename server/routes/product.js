@@ -12,43 +12,28 @@ const validateProductInput = require("../validation/product");
 //@access Public
 router.post("/list", (req, res) => {
   let findArgs = {};
-  for (let key in req.body) {
-    if (req.body[key].length > 0) {
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
       if (key === "price") {
         findArgs[key] = {
-          $gte: req.body[key][0],
-          $lte: req.body[key][1]
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1]
         };
       } else if (key === "name") {
-        findArgs[key] = { $regex: req.body[key], $options: "i" };
+        findArgs[key] = { $regex: req.body.filters[key], $options: "i" };
       } else {
-        findArgs[key] = req.body[key];
+        findArgs[key] = req.body.filters[key];
       }
     }
   }
   Product.find(findArgs)
+    .sort(req.body.sort)
     .then(filterProducts => {
       if (!filterProducts) {
         errors.noproduct = "There are no products";
         return res.status(404).json(errors);
       }
       res.json(filterProducts);
-    })
-    .catch(err => res.json(err));
-});
-
-//@route POST /product
-//@desc  POST sort Products Name By Alphabet
-//@access Public
-router.post("/", (req, res) => {
-  Product.find()
-    .sort(req.body)
-    .then(product => {
-      if (!product) {
-        errors.noproduct = "There are no products";
-        return res.status(404).json(errors);
-      }
-      res.json(product);
     })
     .catch(err => res.json(err));
 });

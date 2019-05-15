@@ -11,16 +11,18 @@ const ram = [
     _id: 0,
     name: "1 GB"
   },
+  { _id: 1, name: "2 GB" },
   {
-    _id: 1,
+    _id: 2,
     name: "3 GB"
   },
   {
-    _id: 2,
+    _id: 3,
     name: "4 GB"
   },
+  { _id: 4, name: "5 GB" },
   {
-    _id: 3,
+    _id: 5,
     name: "6 GB"
   }
 ];
@@ -69,22 +71,25 @@ const color = [
 ];
 
 const internalMemory = [
-  {
-    _id: 0,
-    name: "16 GB"
-  },
+  { _id: 0, name: "8 GB" },
   {
     _id: 1,
+    name: "16 GB"
+  },
+  { _id: 2, name: "32 GB" },
+  {
+    _id: 3,
     name: "64 GB"
   },
   {
-    _id: 2,
+    _id: 4,
     name: "128 GB"
   },
   {
-    _id: 3,
+    _id: 5,
     name: "256 GB"
-  }
+  },
+  { _id: 6, name: "512 GB" }
 ];
 
 const displaySize = [
