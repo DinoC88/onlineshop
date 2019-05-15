@@ -5,8 +5,13 @@ import { Button, Snackbar } from "@material-ui/core";
 import decode from "jwt-decode";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import { getProductById, addProductToCart } from "../products/product-helper";
-
+import {
+  getProductById,
+  addProductToCart,
+  getCurrentUser,
+  deleteProduct
+} from "../products/product-helper";
+import setAuthToken from "../../utils/setAuthToken";
 const styles = {
   productPageContainer: {
     minHeight: "90vh"
@@ -68,17 +73,19 @@ const styles = {
   }
 };
 
-export default class Product extends Component {
-  constructor() {
-    super();
+class Product extends Component {
+  constructor(props) {
+    super(props);
     this.state = {
       product: null,
       isLoading: false,
       errors: null,
       userid: "",
       productid: "",
+      name: "",
       quantity: 1,
-      snackbarOpen: false
+      snackbarOpen: false,
+      isAdmin: false
     };
   }
   componentDidMount() {
@@ -87,11 +94,20 @@ export default class Product extends Component {
       .then(result => {
         let token = localStorage.getItem("jwtToken");
         let decoded = decode(token);
+        setAuthToken(token);
         this.setState({
           product: result.data,
+          name: result.data.name,
           isLoading: false,
           userid: decoded.id
         });
+        getCurrentUser()
+          .then(res => {
+            this.setState({
+              isAdmin: res.data.isAdmin
+            });
+          })
+          .catch(err => console.log(err));
       })
       .catch(errors =>
         this.setState({
@@ -113,6 +129,16 @@ export default class Product extends Component {
     };
     addProductToCart(postData);
     this.setState({ snackbarOpen: true });
+  };
+
+  //TODO: fix isAdmin checker in compdidmount (deleted)
+  onDeleteProduct = () => {
+    deleteProduct(this.state.name)
+      .then(res => {
+        console.log("test");
+        this.props.history.push("/dashboard");
+      })
+      .catch(err => console.log("err"));
   };
 
   render() {
@@ -227,6 +253,17 @@ export default class Product extends Component {
                 Add to Cart
               </Button>
             </div>
+            <div>
+              {this.state.isAdmin ? (
+                <Button
+                  onClick={this.onDeleteProduct}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Delete Product
+                </Button>
+              ) : null}
+            </div>
           </div>
         </div>
       );
@@ -238,3 +275,5 @@ export default class Product extends Component {
     );
   }
 }
+
+export default Product;

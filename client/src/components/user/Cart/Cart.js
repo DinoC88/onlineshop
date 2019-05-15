@@ -99,7 +99,7 @@ export default class Cart extends Component {
           cartData: res.data,
           isLoading: false
         });
-        console.log(res.data.items.length);
+        console.log(res.data);
       })
       .catch(err => console.log(err));
   }

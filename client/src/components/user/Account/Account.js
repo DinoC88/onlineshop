@@ -44,6 +44,11 @@ const styles = {
   deleteButton: {
     color: "white"
   },
+  addButton: {
+    color: "white",
+    marginRight: 20,
+    marginTop: 20
+  },
   accountHistory: {
     width: "50%",
     marginBottom: "50px",
@@ -77,6 +82,8 @@ export default class Account extends Component {
       address: "",
       phone: "",
       orders: "",
+      role: "",
+      isAdmin: Boolean,
       isLoading: false,
       data: null,
       errors: null,
@@ -95,7 +102,9 @@ export default class Account extends Component {
           name: res.data.name,
           address: res.data.address,
           phone: res.data.phone,
-          orders: res.data.orders
+          orders: res.data.orders,
+          role: res.data.role,
+          isAdmin: res.data.isAdmin
         });
       })
       .catch(err =>
@@ -167,6 +176,18 @@ export default class Account extends Component {
                 Delete
                 <DeleteIcon />
               </Button>
+              <div>
+                {this.state.isAdmin ? (
+                  <Button
+                    style={styles.addButton}
+                    variant="contained"
+                    color="primary"
+                    href={`/addproduct`}
+                  >
+                    Add Product
+                  </Button>
+                ) : null}
+              </div>
               <Dialog
                 disableBackdropClick
                 disableEscapeKeyDown

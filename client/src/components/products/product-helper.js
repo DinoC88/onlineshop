@@ -15,3 +15,11 @@ export const getProductById = productId => {
 export const addProductToCart = product => {
   return axios.post("/api/cart", product);
 };
+
+export const getCurrentUser = () => {
+  return axios.get("/api/users/current");
+};
+
+export const deleteProduct = nameData => {
+  return axios.delete("/api/product/delete", { data: { name: nameData } });
+};

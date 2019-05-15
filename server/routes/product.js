@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 //Load model
 const Product = require("../models/Product");
@@ -59,8 +60,7 @@ router.post("/addproduct", (req, res) => {
     ram: req.body.ram,
     camera: req.body.camera,
     brand: req.body.brand,
-    color: req.body.color,
-    pricetag: req.body.pricetag
+    color: req.body.color
   });
 
   newProduct
@@ -83,6 +83,15 @@ router.get("/:id", (req, res) => {
       res.json(product);
     })
     .catch(err => err => res.json(err));
+});
+
+router.delete("/delete", (req, res) => {
+  console.log(req.body);
+  Product.findOneAndDelete(req.body)
+    .then(() => {
+      res.json({ success: true, msg: "deleted" });
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

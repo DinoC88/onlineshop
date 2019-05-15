@@ -43,18 +43,6 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li>
           <MenuItem
-            style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
-            component={Link}
-            to="/addproduct"
-            selected={"/addproduct" === pathname}
-          >
-            Add Product
-          </MenuItem>
-        </li>
-        <li>
-          <MenuItem
             component={Link}
             style={styles.button}
             onMouseEnter={e => (e.target.style.backgroundColor = "gray")}

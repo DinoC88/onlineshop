@@ -100,7 +100,8 @@ router.get(
       phone: req.user.phone,
       address: req.user.address,
       orders: req.user.orders,
-      isAdmin: req.user.isAdmin
+      role: req.user.role,
+      isAdmin: req.user.role === 0 ? false : true
     });
   }
 );

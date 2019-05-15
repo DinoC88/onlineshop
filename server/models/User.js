@@ -25,6 +25,10 @@ const UserSchema = new Schema({
   phone: {
     type: String
   },
+  role: {
+    type: Number,
+    default: 0
+  },
   orders: [],
   date: {
     type: Date,
