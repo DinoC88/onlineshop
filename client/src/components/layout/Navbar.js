@@ -32,6 +32,7 @@ class Navbar extends Component {
   onLogoutClick = e => {
     //remove token from localstorage
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("isAdmin");
     //remove auth header for future request
     setAuthToken(false);
   };

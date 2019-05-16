@@ -30,8 +30,8 @@ export default class CheckBoxPrice extends Component {
     };
   }
 
-  // handleClick function
-  handleClick = () => {
+  // handleCheckboxClick function
+  handleCheckboxClick = () => {
     this.setState({ open: !this.state.open });
   };
 
@@ -57,7 +57,7 @@ export default class CheckBoxPrice extends Component {
     return (
       <div>
         <List style={styles.listItem}>
-          <ListItem onClick={this.handleClick}>
+          <ListItem onClick={this.handleCheckboxClick}>
             <ListItemText
               style={{ marginLeft: 40 }}
               primary={this.props.title}

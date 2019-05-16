@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
 
 //Load model
 const Product = require("../models/Product");
@@ -85,8 +84,10 @@ router.get("/:id", (req, res) => {
     .catch(err => err => res.json(err));
 });
 
+//@route DELETE /delete
+//@desc  Delete product by name
+//@access Admin
 router.delete("/delete", (req, res) => {
-  console.log(req.body);
   Product.findOneAndDelete(req.body)
     .then(() => {
       res.json({ success: true, msg: "deleted" });

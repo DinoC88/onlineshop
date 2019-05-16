@@ -38,7 +38,6 @@ const styles = {
     padding: "0 10px"
   },
   total: {
-    color: "#64dd17",
     fontSize: "22px"
   },
   cartInfoBtns: {
@@ -54,14 +53,14 @@ const styles = {
   },
   cartItemsTh: {
     padding: "5px 5px",
-    backgroundColor: "#00bcd4",
+    backgroundColor: "#333333",
     color: "white",
     textAlign: "left"
   },
   cartItemsTd: {
     padding: "12px 5px",
     textAlign: "left",
-    borderBottom: "1px solid #00bcd4"
+    borderBottom: "1px solid #333333"
   },
   link: {
     color: "inherit",

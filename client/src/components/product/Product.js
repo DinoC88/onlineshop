@@ -36,16 +36,16 @@ const styles = {
     textAlign: "center"
   },
   productInfoTh: {
-    backgroundColor: "#00bcd4",
+    backgroundColor: "#333333",
     color: "white",
     padding: "3px",
     textAlign: "left",
-    border: "1px solid #80deea"
+    border: "1px solid white"
   },
   productInfoTd: {
     padding: "3px",
     textAlign: "left",
-    border: "1px solid #80deea"
+    border: "1px solid #333333"
   },
   productHandle: {
     display: "flex",
@@ -83,21 +83,21 @@ class Product extends Component {
       productid: "",
       name: "",
       quantity: 1,
-      snackbarOpen: false,
-      isAdmin: false
+      snackbarOpen: false
     };
   }
   componentDidMount() {
     this.setState({ isLoading: true });
+
     getProductById(this.props.match.params.id)
       .then(result => {
         let token = localStorage.getItem("jwtToken");
-        let decoded = decode(token);
+        let decoded = token ? decode(token) : "";
         this.setState({
           product: result.data,
           name: result.data.name,
-          isLoading: false,
-          userid: decoded.id
+          userid: decoded.id,
+          isLoading: false
         });
       })
       .catch(errors =>
@@ -122,18 +122,16 @@ class Product extends Component {
     this.setState({ snackbarOpen: true });
   };
 
-  //TODO: fix isAdmin checker in compdidmount (deleted)
   onDeleteProduct = () => {
     deleteProduct(this.state.name)
       .then(res => {
-        console.log("test");
         this.props.history.push("/dashboard");
       })
-      .catch(err => console.log("err"));
+      .catch(err => console.log(err));
   };
 
   render() {
-    const { product, isLoading } = this.state;
+    const { product, isLoading, userid } = this.state;
     let productItem;
     if (product === null || isLoading) {
       productItem = <Spinner />;
@@ -235,6 +233,7 @@ class Product extends Component {
             </div>
             <div>
               <Button
+                disabled={userid ? false : true}
                 style={styles.handleButton}
                 variant="contained"
                 onClick={this.addToCart}

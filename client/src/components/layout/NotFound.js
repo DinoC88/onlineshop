@@ -2,7 +2,7 @@ import * as React from "react";
 
 const styles = {
   notFoundContainer: {
-    minHeight: "85vh"
+    minHeight: "90vh"
   },
   notFoundHeader: {
     textAlign: "center",

@@ -42,7 +42,7 @@ const styles = {
     marginBottom: "10px"
   },
   productsHandle: {
-    borderBottom: "1px solid #81d4fa",
+    borderBottom: "1px solid #333333",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around"
@@ -121,7 +121,7 @@ export default class Mainpage extends Component {
   handleSearchInput = e => {
     this.setState({ searchProduct: e.target.value });
   };
-  //Searchbox hit enter
+  //Searchbox on hit enter
   enterKey = (event, filters) => {
     if (event.keyCode === 13) {
       event.preventDefault();
@@ -153,10 +153,9 @@ export default class Mainpage extends Component {
     }
     return array;
   };
-  //Filter handler
+  //Filters handler
   handleFilters = (filters, category, e) => {
     const newFilters = { ...this.state.filters };
-    //const newFilters = Object.assign(this.state.filters);
     newFilters[category] = filters;
     if (category === "price") {
       let priceValues = this.handlePrice(filters);

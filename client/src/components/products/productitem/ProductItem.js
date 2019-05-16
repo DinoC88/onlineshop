@@ -10,6 +10,13 @@ const styles = {
     boxShadow: "0 0 7px #b7b2b3",
     padding: "8px"
   },
+  productDetailsContainerHover: {
+    maxHeight: "250px",
+    display: "flex",
+    margin: "10px 0",
+    boxShadow: "0 0 14px #d1d3d6",
+    padding: "8px"
+  },
   productImage: {
     width: "200px",
     margin: "15px",
@@ -33,14 +40,34 @@ const styles = {
 };
 
 export default class Productitem extends Component {
+  constructor() {
+    super();
+    this.state = {
+      hover: false
+    };
+  }
+  onMouseEnter = () => {
+    this.setState({
+      hover: true
+    });
+  };
+  onMouseLeave = () => {
+    this.setState({
+      hover: false
+    });
+  };
   render() {
     const { product } = this.props;
     return (
       <div>
         <div
-          onMouseEnter={e => (e.target.style.boxShadow = "0 0 14px #d1d3d6")}
-          onMouseLeave={e => (e.target.style.boxShadow = "0 0 7px #b7b2b3")}
-          style={styles.productDetailsContainer}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          style={
+            this.state.hover
+              ? styles.productDetailsContainerHover
+              : styles.productDetailsContainer
+          }
         >
           <img
             style={styles.productImage}

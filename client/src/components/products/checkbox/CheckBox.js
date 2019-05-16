@@ -33,7 +33,7 @@ export default class CheckBox extends Component {
   }
 
   // handleClick function
-  handleClick = () => {
+  handleCheckboxClick = () => {
     this.setState({ open: !this.state.open });
   };
 
@@ -82,7 +82,7 @@ export default class CheckBox extends Component {
     return (
       <div>
         <List>
-          <ListItem style={styles.listItem} onClick={this.handleClick}>
+          <ListItem style={styles.listItem} onClick={this.handleCheckboxClick}>
             <ListItemText inset primary={this.props.title} />
             {this.state.open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
