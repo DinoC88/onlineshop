@@ -8,10 +8,10 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import {
   getProductById,
   addProductToCart,
-  getCurrentUser,
   deleteProduct
 } from "../products/product-helper";
-import setAuthToken from "../../utils/setAuthToken";
+import checkAdmin from "../common/checkAdmin";
+
 const styles = {
   productPageContainer: {
     minHeight: "90vh"
@@ -51,7 +51,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: "20px 0px 20px 0px"
+    padding: "30px 0px 20px 0px"
   },
   handleSpanText: {
     fontSize: "16px",
@@ -59,8 +59,7 @@ const styles = {
   },
   priceNum: {
     fontSize: "30px",
-    fontWeight: "bold",
-    color: "#64dd17"
+    fontWeight: "bold"
   },
   handleQuantityInput: {
     width: "30px",
@@ -94,20 +93,12 @@ class Product extends Component {
       .then(result => {
         let token = localStorage.getItem("jwtToken");
         let decoded = decode(token);
-        setAuthToken(token);
         this.setState({
           product: result.data,
           name: result.data.name,
           isLoading: false,
           userid: decoded.id
         });
-        getCurrentUser()
-          .then(res => {
-            this.setState({
-              isAdmin: res.data.isAdmin
-            });
-          })
-          .catch(err => console.log(err));
       })
       .catch(errors =>
         this.setState({
@@ -254,7 +245,7 @@ class Product extends Component {
               </Button>
             </div>
             <div>
-              {this.state.isAdmin ? (
+              {checkAdmin() ? (
                 <Button
                   onClick={this.onDeleteProduct}
                   variant="contained"

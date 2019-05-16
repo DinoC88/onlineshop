@@ -12,7 +12,8 @@ import {
 const styles = {
   listItem: {
     borderTop: "1px solid #dcdcdc",
-    padding: "15px 25px 10px 0"
+    padding: "15px 25px 10px 0",
+    cursor: "pointer"
   },
   filterText: {
     marginLeft: 30

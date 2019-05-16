@@ -63,6 +63,7 @@ export default class Login extends Component {
     loginSubmit(user)
       .then(res => {
         this.setState({ logged: true });
+        localStorage.setItem("isAdmin", res.data.test.isAdmin);
         // Take token from data
         const { token } = res.data;
         // Set token to localStorage

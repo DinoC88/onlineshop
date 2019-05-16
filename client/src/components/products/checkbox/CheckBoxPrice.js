@@ -13,7 +13,8 @@ import {
 const styles = {
   listItem: {
     borderTop: "1px solid #dcdcdc",
-    paddingRight: 10
+    paddingRight: 10,
+    cursor: "pointer"
   },
   checkbox: {
     marginLeft: "40px"

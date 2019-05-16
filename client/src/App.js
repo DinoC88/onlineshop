@@ -10,6 +10,7 @@ import Login from "./components/auth/Login";
 import NotFound from "./components/layout/NotFound";
 import Mainpage from "./components/products/Mainpage";
 import PrivateRoute from "./components/common/PrivateRoute";
+import AdminRoute from "./components/common/AdminRoute";
 import Product from "./components/product/Product";
 import Account from "./components/user/Account/Account";
 import EditAccount from "./components/user/EditAccount/EditAccount";
@@ -32,7 +33,7 @@ class App extends Component {
               <PrivateRoute exact path="/users/current" component={Account} />
               <PrivateRoute path="/user/:userId" component={EditAccount} />
               <PrivateRoute path="/cart" component={Cart} />
-              <PrivateRoute path="/addproduct" component={AddProduct} />
+              <AdminRoute path="/addproduct" component={AddProduct} />
               <Route component={NotFound} />
             </Switch>
           </div>

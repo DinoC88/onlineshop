@@ -3,6 +3,7 @@ import { BrowserRouter as Route, Router, Link } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import setAuthToken from "../../utils/setAuthToken";
 import checkAuth from "../common/checkAuth";
+import checkAdmin from "../common/checkAdmin";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import MenuItem from "@material-ui/core/MenuItem";
 
@@ -41,6 +42,20 @@ class Navbar extends Component {
     } = this.props;
     const authLinks = (
       <ul className="navbar-nav ml-auto">
+        {checkAdmin() ? (
+          <li>
+            <MenuItem
+              component={Link}
+              style={styles.button}
+              onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
+              onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+              to="/addproduct"
+              selected={"/addproduct" === pathname}
+            >
+              Add product
+            </MenuItem>
+          </li>
+        ) : null}
         <li>
           <MenuItem
             component={Link}

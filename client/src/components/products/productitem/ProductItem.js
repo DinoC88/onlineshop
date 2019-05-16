@@ -25,8 +25,7 @@ const styles = {
     alignSelf: "center"
   },
   priceStyle: {
-    fontSize: "30px",
-    color: "#64dd17"
+    fontSize: "30px"
   },
   seeMoreButton: {
     color: "white"
@@ -36,10 +35,13 @@ const styles = {
 export default class Productitem extends Component {
   render() {
     const { product } = this.props;
-
     return (
       <div>
-        <div style={styles.productDetailsContainer}>
+        <div
+          onMouseEnter={e => (e.target.style.boxShadow = "0 0 14px #d1d3d6")}
+          onMouseLeave={e => (e.target.style.boxShadow = "0 0 7px #b7b2b3")}
+          style={styles.productDetailsContainer}
+        >
           <img
             style={styles.productImage}
             src={product.image}

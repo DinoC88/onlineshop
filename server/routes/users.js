@@ -70,12 +70,13 @@ router.post("/login", (req, res) => {
 
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
-        const payload = { id: user.id, name: user.name, isAdmin: user.isAdmin };
+        const payload = { id: user.id, name: user.name, isAdmin: user.role };
 
         jwt.sign(payload, keys, { expiresIn: 3600 }, (err, token) => {
           res.json({
             success: true,
-            token: "Bearer " + token
+            token: "Bearer " + token,
+            test: payload
           });
         });
       } else {
@@ -99,9 +100,7 @@ router.get(
       email: req.user.email,
       phone: req.user.phone,
       address: req.user.address,
-      orders: req.user.orders,
-      role: req.user.role,
-      isAdmin: req.user.role === 0 ? false : true
+      orders: req.user.orders
     });
   }
 );

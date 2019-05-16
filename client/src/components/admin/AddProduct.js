@@ -9,7 +9,7 @@ import {
   Drawer
 } from "@material-ui/core";
 import { addNewProduct } from "./admin-helper";
-
+import checkAdmin from "../common/checkAdmin";
 const styles = {
   addProductContainer: {
     height: "90vh"
