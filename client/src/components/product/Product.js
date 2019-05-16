@@ -122,7 +122,6 @@ class Product extends Component {
     this.setState({ snackbarOpen: true });
   };
 
-  //TODO: fix isAdmin checker in compdidmount (deleted)
   onDeleteProduct = () => {
     deleteProduct(this.state.name)
       .then(res => {
