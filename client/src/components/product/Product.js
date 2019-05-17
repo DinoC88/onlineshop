@@ -14,6 +14,9 @@ import checkAdmin from "../common/checkAdmin";
 
 const styles = {
   productPageContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     minHeight: "90vh"
   },
   productDetailsContainer: {
@@ -25,14 +28,14 @@ const styles = {
   },
   productDetails: {
     display: "flex",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    alignItems: "center",
+    padding: "8px"
   },
   productImage: {
-    width: "30%",
     maxHeight: "364px"
   },
   productInfo: {
-    width: "60%",
     textAlign: "center"
   },
   productInfoTh: {
@@ -51,24 +54,23 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    padding: "30px 0px 20px 0px"
-  },
-  handleSpanText: {
-    fontSize: "16px",
-    fontWeight: "bold"
+    margin: 10
   },
   priceNum: {
     fontSize: "30px",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    margin: 10
   },
   handleQuantityInput: {
     width: "30px",
     height: "28px",
     margin: "10px",
-    fontSize: "14px"
+    fontSize: "14px",
+    margin: 10
   },
   handleButton: {
-    color: "white"
+    color: "white",
+    margin: 10
   }
 };
 
@@ -212,8 +214,7 @@ class Product extends Component {
                 Back to catalog
               </Button>
             </div>
-            <div>
-              <span style={styles.handleSpanText}>Price:</span>
+            <div style={styles.priceNum}>
               <span style={styles.priceNum}>
                 {numeral(product.price).format("$0,0.00")}
               </span>
@@ -246,6 +247,7 @@ class Product extends Component {
             <div>
               {checkAdmin() ? (
                 <Button
+                  style={styles.handleButton}
                   onClick={this.onDeleteProduct}
                   variant="contained"
                   color="secondary"
