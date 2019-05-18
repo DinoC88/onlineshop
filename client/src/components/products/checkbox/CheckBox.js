@@ -12,14 +12,10 @@ import {
 const styles = {
   listItem: {
     borderTop: "1px solid #dcdcdc",
-    padding: "15px 25px 10px 0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     cursor: "pointer"
-  },
-  filterText: {
-    marginLeft: 30
-  },
-  checkbox: {
-    marginRight: "10px"
   }
 };
 
@@ -62,13 +58,9 @@ export default class CheckBox extends Component {
     this.props.list
       ? this.props.list.map(value => (
           <ListItem key={value._id}>
-            <ListItemText
-              style={styles.filterText}
-              primary={<i>{value.name}</i>}
-            />
+            <ListItemText primary={<i>{value.name}</i>} />
             <ListItemSecondaryAction>
               <Checkbox
-                style={styles.checkbox}
                 color="primary"
                 onChange={this.handleToggle(value.name)}
                 checked={this.state.checked.indexOf(value.name) !== -1}
@@ -83,7 +75,11 @@ export default class CheckBox extends Component {
       <div>
         <List>
           <ListItem style={styles.listItem} onClick={this.handleCheckboxClick}>
-            <ListItemText inset primary={this.props.title} />
+            <ListItemText
+              style={{ marginBottom: -10 }}
+              inset
+              primary={this.props.title}
+            />
             {this.state.open ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={this.state.open} timeout="auto" unmountOnExit>

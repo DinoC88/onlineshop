@@ -3,7 +3,6 @@ import Spinner from "../common/Spinner";
 import ProductItem from "./productitem/ProductItem";
 import CheckBox from "./checkbox/CheckBox";
 import CheckBoxPrice from "./checkbox/CheckBoxPrice";
-import SearchIcon from "@material-ui/icons/Search";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
 import { getProduct } from "./product-helper";
 import {
@@ -22,27 +21,28 @@ const styles = {
     justifyContent: "space-between",
     minHeight: "100vh",
     border: "1px solid #ffffff00",
-    marginTop: "-70px"
+    marginTop: "-50px"
   },
   filtersList: {
     width: "25%",
-    height: "100%",
-    minHeight: "auto",
-    margin: "90px 20px 40px 0px",
+    maxHeight: "100%",
+    boxShadow: "0 0 7px #b7b2b3",
+    margin: "70px 20px 40px 0px",
     backgroundColor: "#f5f5f5"
   },
   filtersListHeader: {
+    marginTop: 20,
     fontSize: "20px",
     fontWeight: "bold",
     textAlign: "center"
   },
   productList: {
-    width: "78%",
+    width: "100%",
     marginTop: "90px",
     marginBottom: "10px"
   },
   productsHandle: {
-    borderBottom: "1px solid #333333",
+    borderBottom: "1px solid #325999",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around"
@@ -52,7 +52,9 @@ const styles = {
     marginTop: 10
   },
   search: {
-    marginTop: -20,
+    marginTop: -23,
+    marginRight: -35,
+    display: "flex",
     justifyContent: "flex-end"
   },
   clearButton: {
@@ -62,7 +64,7 @@ const styles = {
   iconStyle: {
     width: 40,
     height: 40,
-    backgroundColor: "#333333",
+    backgroundColor: "#325999",
     color: "white",
     borderRadius: "5px"
   },
@@ -188,7 +190,6 @@ export default class Mainpage extends Component {
       <div style={styles.homepageContainer}>
         <div style={styles.filtersList}>
           <p style={styles.filtersListHeader}>Search by</p>
-
           <CheckBoxPrice
             title={<b>Price</b>}
             list={price}
@@ -237,7 +238,7 @@ export default class Mainpage extends Component {
             <div>
               <Button
                 style={styles.clearButton}
-                color="secondary"
+                color="primary"
                 variant="contained"
                 href="/dashboard"
               >
@@ -275,16 +276,10 @@ export default class Mainpage extends Component {
               <TextField
                 label="Search phone"
                 type="search"
-                variant="outlined"
+                variant="filled"
                 onChange={this.handleSearchInput}
                 onKeyDown={this.enterKey}
               />
-              <Button
-                type="submit"
-                onClick={filters => this.handleFilters(filters, "name")}
-              >
-                <SearchIcon style={styles.iconStyle} />
-              </Button>
             </div>
           </div>
           {productItems}

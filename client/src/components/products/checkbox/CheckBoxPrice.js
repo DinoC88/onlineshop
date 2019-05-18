@@ -13,8 +13,10 @@ import {
 const styles = {
   listItem: {
     borderTop: "1px solid #dcdcdc",
-    paddingRight: 10,
-    cursor: "pointer"
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    marginLeft: 15
   },
   checkbox: {
     marginLeft: "40px"
@@ -59,7 +61,7 @@ export default class CheckBoxPrice extends Component {
         <List style={styles.listItem}>
           <ListItem onClick={this.handleCheckboxClick}>
             <ListItemText
-              style={{ marginLeft: 40 }}
+              style={{ marginLeft: 40, marginBottom: -10 }}
               primary={this.props.title}
             />
             {this.state.open ? <ExpandLess /> : <ExpandMore />}

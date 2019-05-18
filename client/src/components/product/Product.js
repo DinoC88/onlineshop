@@ -3,14 +3,14 @@ import Spinner from "../common/Spinner";
 import * as numeral from "numeral";
 import { Button, Snackbar } from "@material-ui/core";
 import decode from "jwt-decode";
-import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import { AddShoppingCart, KeyboardArrowLeft } from "@material-ui/icons";
 import {
   getProductById,
   addProductToCart,
   deleteProduct
 } from "../products/product-helper";
 import checkAdmin from "../common/checkAdmin";
+import setAuthToken from "../../utils/setAuthToken";
 
 const styles = {
   productPageContainer: {
@@ -39,7 +39,7 @@ const styles = {
     textAlign: "center"
   },
   productInfoTh: {
-    backgroundColor: "#333333",
+    backgroundColor: "#325999",
     color: "white",
     padding: "3px",
     textAlign: "left",
@@ -48,7 +48,7 @@ const styles = {
   productInfoTd: {
     padding: "3px",
     textAlign: "left",
-    border: "1px solid #333333"
+    border: "1px solid #325999"
   },
   productHandle: {
     display: "flex",
@@ -58,13 +58,11 @@ const styles = {
   },
   priceNum: {
     fontSize: "30px",
-    fontWeight: "bold",
     margin: 10
   },
   handleQuantityInput: {
     width: "30px",
     height: "28px",
-    margin: "10px",
     fontSize: "14px",
     margin: 10
   },
@@ -89,6 +87,8 @@ class Product extends Component {
     };
   }
   componentDidMount() {
+    let token = localStorage.getItem("jwtToken");
+    setAuthToken(token);
     this.setState({ isLoading: true });
 
     getProductById(this.props.match.params.id)
@@ -240,7 +240,7 @@ class Product extends Component {
                 onClick={this.addToCart}
                 color="primary"
               >
-                <AddShoppingCartIcon />
+                <AddShoppingCart />
                 Add to Cart
               </Button>
             </div>

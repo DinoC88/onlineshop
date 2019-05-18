@@ -61,14 +61,14 @@ const styles = {
   },
   th: {
     padding: "5px 5px",
-    backgroundColor: "#333333",
+    backgroundColor: "#325999",
     color: "white",
     textAlign: "left"
   },
   td: {
     paddingBottom: "12px 5px",
     textAlign: "left",
-    borderBottom: "1px solid #333333"
+    borderBottom: "1px solid #325999"
   }
 };
 

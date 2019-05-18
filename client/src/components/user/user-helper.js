@@ -8,8 +8,8 @@ export const deleteCurrentUser = () => {
   return axios.delete("/api/users/delete");
 };
 
-export const getCartData = () => {
-  return axios.get("/api/cart");
+export const getCartData = userid => {
+  return axios.get("/api/cart", userid);
 };
 
 export const deleteCart = cartId => {

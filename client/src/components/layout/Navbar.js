@@ -10,15 +10,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 const styles = {
   navbar: {
     display: "flex",
-    height: "70px",
-    backgroundColor: "#333333",
-    marginBottom: "10px",
+    height: "60px",
+    backgroundColor: "#152847",
     color: "white"
   },
   button: {
-    backgroundColor: "#333333",
+    backgroundColor: "#152847",
     color: "white",
-    borderRadius: 20
+    height: "100%",
+    marginTop: -10
   },
   logo: {
     color: "white",
@@ -48,8 +48,8 @@ class Navbar extends Component {
             <MenuItem
               component={Link}
               style={styles.button}
-              onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-              onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+              onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+              onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
               to="/addproduct"
               selected={"/addproduct" === pathname}
             >
@@ -61,8 +61,8 @@ class Navbar extends Component {
           <MenuItem
             component={Link}
             style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+            onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             to="/cart"
             selected={"/cart" === pathname}
           >
@@ -73,8 +73,8 @@ class Navbar extends Component {
         <li>
           <MenuItem
             style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+            onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
             to="/users/current"
             selected={"/users/current" === pathname}
@@ -85,8 +85,8 @@ class Navbar extends Component {
         <li>
           <MenuItem
             style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+            onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
             to="/login"
             onClick={this.onLogoutClick}
@@ -102,8 +102,8 @@ class Navbar extends Component {
         <li>
           <MenuItem
             style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+            onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
             to="/register"
             selected={"/register" === pathname}
@@ -114,8 +114,8 @@ class Navbar extends Component {
         <li>
           <MenuItem
             style={styles.button}
-            onMouseEnter={e => (e.target.style.backgroundColor = "gray")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#333333")}
+            onMouseEnter={e => (e.target.style.backgroundColor = "#224175")}
+            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
             to="/login"
             selected={"/login" === pathname}
@@ -132,7 +132,7 @@ class Navbar extends Component {
           <Link style={styles.logo} to="/">
             Mobile Shop App
           </Link>
-          <div>{checkAuth() ? authLinks : guestLinks}</div>
+          {checkAuth() ? authLinks : guestLinks}
         </div>
       </nav>
     );

@@ -53,14 +53,14 @@ const styles = {
   },
   cartItemsTh: {
     padding: "5px 5px",
-    backgroundColor: "#333333",
+    backgroundColor: "#325999",
     color: "white",
     textAlign: "left"
   },
   cartItemsTd: {
     padding: "12px 5px",
     textAlign: "left",
-    borderBottom: "1px solid #333333"
+    borderBottom: "1px solid #325999"
   },
   link: {
     color: "inherit",
@@ -81,8 +81,11 @@ export default class Cart extends Component {
   constructor() {
     super();
     this.state = {
-      cartData: null,
-      isLoading: null,
+      cartData: [],
+      id: null,
+      isLoading: false,
+      isLoaded: false,
+      error: null,
       openOrderConfirm: false,
       openEmptyConfirm: false
     };
@@ -95,25 +98,27 @@ export default class Cart extends Component {
     getCartData()
       .then(res => {
         this.setState({
-          cartData: res.data,
-          isLoading: false
+          cartData: res.data ? res.data.items : [],
+          id: res.data ? res.data._id : null,
+          isLoading: false,
+          isLoaded: true,
+          error: null
         });
-        console.log(res.data);
       })
-      .catch(err => console.log(err));
+      .catch(err => this.setState({ error: err }));
   }
-  // TODO: remove item not working as it should.
-  //When you delete last item it doesnt return "No items in the cart."
+
   removeItem = itemId => {
     this.setState({ isLoading: true });
     removeOneItem({
-      cartId: this.state.cartData._id,
+      cartId: this.state.id,
       itemId: itemId
     }).then(res => {
       getCartData()
         .then(res => {
           this.setState({
-            cartData: res.data,
+            cartData: res.data ? res.data.items : [],
+            id: res.data ? res.data._id : null,
             isLoading: false
           });
         })
@@ -121,12 +126,13 @@ export default class Cart extends Component {
     });
   };
   emptyCart = () => {
-    const id = this.state.cartData._id;
+    const id = this.state.id;
     deleteCart({ params: { id } }).then(() => {
       getCartData()
         .then(res => {
           this.setState({
-            cartData: res.data,
+            cartData: res.data ? res.data.items : [],
+            id: res.data ? res.data._id : null,
             isLoading: false
           });
         })
@@ -135,7 +141,7 @@ export default class Cart extends Component {
     });
   };
   makeOrder = () => {
-    const order = this.state.cartData.items.map(item => {
+    const order = this.state.cartData.map(item => {
       let order = {
         name: item.product.name,
         price: item.product.price,
@@ -164,7 +170,8 @@ export default class Cart extends Component {
     this.setState({ openEmptyConfirm: false });
   };
   render() {
-    let { cartData, isLoading } = this.state;
+    let { cartData, isLoading, isLoaded, error } = this.state;
+    const cartExists = isLoaded && !error && cartData.length;
     return (
       <div style={styles.cartContainer}>
         <h1 style={styles.cartTitle}>Your Cart</h1>
@@ -173,20 +180,16 @@ export default class Cart extends Component {
             <div>
               <p style={styles.cartInfoPar}>
                 <b>Number of items: </b>
-                {cartData
-                  ? cartData.items.reduce(
-                      (acc, item) => (acc += item.quantity),
-                      0
-                    )
+                {cartExists
+                  ? cartData.reduce((acc, item) => (acc += item.quantity), 0)
                   : 0}
               </p>
               <p style={styles.cartInfoPar}>
                 <b>Total amount: </b>
-
                 <span style={styles.total}>
-                  {cartData
+                  {cartExists
                     ? numeral(
-                        cartData.items.reduce(
+                        cartData.reduce(
                           (acc, item) =>
                             (acc += item.product.price * item.quantity),
                           0
@@ -198,6 +201,7 @@ export default class Cart extends Component {
             </div>
             <div style={styles.cartInfoBtns}>
               <Button
+                disabled={!cartExists}
                 color="primary"
                 variant="contained"
                 style={{ marginRight: "5px" }}
@@ -229,6 +233,7 @@ export default class Cart extends Component {
                 </DialogActions>
               </Dialog>
               <Button
+                disabled={!cartExists}
                 color="secondary"
                 variant="contained"
                 onClick={this.handleEmptyOpen}
@@ -258,7 +263,7 @@ export default class Cart extends Component {
             </div>
           </div>
           <div style={styles.cartItems}>
-            {cartData && !isLoading ? (
+            {cartExists ? (
               <table style={styles.cartItemsTable}>
                 <thead>
                   <tr>
@@ -271,7 +276,7 @@ export default class Cart extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {cartData.items.map(item => {
+                  {cartData.map(item => {
                     return (
                       <tr style={styles.cartItemsTd} key={item.product.name}>
                         <td>
@@ -302,7 +307,7 @@ export default class Cart extends Component {
                             title="Remove this item from the cart"
                             onClick={() => this.removeItem(item._id)}
                             onMouseEnter={e =>
-                              (e.target.style.backgroundColor = "gray")
+                              (e.target.style.backgroundColor = "#325999")
                             }
                             onMouseLeave={e =>
                               (e.target.style.backgroundColor = "#ce1e4d")
