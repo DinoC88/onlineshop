@@ -10,33 +10,8 @@ import {
 } from "@material-ui/core";
 import setAuthToken from "../../utils/setAuthToken";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { loginSubmit } from "./auth-helper";
-
-const styles = {
-  loginStyle: {
-    height: "90vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  headerStyle: {
-    textAlign: "center"
-  },
-  warningStyle: {
-    color: "red",
-    fontSize: "12px"
-  },
-  buttonStyle: {
-    paddingTop: 25,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  formStyle: {
-    marginTop: 25,
-    width: 350
-  }
-};
+import { loginSubmit } from "../../utils/requestManager";
+import { styles } from "./styles";
 
 export default class Login extends Component {
   constructor() {
@@ -81,7 +56,7 @@ export default class Login extends Component {
   render() {
     const { errors } = this.state;
     return (
-      <div style={styles.loginStyle}>
+      <div style={styles.containerStyle}>
         <div>
           <h3 style={styles.headerStyle}>Sign in</h3>
           <form noValidate onSubmit={this.onLoginSubmit}>

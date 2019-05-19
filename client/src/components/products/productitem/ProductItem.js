@@ -1,57 +1,12 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import Button from "@material-ui/core/Button";
+import { Button, Snackbar } from "@material-ui/core";
 import { Search, AddShoppingCart } from "@material-ui/icons";
-import checkAuth from "../../common/checkAuth";
-import { addProductToCart } from "../product-helper";
+import checkAuth from "../../../utils/checkAuth";
+import { addProductToCart } from "../../../utils/requestManager";
 import decode from "jwt-decode";
 import setAuthToken from "../../../utils/setAuthToken";
-
-const styles = {
-  productDetailsContainer: {
-    maxHeight: "250px",
-    display: "flex",
-    margin: "10px 0",
-    boxShadow: "0 0 7px #b7b2b3",
-    padding: "8px"
-  },
-  productDetailsContainerHover: {
-    maxHeight: "250px",
-    display: "flex",
-    margin: "10px 0",
-    boxShadow: "0 0 14px #d1d3d6",
-    padding: "8px",
-    cursor: "pointer"
-  },
-  productImage: {
-    width: "200px",
-    margin: "15px",
-    objectFit: "contain"
-  },
-  contentLeft: {
-    width: "80%",
-    justifyContent: "flex-start",
-    alignSelf: "center"
-  },
-  contentRightPosition: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "flex-end"
-  },
-  priceStyle: {
-    fontSize: "30px"
-  },
-  hoverButtons: {
-    display: "flex",
-    justifyContent: "space-around",
-    flexDirection: "row"
-  },
-  linkStyle: {
-    textDecoration: "none",
-    color: "#474a4f"
-  }
-};
-
+import { styles } from "./styles";
 export default class Productitem extends Component {
   constructor() {
     super();
@@ -60,7 +15,8 @@ export default class Productitem extends Component {
       productid: null,
       userid: null,
       quantity: 1,
-      isLoading: false
+      isLoading: false,
+      snackbarOpen: false
     };
   }
   componentDidMount() {
@@ -70,7 +26,6 @@ export default class Productitem extends Component {
     this.setState({
       userid: decoded.id
     });
-    console.log(this.state.productid);
   }
 
   onHover = () => {
@@ -86,6 +41,7 @@ export default class Productitem extends Component {
       productid: productid
     };
     addProductToCart(postData);
+    this.setState({ snackbarOpen: true });
   };
   render() {
     const { product } = this.props;
@@ -106,13 +62,13 @@ export default class Productitem extends Component {
             alt={product.name}
           />
           <div style={styles.contentLeft}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div>
               <h3>{product.name}</h3>
+            </div>
+            <div>
               <h2 style={styles.priceStyle}>
                 {numeral(product.price).format("$0,0.00")}
               </h2>
-            </div>
-            <div>
               <div>
                 <b>Display size: </b>
                 <span>{product.displaySize}</span>
@@ -139,28 +95,33 @@ export default class Productitem extends Component {
               </div>
             </div>
           </div>
+          <Snackbar
+            open={this.state.snackbarOpen}
+            message={"Item added to your cart."}
+            autoHideDuration={3000}
+            style={{ background: "#64DD17" }}
+            onClose={() => this.setState({ snackbarOpen: false })}
+          />
           <div style={styles.contentRightPosition}>
-            {this.state.hover ? (
-              <div style={styles.hoverButtons}>
-                <Button
-                  style={{ color: "white" }}
-                  color="primary"
-                  variant="contained"
-                  href={`/product/${product._id}`}
-                >
-                  <Search />
-                </Button>
-                <Button
-                  disabled={checkAuth() ? false : true}
-                  style={{ marginLeft: 10 }}
-                  color="primary"
-                  variant="contained"
-                  onClick={() => this.addToCart(product._id)}
-                >
-                  <AddShoppingCart />
-                </Button>
-              </div>
-            ) : null}
+            <div style={styles.hoverButtons}>
+              <Button
+                style={{ color: "white" }}
+                color="primary"
+                variant="contained"
+                href={`/product/${product._id}`}
+              >
+                <Search />
+              </Button>
+              <Button
+                disabled={checkAuth() ? false : true}
+                style={{ marginLeft: 10 }}
+                color="primary"
+                variant="contained"
+                onClick={() => this.addToCart(product._id)}
+              >
+                <AddShoppingCart />
+              </Button>
+            </div>
           </div>
         </div>
       </div>

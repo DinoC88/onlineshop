@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import checkAuth from "../common/checkAuth";
+import checkAuth from "../../utils/checkAuth";
 import Button from "@material-ui/core/Button";
+import Logo from "../../utils/Logo";
 const styles = {
   landingStyle: {
     height: "90vh",
@@ -18,18 +19,12 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-around"
   },
-  registerButton: {
-    color: "white",
+  button: {
+    color: "black",
     width: 120,
     height: 50
-  },
-  loginButton: {
-    width: 120,
-    height: 50,
-    color: "#333333"
   }
 };
-
 export default class Landing extends Component {
   componentDidMount() {
     if (checkAuth()) {
@@ -40,21 +35,12 @@ export default class Landing extends Component {
     return (
       <div style={styles.landingStyle}>
         <div>
-          <h3 style={styles.headerStyle}>Mobile shop App</h3>
+          <Logo />
           <div style={styles.buttonStyle}>
-            <Button
-              style={styles.registerButton}
-              variant="contained"
-              color="primary"
-              href="/register"
-            >
+            <Button style={styles.button} variant="contained" href="/register">
               Sign Up
             </Button>
-            <Button
-              style={styles.loginButton}
-              href="/login"
-              variant="contained"
-            >
+            <Button style={styles.button} href="/login" variant="contained">
               Login
             </Button>
           </div>

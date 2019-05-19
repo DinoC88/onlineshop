@@ -9,19 +9,7 @@ import {
   Radio,
   FormControlLabel
 } from "@material-ui/core";
-
-const styles = {
-  listItem: {
-    borderTop: "1px solid #dcdcdc",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    marginLeft: 15
-  },
-  checkbox: {
-    marginLeft: "40px"
-  }
-};
+import { styles } from "./styles";
 
 export default class CheckBoxPrice extends Component {
   constructor() {
@@ -57,29 +45,30 @@ export default class CheckBoxPrice extends Component {
 
   render() {
     return (
-      <div>
-        <List style={styles.listItem}>
-          <ListItem onClick={this.handleCheckboxClick}>
-            <ListItemText
-              style={{ marginLeft: 40, marginBottom: -10 }}
-              primary={this.props.title}
-            />
-            {this.state.open ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-            <List disablePadding>
-              <RadioGroup
-                aria-label="price"
-                name="price"
-                value={this.state.value}
-                onChange={this.handleChange}
-              >
-                {this.renderList()}
-              </RadioGroup>
-            </List>
-          </Collapse>
-        </List>
-      </div>
+      <List style={styles.listItem}>
+        <ListItem onClick={this.handleCheckboxClick} style={{ width: "100%" }}>
+          <ListItemText
+            style={{
+              width: "100%",
+              padding: 0
+            }}
+            primary={this.props.title}
+          />
+          {this.state.open ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+          <List disablePadding>
+            <RadioGroup
+              aria-label="price"
+              name="price"
+              value={this.state.value}
+              onChange={this.handleChange}
+            >
+              {this.renderList()}
+            </RadioGroup>
+          </List>
+        </Collapse>
+      </List>
     );
   }
 }

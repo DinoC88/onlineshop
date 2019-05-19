@@ -8,16 +8,7 @@ import {
   ListItem,
   List
 } from "@material-ui/core";
-
-const styles = {
-  listItem: {
-    borderTop: "1px solid #dcdcdc",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer"
-  }
-};
+import { styles } from "./styles";
 
 export default class CheckBox extends Component {
   constructor() {
@@ -73,10 +64,16 @@ export default class CheckBox extends Component {
   render() {
     return (
       <div>
-        <List>
-          <ListItem style={styles.listItem} onClick={this.handleCheckboxClick}>
+        <List style={styles.listItem}>
+          <ListItem
+            style={{ width: "100%" }}
+            onClick={this.handleCheckboxClick}
+          >
             <ListItemText
-              style={{ marginBottom: -10 }}
+              style={{
+                width: "100%",
+                padding: 0
+              }}
               inset
               primary={this.props.title}
             />

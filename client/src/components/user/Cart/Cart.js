@@ -8,75 +8,8 @@ import {
   deleteCart,
   removeOneItem,
   getOrder
-} from "../user-helper";
-
-const styles = {
-  cartContainer: {
-    minHeight: "100vh",
-    margin: "0 6px",
-    marginTop: "-72px",
-    border: "1px solid #ffffff00"
-  },
-  cartTitle: {
-    marginTop: "100px",
-    marginBottom: "40px"
-  },
-  cart: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  cartInfo: {
-    display: "flex",
-    flexDirection: "column",
-    width: "25%",
-    height: "100%",
-    minHeight: "auto",
-    background: "#f5f5f5"
-  },
-  cartInfoPar: {
-    padding: "0 10px"
-  },
-  total: {
-    fontSize: "22px"
-  },
-  cartInfoBtns: {
-    textAlign: "center"
-  },
-  cartItems: {
-    width: "78%"
-  },
-  image: { maxWidth: "50px" },
-  cartItemsTable: {
-    width: "100%",
-    borderSpacing: "0"
-  },
-  cartItemsTh: {
-    padding: "5px 5px",
-    backgroundColor: "#325999",
-    color: "white",
-    textAlign: "left"
-  },
-  cartItemsTd: {
-    padding: "12px 5px",
-    textAlign: "left",
-    borderBottom: "1px solid #325999"
-  },
-  link: {
-    color: "inherit",
-    textDecoration: "none"
-  },
-  cartHeader: {
-    textAlign: "center",
-    marginTop: "100px"
-  },
-  cartItemButton: {
-    padding: "1px 5px",
-    borderRadius: "60%",
-    backgroundColor: "#ce1e4d"
-  }
-};
-
+} from "../../../utils/requestManager";
+import { styles } from "./styles";
 export default class Cart extends Component {
   constructor() {
     super();
@@ -90,7 +23,6 @@ export default class Cart extends Component {
       openEmptyConfirm: false
     };
   }
-
   componentDidMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
@@ -107,7 +39,6 @@ export default class Cart extends Component {
       })
       .catch(err => this.setState({ error: err }));
   }
-
   removeItem = itemId => {
     this.setState({ isLoading: true });
     removeOneItem({
@@ -150,27 +81,19 @@ export default class Cart extends Component {
       };
       return order;
     });
-
     getOrder({ order: order }).then(res => {
       this.emptyCart();
       this.setState({ openOrderConfirm: false });
     });
   };
-
-  handleOrderOpen = () => {
-    this.setState({ openOrderConfirm: true });
+  handleOrderDialog = () => {
+    this.setState({ openOrderConfirm: !this.state.openOrderConfirm });
   };
-  handleOrderClose = () => {
-    this.setState({ openOrderConfirm: false });
-  };
-  handleEmptyOpen = () => {
-    this.setState({ openEmptyConfirm: true });
-  };
-  handleEmptyClose = () => {
-    this.setState({ openEmptyConfirm: false });
+  handleEmptyDialog = () => {
+    this.setState({ openEmptyConfirm: !this.state.openEmptyConfirm });
   };
   render() {
-    let { cartData, isLoading, isLoaded, error } = this.state;
+    let { cartData, isLoaded, error } = this.state;
     const cartExists = isLoaded && !error && cartData.length;
     return (
       <div style={styles.cartContainer}>
@@ -205,7 +128,7 @@ export default class Cart extends Component {
                 color="primary"
                 variant="contained"
                 style={{ marginRight: "5px" }}
-                onClick={this.handleOrderOpen}
+                onClick={this.handleOrderDialog}
               >
                 Check out
               </Button>
@@ -214,7 +137,7 @@ export default class Cart extends Component {
                 disableEscapeKeyDown
                 maxWidth="sm"
                 open={this.state.openOrderConfirm}
-                onClose={this.handleOrderClose}
+                onClose={this.handleOrderDialog}
                 aria-labelledby="responsive-dialog-title"
               >
                 <DialogTitle id="responsive-dialog-title">
@@ -224,7 +147,7 @@ export default class Cart extends Component {
                 </DialogTitle>
 
                 <DialogActions>
-                  <Button onClick={this.handleOrderClose} color="primary">
+                  <Button onClick={this.handleOrderDialog} color="primary">
                     Cancel
                   </Button>
                   <Button onClick={this.makeOrder} color="secondary" autoFocus>
@@ -236,7 +159,7 @@ export default class Cart extends Component {
                 disabled={!cartExists}
                 color="secondary"
                 variant="contained"
-                onClick={this.handleEmptyOpen}
+                onClick={this.handleEmptyDialog}
               >
                 Empty cart
               </Button>
@@ -244,15 +167,14 @@ export default class Cart extends Component {
                 disableBackdropClick
                 disableEscapeKeyDown
                 open={this.state.openEmptyConfirm}
-                onClose={this.handleEmptyClose}
+                onClose={this.handleEmptyDialog}
                 aria-labelledby="responsive-dialog-title"
               >
                 <DialogTitle id="responsive-dialog-title">
                   {"Are you sure you want to clear shop cart?"}
                 </DialogTitle>
-
                 <DialogActions>
-                  <Button onClick={this.handleEmptyClose} color="primary">
+                  <Button onClick={this.handleEmptyDialog} color="primary">
                     Cancel
                   </Button>
                   <Button onClick={this.emptyCart} color="secondary" autoFocus>
@@ -267,12 +189,12 @@ export default class Cart extends Component {
               <table style={styles.cartItemsTable}>
                 <thead>
                   <tr>
-                    <th style={styles.cartItemsTh} />
-                    <th style={styles.cartItemsTh}>Product Name</th>
-                    <th style={styles.cartItemsTh}>Price</th>
-                    <th style={styles.cartItemsTh}>Qty</th>
-                    <th style={styles.cartItemsTh}>Total</th>
-                    <th style={styles.cartItemsTh} />
+                    <td style={styles.cartItemsTh} />
+                    <td style={styles.cartItemsTh}>Product Name</td>
+                    <td style={styles.cartItemsTh}>Price</td>
+                    <td style={styles.cartItemsTh}>Qty</td>
+                    <td style={styles.cartItemsTh}>Total</td>
+                    <td style={styles.cartItemsTh} />
                   </tr>
                 </thead>
                 <tbody>

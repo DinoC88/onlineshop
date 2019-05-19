@@ -11,66 +11,11 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import setAuthToken from "../../../utils/setAuthToken";
 import * as numeral from "numeral";
 import * as moment from "moment";
-import { getCurrentUser, deleteCurrentUser } from "../user-helper";
-
-const styles = {
-  accountContainer: {
-    minHeight: "100vh",
-    margin: "0 6px",
-    marginTop: "20px",
-    border: "1px solid #ffffff00"
-  },
-  account: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "20px"
-  },
-  accountInfo: {
-    width: "50%",
-    marginBottom: "30px",
-    marginTop: "20px"
-  },
-  accountContainerTop: {
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  userInfo: {
-    marginTop: "20px"
-  },
-  editButton: {
-    marginRight: "20px",
-    color: "white"
-  },
-  deleteButton: {
-    color: "white"
-  },
-  addButton: {
-    color: "white",
-    marginRight: 20,
-    marginTop: 20
-  },
-  accountHistory: {
-    width: "50%",
-    marginBottom: "50px",
-    marginTop: "20px"
-  },
-  orders: {
-    width: "100%",
-    margin: "10px auto",
-    borderSpacing: "0"
-  },
-  th: {
-    padding: "5px 5px",
-    backgroundColor: "#325999",
-    color: "white",
-    textAlign: "left"
-  },
-  td: {
-    paddingBottom: "12px 5px",
-    textAlign: "left",
-    borderBottom: "1px solid #325999"
-  }
-};
+import {
+  getCurrentUser,
+  deleteCurrentUser
+} from "../../../utils/requestManager";
+import { styles } from "./styles";
 
 export default class Account extends Component {
   constructor() {
@@ -160,7 +105,6 @@ export default class Account extends Component {
                 color="primary"
                 href={`/user/${this.state.userId}`}
               >
-                Edit Info
                 <EditIcon />
               </Button>
               <Button
@@ -169,7 +113,6 @@ export default class Account extends Component {
                 color="secondary"
                 onClick={this.handleClickOpen}
               >
-                Delete
                 <DeleteIcon />
               </Button>
               <Dialog
@@ -207,11 +150,11 @@ export default class Account extends Component {
                 <table style={styles.orders}>
                   <thead>
                     <tr>
-                      <th style={styles.th}>Date Created</th>
-                      <th style={styles.th}>Product Name</th>
-                      <th style={styles.th}>Price</th>
-                      <th style={styles.th}>Qty</th>
-                      <th style={styles.th}>Total</th>
+                      <td style={styles.th}>Date Created</td>
+                      <td style={styles.th}>Product Name</td>
+                      <td style={styles.th}>Price</td>
+                      <td style={styles.th}>Qty</td>
+                      <td style={styles.th}>Total</td>
                     </tr>
                   </thead>
                   <tbody>

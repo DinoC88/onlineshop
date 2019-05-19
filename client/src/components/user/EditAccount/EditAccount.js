@@ -2,28 +2,8 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import { FormControl, Input, InputLabel } from "@material-ui/core";
 import setAuthToken from "../../../utils/setAuthToken";
-import { getCurrentUser, editUserInfo } from "../user-helper";
-
-const styles = {
-  editAccount: {
-    height: "90vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  headerStyle: {
-    textAlign: "center"
-  },
-  buttonStyle: {
-    display: "flex",
-    justifyContent: "space-around",
-    paddingTop: 25
-  },
-  formStyle: {
-    marginTop: 25,
-    width: 350
-  }
-};
+import { getCurrentUser, editUserInfo } from "../../../utils/requestManager";
+import { styles } from "./styles";
 export default class EditAccount extends Component {
   constructor() {
     super();

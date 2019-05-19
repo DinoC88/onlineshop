@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Spinner from "../common/Spinner";
+import Spinner from "../../utils/Spinner";
 import * as numeral from "numeral";
 import { Button, Snackbar } from "@material-ui/core";
 import decode from "jwt-decode";
@@ -8,71 +8,12 @@ import {
   getProductById,
   addProductToCart,
   deleteProduct
-} from "../products/product-helper";
-import checkAdmin from "../common/checkAdmin";
+} from "../../utils/requestManager";
+import checkAdmin from "../../utils/checkAdmin";
 import setAuthToken from "../../utils/setAuthToken";
+import { styles } from "./styles";
 
-const styles = {
-  productPageContainer: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "90vh"
-  },
-  productDetailsContainer: {
-    margin: "25px 0px",
-    boxShadow: "0 0 7px #b7b2b3"
-  },
-  productDetailsContainerHeader: {
-    textAlign: "center"
-  },
-  productDetails: {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: "8px"
-  },
-  productImage: {
-    maxHeight: "364px"
-  },
-  productInfo: {
-    textAlign: "center"
-  },
-  productInfoTh: {
-    backgroundColor: "#325999",
-    color: "white",
-    padding: "3px",
-    textAlign: "left",
-    border: "1px solid white"
-  },
-  productInfoTd: {
-    padding: "3px",
-    textAlign: "left",
-    border: "1px solid #325999"
-  },
-  productHandle: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    margin: 10
-  },
-  priceNum: {
-    fontSize: "30px",
-    margin: 10
-  },
-  handleQuantityInput: {
-    width: "30px",
-    height: "28px",
-    fontSize: "14px",
-    margin: 10
-  },
-  handleButton: {
-    color: "white",
-    margin: 10
-  }
-};
-
-class Product extends Component {
+export default class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,7 +31,6 @@ class Product extends Component {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
     this.setState({ isLoading: true });
-
     getProductById(this.props.match.params.id)
       .then(result => {
         let token = localStorage.getItem("jwtToken");
@@ -123,7 +63,6 @@ class Product extends Component {
     addProductToCart(postData);
     this.setState({ snackbarOpen: true });
   };
-
   onDeleteProduct = () => {
     deleteProduct(this.state.name)
       .then(res => {
@@ -131,7 +70,6 @@ class Product extends Component {
       })
       .catch(err => console.log(err));
   };
-
   render() {
     const { product, isLoading, userid } = this.state;
     let productItem;
@@ -151,19 +89,19 @@ class Product extends Component {
               <table>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>Model</th>
+                    <td style={styles.productInfoTh}>Model</td>
                     <td style={styles.productInfoTd}>{product.name}</td>
                   </tr>
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>Display Size</th>
+                    <td style={styles.productInfoTh}>Display Size</td>
                     <td style={styles.productInfoTd}>{product.displaySize}</td>
                   </tr>
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>Display Resolution</th>
+                    <td style={styles.productInfoTh}>Display Resolution</td>
                     <td style={styles.productInfoTd}>
                       {product.displayResolution}
                     </td>
@@ -171,25 +109,25 @@ class Product extends Component {
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>CPU</th>
+                    <td style={styles.productInfoTh}>CPU</td>
                     <td style={styles.productInfoTd}>{product.cpu}</td>
                   </tr>
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>Internal Memory</th>
+                    <td style={styles.productInfoTh}>Internal Memory</td>
                     <td style={styles.productInfoTd}>{product.memory}</td>
                   </tr>
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>RAM</th>
+                    <td style={styles.productInfoTh}>RAM</td>
                     <td style={styles.productInfoTd}>{product.ram}</td>
                   </tr>
                 </tbody>
                 <tbody>
                   <tr>
-                    <th style={styles.productInfoTh}>Camera</th>
+                    <td style={styles.productInfoTh}>Camera</td>
                     <td style={styles.productInfoTd}>{product.camera}</td>
                   </tr>
                 </tbody>
@@ -199,8 +137,9 @@ class Product extends Component {
           <Snackbar
             open={this.state.snackbarOpen}
             message={"Item added to your cart."}
-            autoHideDuration={100}
+            autoHideDuration={3000}
             style={{ background: "#64DD17" }}
+            onClose={() => this.setState({ snackbarOpen: false })}
           />
           <div style={styles.productHandle}>
             <div>
@@ -211,7 +150,6 @@ class Product extends Component {
                 variant="contained"
               >
                 <KeyboardArrowLeft />
-                Back to catalog
               </Button>
             </div>
             <div style={styles.priceNum}>
@@ -241,7 +179,6 @@ class Product extends Component {
                 color="primary"
               >
                 <AddShoppingCart />
-                Add to Cart
               </Button>
             </div>
             <div>
@@ -251,9 +188,7 @@ class Product extends Component {
                   onClick={this.onDeleteProduct}
                   variant="contained"
                   color="secondary"
-                >
-                  Delete Product
-                </Button>
+                />
               ) : null}
             </div>
           </div>
@@ -267,5 +202,3 @@ class Product extends Component {
     );
   }
 }
-
-export default Product;

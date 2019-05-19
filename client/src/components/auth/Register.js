@@ -8,35 +8,10 @@ import {
   InputLabel,
   IconButton
 } from "@material-ui/core";
-import checkAuth from "../common/checkAuth";
+import checkAuth from "../../utils/checkAuth";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { registerSubmit } from "./auth-helper";
-
-const styles = {
-  registerStyle: {
-    height: "90vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  headerStyle: {
-    textAlign: "center"
-  },
-  warningStyle: {
-    color: "red",
-    fontSize: "12px"
-  },
-  buttonStyle: {
-    paddingTop: 25,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  formStyle: {
-    marginTop: 25,
-    width: 350
-  }
-};
+import { registerSubmit } from "../../utils/requestManager";
+import { styles } from "./styles";
 
 export default class Register extends Component {
   constructor(props) {
@@ -81,7 +56,7 @@ export default class Register extends Component {
     const { errors } = this.state;
 
     return (
-      <div style={styles.registerStyle}>
+      <div style={styles.containerStyle}>
         <div>
           <h3 style={styles.headerStyle}>Create new Account</h3>
           <form noValidate onSubmit={this.onRegisterSubmit}>

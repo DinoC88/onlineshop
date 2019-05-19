@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Spinner from "../common/Spinner";
+import Spinner from "../../utils/Spinner";
 import ProductItem from "./productitem/ProductItem";
 import CheckBox from "./checkbox/CheckBox";
 import CheckBoxPrice from "./checkbox/CheckBoxPrice";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
-import { getProduct } from "./product-helper";
+import { getProduct } from "../../utils/requestManager";
 import {
   brand,
   ram,
@@ -14,68 +14,7 @@ import {
   displaySize,
   displayResolution
 } from "../../utils/filters";
-
-const styles = {
-  homepageContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    minHeight: "100vh",
-    border: "1px solid #ffffff00",
-    marginTop: "-50px"
-  },
-  filtersList: {
-    width: "25%",
-    maxHeight: "100%",
-    boxShadow: "0 0 7px #b7b2b3",
-    margin: "70px 20px 40px 0px",
-    backgroundColor: "#f5f5f5"
-  },
-  filtersListHeader: {
-    marginTop: 20,
-    fontSize: "20px",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  productList: {
-    width: "100%",
-    marginTop: "90px",
-    marginBottom: "10px"
-  },
-  productsHandle: {
-    borderBottom: "1px solid #325999",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  productFound: {
-    fontSize: 20,
-    marginTop: 10
-  },
-  search: {
-    marginTop: -23,
-    marginRight: -35,
-    display: "flex",
-    justifyContent: "flex-end"
-  },
-  clearButton: {
-    color: "white",
-    marginBottom: 17
-  },
-  iconStyle: {
-    width: 40,
-    height: 40,
-    backgroundColor: "#325999",
-    color: "white",
-    borderRadius: "5px"
-  },
-  noProductFound: {
-    fontSize: "50px",
-    fontWeight: "bold",
-    marginTop: 50,
-    display: "flex",
-    justifyContent: "center"
-  }
-};
+import { styles } from "./styles";
 
 export default class Mainpage extends Component {
   constructor(props) {
@@ -87,17 +26,29 @@ export default class Mainpage extends Component {
       products: [],
       filters: {},
       sort: {},
-      input: "",
-      drawerOpen: false
+      limit: 10,
+      sortInput: "",
+      limitInput: "10",
+      drawerOpen: false,
+      drawerShowOpen: false,
+      snackbarOpen: false
     };
   }
   componentWillMount() {
     this.setState({ isLoading: true });
-    this.showFilterResults(this.state.filters, this.state.sort);
+    this.showFilterResults(
+      this.state.filters,
+      this.state.sort,
+      this.state.show
+    );
   }
   //Sort drawer controller
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
+  };
+  //Limit drawer controller
+  toggleLimitDrawer = () => {
+    this.setState({ drawerShowOpen: !this.state.drawerLimitOpen });
   };
   //Sort products
   handleDrawerChange = e => {
@@ -114,11 +65,29 @@ export default class Mainpage extends Component {
     this.setState({
       sort: newSort,
       isLoading: true,
-      input: e.target.value
+      sortInput: e.target.value
     });
-    this.showFilterResults(this.state.filters, newSort);
+    this.showFilterResults(this.state.filters, newSort, this.state.limit);
   };
-
+  //Show handle drawer
+  handleLimitDrawerChange = e => {
+    let newLimit = this.state.limit;
+    if (e.target.value === "10") {
+      newLimit = 10;
+    } else if (e.target.value === "20") {
+      newLimit = 20;
+    } else if (e.target.value === "30") {
+      newLimit = 30;
+    } else {
+      newLimit = 40;
+    }
+    this.setState({
+      limit: newLimit,
+      isLoading: true,
+      limitInput: e.target.value
+    });
+    this.showFilterResults(this.state.filters, this.state.sort, newLimit);
+  };
   //Searchbox input
   handleSearchInput = e => {
     this.setState({ searchProduct: e.target.value });
@@ -131,8 +100,8 @@ export default class Mainpage extends Component {
     }
   };
   //Filter function
-  showFilterResults = (filter, sort) => {
-    getProduct(filter, sort)
+  showFilterResults = (filter, sort, show) => {
+    getProduct(filter, sort, show)
       .then(products => {
         this.setState({ products: products.data, isLoading: false });
       })
@@ -166,7 +135,7 @@ export default class Mainpage extends Component {
       let search = this.state.searchProduct;
       newFilters[category] = search;
     }
-    this.showFilterResults(newFilters, this.state.sort);
+    this.showFilterResults(newFilters, this.state.sort, this.state.limit);
     this.setState({
       filters: newFilters
     });
@@ -190,11 +159,13 @@ export default class Mainpage extends Component {
       <div style={styles.homepageContainer}>
         <div style={styles.filtersList}>
           <p style={styles.filtersListHeader}>Search by</p>
-          <CheckBoxPrice
-            title={<b>Price</b>}
-            list={price}
-            handleFilters={filters => this.handleFilters(filters, "price")}
-          />
+          <div>
+            <CheckBoxPrice
+              title={<b>Price</b>}
+              list={price}
+              handleFilters={filters => this.handleFilters(filters, "price")}
+            />
+          </div>
           <CheckBox
             title={<b>Brand</b>}
             list={brand}
@@ -236,6 +207,23 @@ export default class Mainpage extends Component {
               <b>Products found:</b> {products.length}
             </div>
             <div>
+              <b>Show:</b>
+              <Select
+                value={this.state.limitInput}
+                onChange={this.handleLimitDrawerChange}
+              >
+                <MenuItem value="10">10</MenuItem>
+                <MenuItem value="20">20</MenuItem>
+                <MenuItem value="30">30</MenuItem>
+                <MenuItem value="40">40</MenuItem>
+              </Select>
+              <Drawer
+                docked={false}
+                open={this.state.drawerShowOpen}
+                onRequestChange={this.toggleLimitDrawer}
+              />
+            </div>
+            <div>
               <Button
                 style={styles.clearButton}
                 color="primary"
@@ -246,11 +234,9 @@ export default class Mainpage extends Component {
               </Button>
             </div>
             <div>
-              <span>
-                <b>Sort By:</b>
-              </span>
+              <b>Sort By:</b>
               <Select
-                value={this.state.input}
+                value={this.state.sortInput}
                 onChange={this.handleDrawerChange}
               >
                 <MenuItem name="name" id="name" value="Name: A-Z">

@@ -28,6 +28,7 @@ router.post("/list", (req, res) => {
   }
   Product.find(findArgs)
     .sort(req.body.sort)
+    .limit(req.body.limit)
     .then(filterProducts => {
       if (!filterProducts) {
         errors.noproduct = "There are no products";
@@ -41,6 +42,8 @@ router.post("/list", (req, res) => {
 //@route POST /product/product
 //@desc  POST product
 //@access public (should change to private)
+
+//TODO: adminSecurityCheck
 router.post("/addproduct", (req, res) => {
   const { errors, isValid } = validateProductInput(req.body);
 
