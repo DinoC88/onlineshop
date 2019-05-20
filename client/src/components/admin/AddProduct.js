@@ -120,7 +120,7 @@ export default class AddProduct extends Component {
                 <MenuItem value="64 GB">64 GB</MenuItem>
                 <MenuItem value="128 GB">128 GB</MenuItem>
                 <MenuItem value="256 GB">256 GB</MenuItem>
-                <MenuItem value="512 GB">256 GB</MenuItem>
+                <MenuItem value="512 GB">512 GB</MenuItem>
               </Select>
               <Drawer
                 docked={false}

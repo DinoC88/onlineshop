@@ -8,7 +8,7 @@ import Footer from "./components/layout/Footer";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import NotFound from "./components/layout/NotFound";
-import Mainpage from "./components/products/Mainpage";
+import Mainpage from "./components/mainpage/Mainpage";
 import PrivateRoute from "./utils/PrivateRoute";
 import AdminRoute from "./utils/AdminRoute";
 import Product from "./components/product/Product";

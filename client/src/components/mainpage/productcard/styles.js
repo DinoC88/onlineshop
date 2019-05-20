@@ -3,14 +3,16 @@ const styles = {
     maxHeight: "250px",
     display: "flex",
     margin: "10px 0",
-    boxShadow: "0 0 7px #b7b2b3",
+    boxShadow: "0 0 8px #b7b2b3",
+    backgroundColor: "white",
     padding: "8px"
   },
   productDetailsContainerHover: {
     maxHeight: "250px",
     display: "flex",
     margin: "10px 0",
-    boxShadow: "0 0 14px #d1d3d6",
+    boxShadow: "0 0 32px #d1d3d6",
+    backgroundColor: "#f2f5fc",
     padding: "8px",
     cursor: "pointer"
   },
@@ -30,7 +32,11 @@ const styles = {
     alignItems: "flex-end"
   },
   priceStyle: {
-    fontSize: "30px"
+    fontSize: "20px",
+    color: "green"
+  },
+  phoneName: {
+    fontSize: 20
   },
   hoverButtons: {
     display: "flex",

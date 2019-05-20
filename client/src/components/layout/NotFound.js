@@ -1,14 +1,6 @@
 import * as React from "react";
+import { styles } from "./styles";
 
-const styles = {
-  notFoundContainer: {
-    minHeight: "90vh"
-  },
-  notFoundHeader: {
-    textAlign: "center",
-    fontSize: "60px"
-  }
-};
 const NotFound = () => (
   <div style={styles.notFoundContainer}>
     <h1 style={styles.notFoundHeader}>404</h1>

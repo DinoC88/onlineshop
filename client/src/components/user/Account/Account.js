@@ -6,8 +6,7 @@ import {
   DialogActions,
   Dialog
 } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Edit, Delete } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
 import * as numeral from "numeral";
 import * as moment from "moment";
@@ -105,7 +104,7 @@ export default class Account extends Component {
                 color="primary"
                 href={`/user/${this.state.userId}`}
               >
-                <EditIcon />
+                <Edit />
               </Button>
               <Button
                 style={styles.deleteButton}
@@ -113,7 +112,7 @@ export default class Account extends Component {
                 color="secondary"
                 onClick={this.handleClickOpen}
               >
-                <DeleteIcon />
+                <Delete />
               </Button>
               <Dialog
                 disableBackdropClick

@@ -6,27 +6,7 @@ import checkAuth from "../../utils/checkAuth";
 import checkAdmin from "../../utils/checkAdmin";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import MenuItem from "@material-ui/core/MenuItem";
-
-const styles = {
-  navbar: {
-    display: "flex",
-    height: "60px",
-    backgroundColor: "#152847",
-    color: "white"
-  },
-  button: {
-    backgroundColor: "#152847",
-    color: "white",
-    height: "100%",
-    marginTop: -10
-  },
-  logo: {
-    color: "white",
-    display: "inline-block",
-    fontSize: "20px",
-    margin: "0 40px 0 20px"
-  }
-};
+import { styles } from "./styles";
 
 class Navbar extends Component {
   onLogoutClick = e => {
@@ -47,7 +27,7 @@ class Navbar extends Component {
           <li>
             <MenuItem
               component={Link}
-              style={styles.button}
+              style={styles.navBarButton}
               onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
               onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
               to="/addproduct"
@@ -60,7 +40,7 @@ class Navbar extends Component {
         <li>
           <MenuItem
             component={Link}
-            style={styles.button}
+            style={styles.navBarButton}
             onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
             onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             to="/cart"
@@ -72,7 +52,7 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={styles.navBarButton}
             onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
             onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
@@ -84,7 +64,7 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={styles.navBarButton}
             onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
             onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
@@ -101,7 +81,7 @@ class Navbar extends Component {
       <ul className="navbar-nav ml-auto">
         <li>
           <MenuItem
-            style={styles.button}
+            style={styles.navBarButton}
             onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
             onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
@@ -113,7 +93,7 @@ class Navbar extends Component {
         </li>
         <li>
           <MenuItem
-            style={styles.button}
+            style={styles.navBarButton}
             onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
             onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
             component={Link}
@@ -129,7 +109,7 @@ class Navbar extends Component {
     return (
       <nav style={styles.navbar} className="navbar  navbar-expand-sm">
         <div className="container">
-          <Link style={styles.logo} to="/">
+          <Link style={styles.navBarLogo} to="/">
             Mobile Shop
           </Link>
           {checkAuth() ? authLinks : guestLinks}

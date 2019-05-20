@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Spinner from "../../utils/Spinner";
-import ProductItem from "./productitem/ProductItem";
-import CheckBox from "./checkbox/CheckBox";
-import CheckBoxPrice from "./checkbox/CheckBoxPrice";
+import ProductItem from "./productcard/ProductCard";
+import CheckBox from "./filterlist/CheckBox";
+import CheckBoxPrice from "./filterlist/CheckBoxPrice";
 import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
 import { getProduct } from "../../utils/requestManager";
 import {
@@ -39,7 +39,7 @@ export default class Mainpage extends Component {
     this.showFilterResults(
       this.state.filters,
       this.state.sort,
-      this.state.show
+      this.state.limit
     );
   }
   //Sort drawer controller

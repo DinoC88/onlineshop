@@ -1,22 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-const styles = {
-  footer: {
-    backgroundColor: "#152847"
-  },
-  logo: {
-    color: "white",
-    display: "flex",
-    justifyContent: "center",
-    fontSize: "20px"
-  }
-};
+import { styles } from "./styles";
 
 export default function Footer() {
   return (
     <footer style={styles.footer}>
-      <Link style={styles.logo} to="/">
+      <Link style={styles.footerLogo} to="/">
         Mobile Shop App
       </Link>
     </footer>

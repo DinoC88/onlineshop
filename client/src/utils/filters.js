@@ -116,7 +116,8 @@ const displaySize = [
   {
     _id: 5,
     name: '6.3"'
-  }
+  },
+  { _id: 6, name: '6.6"' }
 ];
 
 const displayResolution = [
@@ -124,24 +125,25 @@ const displayResolution = [
     _id: 0,
     name: "540 x 960"
   },
+  { _id: 1, name: "720 x 1480" },
   {
-    _id: 1,
+    _id: 2,
     name: "1080 x 1920"
   },
   {
-    _id: 2,
+    _id: 3,
     name: "1125 x 2436"
   },
   {
-    _id: 3,
+    _id: 4,
     name: "1440 x 2560"
   },
   {
-    _id: 4,
+    _id: 5,
     name: "1440 x 2880"
   },
   {
-    _id: 5,
+    _id: 6,
     name: "1440 x 2960"
   }
 ];

@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 import Spinner from "../../utils/Spinner";
 import * as numeral from "numeral";
-import { Button, Snackbar } from "@material-ui/core";
+import {
+  Button,
+  Snackbar,
+  DialogTitle,
+  DialogActions,
+  Dialog
+} from "@material-ui/core";
 import decode from "jwt-decode";
-import { AddShoppingCart, KeyboardArrowLeft } from "@material-ui/icons";
+import { AddShoppingCart, KeyboardArrowLeft, Delete } from "@material-ui/icons";
 import {
   getProductById,
   addProductToCart,
@@ -24,7 +30,8 @@ export default class Product extends Component {
       productid: "",
       name: "",
       quantity: 1,
-      snackbarOpen: false
+      snackbarOpen: false,
+      openDeleteConfirm: false
     };
   }
   componentDidMount() {
@@ -69,6 +76,9 @@ export default class Product extends Component {
         this.props.history.push("/dashboard");
       })
       .catch(err => console.log(err));
+  };
+  handleDeleteDialog = () => {
+    this.setState({ openDeleteConfirm: !this.state.openDeleteConfirm });
   };
   render() {
     const { product, isLoading, userid } = this.state;
@@ -183,12 +193,40 @@ export default class Product extends Component {
             </div>
             <div>
               {checkAdmin() ? (
-                <Button
-                  style={styles.handleButton}
-                  onClick={this.onDeleteProduct}
-                  variant="contained"
-                  color="secondary"
-                />
+                <div>
+                  <Button
+                    style={styles.handleButton}
+                    onClick={this.handleDeleteDialog}
+                    variant="contained"
+                    color="secondary"
+                  >
+                    <Delete />
+                  </Button>
+                  <Dialog
+                    disableBackdropClick
+                    disableEscapeKeyDown
+                    maxWidth="sm"
+                    open={this.state.openDeleteConfirm}
+                    onClose={this.handleDeleteDialog}
+                    aria-labelledby="responsive-dialog-title"
+                  >
+                    <DialogTitle id="responsive-dialog-title">
+                      {"Are you sure you want to delete this product?"}
+                    </DialogTitle>
+                    <DialogActions>
+                      <Button onClick={this.handleDeleteDialog} color="primary">
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={this.onDeleteProduct}
+                        color="secondary"
+                        autoFocus
+                      >
+                        Confirm
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
               ) : null}
             </div>
           </div>

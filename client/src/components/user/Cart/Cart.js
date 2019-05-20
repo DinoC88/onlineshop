@@ -36,6 +36,7 @@ export default class Cart extends Component {
           isLoaded: true,
           error: null
         });
+        console.log(res.data);
       })
       .catch(err => this.setState({ error: err }));
   }
@@ -94,7 +95,7 @@ export default class Cart extends Component {
   };
   render() {
     let { cartData, isLoaded, error } = this.state;
-    const cartExists = isLoaded && !error && cartData.length;
+    const cartExists = isLoaded && !error && cartData.length > 0;
     return (
       <div style={styles.cartContainer}>
         <h1 style={styles.cartTitle}>Your Cart</h1>

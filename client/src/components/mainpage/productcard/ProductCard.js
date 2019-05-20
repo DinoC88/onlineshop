@@ -63,7 +63,7 @@ export default class Productitem extends Component {
           />
           <div style={styles.contentLeft}>
             <div>
-              <h3>{product.name}</h3>
+              <h5 style={{ fontSize: 22 }}>{product.name}</h5>
             </div>
             <div>
               <h2 style={styles.priceStyle}>
@@ -91,7 +91,11 @@ export default class Productitem extends Component {
               </div>
               <div>
                 <b>Camera: </b>
-                <span>{product.camera}</span>
+                <span>
+                  {product.camera < 50
+                    ? product.camera
+                    : product.camera.slice(0, 50) + "..."}
+                </span>
               </div>
             </div>
           </div>
