@@ -15,6 +15,7 @@ import {
   displayResolution
 } from "../../utils/filters";
 import { styles } from "./styles";
+import Pagination from "./pagination/Pagination";
 
 export default class Mainpage extends Component {
   constructor(props) {
@@ -26,9 +27,12 @@ export default class Mainpage extends Component {
       products: [],
       filters: {},
       sort: {},
-      limit: 10,
+      limit: 5,
+      currentPage: 1,
+      totalPages: 0,
+      totalProducts: 0,
       sortInput: "",
-      limitInput: "10",
+      limitInput: "5",
       drawerOpen: false,
       drawerShowOpen: false,
       snackbarOpen: false
@@ -39,7 +43,8 @@ export default class Mainpage extends Component {
     this.showFilterResults(
       this.state.filters,
       this.state.sort,
-      this.state.limit
+      this.state.limit,
+      this.state.currentPage
     );
   }
   //Sort drawer controller
@@ -67,26 +72,36 @@ export default class Mainpage extends Component {
       isLoading: true,
       sortInput: e.target.value
     });
-    this.showFilterResults(this.state.filters, newSort, this.state.limit);
+    this.showFilterResults(
+      this.state.filters,
+      newSort,
+      this.state.limit,
+      this.state.currentPage
+    );
   };
   //Show handle drawer
   handleLimitDrawerChange = e => {
     let newLimit = this.state.limit;
-    if (e.target.value === "10") {
+    if (e.target.value === "5") {
+      newLimit = 5;
+    } else if (e.target.value === "10") {
       newLimit = 10;
     } else if (e.target.value === "20") {
       newLimit = 20;
-    } else if (e.target.value === "30") {
-      newLimit = 30;
     } else {
-      newLimit = 40;
+      newLimit = 50;
     }
     this.setState({
       limit: newLimit,
       isLoading: true,
       limitInput: e.target.value
     });
-    this.showFilterResults(this.state.filters, this.state.sort, newLimit);
+    this.showFilterResults(
+      this.state.filters,
+      this.state.sort,
+      newLimit,
+      this.state.currentPage
+    );
   };
   //Searchbox input
   handleSearchInput = e => {
@@ -100,10 +115,15 @@ export default class Mainpage extends Component {
     }
   };
   //Filter function
-  showFilterResults = (filter, sort, show) => {
-    getProduct(filter, sort, show)
+  showFilterResults = (filter, sort, show, currentPage) => {
+    getProduct(filter, sort, show, currentPage)
       .then(products => {
-        this.setState({ products: products.data, isLoading: false });
+        this.setState({
+          products: products.data.products,
+          isLoading: false,
+          totalPages: products.data.totalPages,
+          totalProducts: products.data.totalProducts
+        });
       })
       .catch(errors =>
         this.setState({
@@ -135,15 +155,37 @@ export default class Mainpage extends Component {
       let search = this.state.searchProduct;
       newFilters[category] = search;
     }
-    this.showFilterResults(newFilters, this.state.sort, this.state.limit);
+    this.showFilterResults(
+      newFilters,
+      this.state.sort,
+      this.state.limit,
+      this.state.currentPage
+    );
     this.setState({
       filters: newFilters
     });
   };
+  nextPage = pageNumber => {
+    this.setState({
+      currentPage: pageNumber
+    });
+    this.showFilterResults(
+      this.state.filters,
+      this.state.sort,
+      this.state.limit,
+      pageNumber
+    );
+  };
 
   render() {
     let productItems;
-    const { products } = this.state;
+    const {
+      products,
+      totalProducts,
+      currentPage,
+      limit,
+      totalPages
+    } = this.state;
     if (products === null || this.state.isLoading) {
       productItems = <Spinner />;
     } else {
@@ -204,7 +246,7 @@ export default class Mainpage extends Component {
         <div style={styles.productList}>
           <div style={styles.productsHandle}>
             <div style={styles.productFound}>
-              <b>Products found:</b> {products.length}
+              <b>Products found:</b> {totalProducts}
             </div>
             <div>
               <b>Show:</b>
@@ -212,10 +254,10 @@ export default class Mainpage extends Component {
                 value={this.state.limitInput}
                 onChange={this.handleLimitDrawerChange}
               >
+                <MenuItem value="5">5</MenuItem>
                 <MenuItem value="10">10</MenuItem>
                 <MenuItem value="20">20</MenuItem>
-                <MenuItem value="30">30</MenuItem>
-                <MenuItem value="40">40</MenuItem>
+                <MenuItem value="50">50</MenuItem>
               </Select>
               <Drawer
                 docked={false}
@@ -269,6 +311,15 @@ export default class Mainpage extends Component {
             </div>
           </div>
           {productItems}
+          {totalProducts > limit ? (
+            <Pagination
+              pages={totalPages}
+              nextPage={this.nextPage}
+              currentPage={currentPage}
+            />
+          ) : (
+            ""
+          )}
         </div>
       </div>
     );

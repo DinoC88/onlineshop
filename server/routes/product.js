@@ -28,15 +28,17 @@ router.post("/list", (req, res) => {
   }
   Product.find(findArgs)
     .sort(req.body.sort)
-    .limit(req.body.limit)
-    .then(filterProducts => {
-      if (!filterProducts) {
-        errors.noproduct = "There are no products";
-        return res.status(404).json(errors);
-      }
-      res.json(filterProducts);
-    })
-    .catch(err => res.json(err));
+    .exec(function(err, products) {
+      res.json({
+        products: products.slice(
+          (req.body.currentPage - 1) * req.body.limit,
+          req.body.currentPage * req.body.limit
+        ),
+        currentPage: req.body.currentPage,
+        totalPages: products.length / req.body.limit,
+        totalProducts: products.length
+      });
+    });
 });
 
 //@route POST /product/product

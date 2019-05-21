@@ -32,11 +32,12 @@ export const editUserInfo = userInfo => {
   return axios.post("/api/users/edit", userInfo);
 };
 
-export const getProduct = (filters, sort, limit) => {
+export const getProduct = (filters, sort, limit, currentPage) => {
   const data = {
     filters,
     sort,
-    limit
+    limit,
+    currentPage
   };
   return axios.post(`/api/product/list`, data);
 };
