@@ -31,6 +31,7 @@ export default class Mainpage extends Component {
       currentPage: 1,
       totalPages: 0,
       totalProducts: 0,
+      offset: 0,
       sortInput: "",
       limitInput: "5",
       drawerOpen: false,
@@ -313,8 +314,10 @@ export default class Mainpage extends Component {
           {productItems}
           {totalProducts > limit ? (
             <Pagination
-              pages={totalPages}
+              pages={Math.ceil(totalPages)}
               nextPage={this.nextPage}
+              limit={limit}
+              totalProducts={totalProducts}
               currentPage={currentPage}
             />
           ) : (
