@@ -7,61 +7,90 @@ const styles = {
   },
   cartTitle: {
     marginTop: "100px",
-    marginBottom: "40px"
+    marginBottom: "40px",
+    textAlign: "center"
   },
   cart: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  cartInfo: {
+  cartOrder: {
     display: "flex",
     flexDirection: "column",
-    width: "25%",
+    width: "35%",
     height: "100%",
-    minHeight: "auto",
-    background: "#f5f5f5"
+    minHeight: "auto"
   },
-  cartInfoPar: {
-    padding: "0 10px"
+  orderHeader: {
+    borderBottom: "2px solid black",
+    textAlign: "center"
+  },
+  orderCard: {
+    boxShadow: "0 0 8px #b7b2b3",
+    backgroundColor: "white",
+    padding: "8px",
+    marginBottom: 16
+  },
+  orderInfo: {
+    display: "flex",
+    flexDirection: "column"
+  },
+  cartOrderInfo: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    margin: "8px 32px 0 32px"
+  },
+  buttonStyle: {
+    margin: 8
+  },
+  cartProductCard: {
+    maxHeight: "180px",
+    display: "flex",
+    boxShadow: "0 0 8px #b7b2b3",
+    backgroundColor: "white",
+    padding: "8px",
+    marginBottom: 16
+  },
+  cartProductImg: {
+    width: "150px",
+    objectFit: "contain"
+  },
+  cartProductRight: {
+    width: "80%"
+  },
+  cartProductHeader: {
+    fontSize: 30,
+    textAlign: "center"
+  },
+  cartProductInfo: {
+    marginTop: 16,
+    display: "flex",
+    justifyContent: "space-around"
+  },
+  productCardDetails: {
+    display: "flex",
+    justifyContent: "space-around",
+    marginLeft: -20
+  },
+  productCardDelete: {
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-end"
   },
   total: {
-    fontSize: "22px"
+    fontSize: "16px"
   },
   cartInfoBtns: {
     textAlign: "center"
   },
   cartItems: {
-    width: "78%"
-  },
-  image: { maxWidth: "50px" },
-  cartItemsTable: {
-    width: "100%",
-    borderSpacing: "0"
-  },
-  cartItemsTh: {
-    padding: "5px 5px",
-    backgroundColor: "#325999",
-    color: "white",
-    textAlign: "left"
-  },
-  cartItemsTd: {
-    padding: "12px 5px",
-    textAlign: "left",
-    borderBottom: "1px solid #325999"
-  },
-  link: {
-    color: "inherit",
-    textDecoration: "none"
+    width: "60%"
   },
   cartHeader: {
     textAlign: "center",
     marginTop: "100px"
-  },
-  cartItemButton: {
-    padding: "1px 5px",
-    borderRadius: "60%",
-    backgroundColor: "#ce1e4d"
   }
 };
 

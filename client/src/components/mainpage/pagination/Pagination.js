@@ -1,6 +1,11 @@
 import React from "react";
 import { Button } from "@material-ui/core";
-import { KeyboardArrowRight, KeyboardArrowLeft } from "@material-ui/icons";
+import {
+  KeyboardArrowRight,
+  KeyboardArrowLeft,
+  LastPage,
+  FirstPage
+} from "@material-ui/icons";
 import paginator from "./paginator";
 const Pagination = props => {
   const pageLinks = [];
@@ -16,6 +21,7 @@ const Pagination = props => {
     pageLinks.push(
       <Button
         style={{
+          height: 32,
           backgroundColor: `${active}`,
           margin: 8,
           marginBottom: 0,
@@ -32,74 +38,76 @@ const Pagination = props => {
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        {props.currentPage > 1 ? (
-          <Button
-            style={{
-              margin: 8,
-              marginBottom: 0,
-              padding: 8
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => props.nextPage(1)}
-          >
-            First
-          </Button>
-        ) : (
-          ""
-        )}
-        {props.currentPage > 1 ? (
-          <Button
-            style={{
-              margin: 8,
-              marginBottom: 0,
-              padding: 8
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => props.nextPage(props.currentPage - 1)}
-          >
-            <KeyboardArrowLeft />
-          </Button>
-        ) : (
-          ""
-        )}
-        {pageLinks}
-        {props.currentPage < props.pages ? (
-          <Button
-            style={{
-              margin: 8,
-              marginBottom: 0,
-              padding: 8
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => props.nextPage(props.currentPage + 1)}
-          >
-            <KeyboardArrowRight />
-          </Button>
-        ) : (
-          ""
-        )}
-        {props.currentPage < props.pages ? (
-          <Button
-            style={{
-              margin: 8,
-              marginBottom: 0,
-              padding: 8
-            }}
-            color="primary"
-            variant="contained"
-            onClick={() => props.nextPage(props.pages)}
-          >
-            Last
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
+    <div style={{ display: "row", textAlign: "center" }}>
+      {props.currentPage > 1 ? (
+        <Button
+          style={{
+            height: 32,
+            margin: 8,
+            marginBottom: 0,
+            padding: 8
+          }}
+          color="primary"
+          variant="contained"
+          onClick={() => props.nextPage(1)}
+        >
+          <FirstPage />
+        </Button>
+      ) : (
+        ""
+      )}
+      {props.currentPage > 1 ? (
+        <Button
+          style={{
+            height: 32,
+            margin: 8,
+            marginBottom: 0,
+            padding: 8
+          }}
+          color="primary"
+          variant="contained"
+          onClick={() => props.nextPage(props.currentPage - 1)}
+        >
+          <KeyboardArrowLeft />
+        </Button>
+      ) : (
+        ""
+      )}
+      {pageLinks}
+      {props.currentPage < props.pages ? (
+        <Button
+          style={{
+            height: 32,
+            margin: 8,
+            marginBottom: 0,
+            padding: 8
+          }}
+          color="primary"
+          variant="contained"
+          onClick={() => props.nextPage(props.currentPage + 1)}
+        >
+          <KeyboardArrowRight />
+        </Button>
+      ) : (
+        ""
+      )}
+      {props.currentPage < props.pages ? (
+        <Button
+          style={{
+            height: 32,
+            margin: 8,
+            marginBottom: 0,
+            padding: 8
+          }}
+          color="primary"
+          variant="contained"
+          onClick={() => props.nextPage(props.pages)}
+        >
+          <LastPage />
+        </Button>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

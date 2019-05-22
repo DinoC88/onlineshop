@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
 import { Button, DialogTitle, DialogActions, Dialog } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Delete } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
 import {
   getCartData,
@@ -98,152 +98,146 @@ export default class Cart extends Component {
     const cartExists = isLoaded && !error && cartData.length > 0;
     return (
       <div style={styles.cartContainer}>
-        <h1 style={styles.cartTitle}>Your Cart</h1>
+        <h2 style={styles.cartTitle}>
+          Your Cart (
+          {cartExists
+            ? cartData.reduce((acc, item) => (acc += item.quantity), 0) +
+              " item"
+            : ""}
+          )
+        </h2>
         <div style={styles.cart}>
-          <div style={styles.cartInfo}>
-            <div>
-              <p style={styles.cartInfoPar}>
-                <b>Number of items: </b>
-                {cartExists
-                  ? cartData.reduce((acc, item) => (acc += item.quantity), 0)
-                  : 0}
-              </p>
-              <p style={styles.cartInfoPar}>
-                <b>Total amount: </b>
-                <span style={styles.total}>
-                  {cartExists
-                    ? numeral(
-                        cartData.reduce(
-                          (acc, item) =>
-                            (acc += item.product.price * item.quantity),
-                          0
-                        )
-                      ).format("$0,0.00")
-                    : numeral(0).format("$0,0.00")}
-                </span>
-              </p>
-            </div>
-            <div style={styles.cartInfoBtns}>
-              <Button
-                disabled={!cartExists}
-                color="primary"
-                variant="contained"
-                style={{ marginRight: "5px" }}
-                onClick={this.handleOrderDialog}
-              >
-                Check out
-              </Button>
-              <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                maxWidth="sm"
-                open={this.state.openOrderConfirm}
-                onClose={this.handleOrderDialog}
-                aria-labelledby="responsive-dialog-title"
-              >
-                <DialogTitle id="responsive-dialog-title">
-                  {
-                    "Please read the list of items in your order and click `Ok` to confirm your order?"
-                  }
-                </DialogTitle>
+          <div style={styles.cartOrder}>
+            <div style={styles.orderCard}>
+              <div style={styles.orderHeader}>
+                <h2>Order Summary</h2>
+              </div>
+              <div style={styles.orderInfo}>
+                <div style={styles.cartOrderInfo}>
+                  <p>Item cost</p>
+                  <span style={styles.total}>
+                    {cartExists
+                      ? numeral(
+                          cartData.reduce(
+                            (acc, item) =>
+                              (acc += item.product.price * item.quantity),
+                            0
+                          )
+                        ).format("$0,0.00")
+                      : numeral(0).format("$0,0.00")}
+                  </span>
+                </div>
+                <div style={styles.cartOrderInfo}>
+                  <p>Shipping</p>
+                  <p>Free</p>
+                </div>
+                <div style={styles.cartOrderInfo}>
+                  <p>Tax</p>
+                  <p>estimate</p>
+                </div>
+                <div style={styles.cartOrderInfo}>
+                  <b>Estimated total</b>
+                  <span style={styles.total}>
+                    {cartExists
+                      ? numeral(
+                          cartData.reduce(
+                            (acc, item) =>
+                              (acc += item.product.price * item.quantity),
+                            0
+                          )
+                        ).format("$0,0.00")
+                      : numeral(0).format("$0,0.00")}
+                  </span>
+                </div>
+              </div>
+              <div style={styles.cartInfoBtns}>
+                <div>
+                  <Button
+                    disabled={!cartExists}
+                    color="secondary"
+                    variant="contained"
+                    style={styles.buttonStyle}
+                    onClick={this.handleOrderDialog}
+                  >
+                    Proceed to Checkout
+                  </Button>
+                  <Dialog
+                    disableBackdropClick
+                    disableEscapeKeyDown
+                    maxWidth="sm"
+                    open={this.state.openOrderConfirm}
+                    onClose={this.handleOrderDialog}
+                    aria-labelledby="responsive-dialog-title"
+                  >
+                    <DialogTitle id="responsive-dialog-title">
+                      {
+                        "Please read the list of items in your order and click `Ok` to confirm your order?"
+                      }
+                    </DialogTitle>
 
-                <DialogActions>
-                  <Button onClick={this.handleOrderDialog} color="primary">
-                    Cancel
+                    <DialogActions>
+                      <Button onClick={this.handleOrderDialog} color="primary">
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={this.makeOrder}
+                        color="secondary"
+                        autoFocus
+                      >
+                        Confirm
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </div>
+                <div>
+                  <Button
+                    disabled={!cartExists}
+                    variant="contained"
+                    style={styles.buttonStyle}
+                  >
+                    Check out with PayPal
                   </Button>
-                  <Button onClick={this.makeOrder} color="secondary" autoFocus>
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
-              <Button
-                disabled={!cartExists}
-                color="secondary"
-                variant="contained"
-                onClick={this.handleEmptyDialog}
-              >
-                Empty cart
-              </Button>
-              <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                open={this.state.openEmptyConfirm}
-                onClose={this.handleEmptyDialog}
-                aria-labelledby="responsive-dialog-title"
-              >
-                <DialogTitle id="responsive-dialog-title">
-                  {"Are you sure you want to clear shop cart?"}
-                </DialogTitle>
-                <DialogActions>
-                  <Button onClick={this.handleEmptyDialog} color="primary">
-                    Cancel
-                  </Button>
-                  <Button onClick={this.emptyCart} color="secondary" autoFocus>
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                </div>
+              </div>
             </div>
           </div>
           <div style={styles.cartItems}>
             {cartExists ? (
-              <table style={styles.cartItemsTable}>
-                <thead>
-                  <tr>
-                    <td style={styles.cartItemsTh} />
-                    <td style={styles.cartItemsTh}>Product Name</td>
-                    <td style={styles.cartItemsTh}>Price</td>
-                    <td style={styles.cartItemsTh}>Qty</td>
-                    <td style={styles.cartItemsTh}>Total</td>
-                    <td style={styles.cartItemsTh} />
-                  </tr>
-                </thead>
-                <tbody>
-                  {cartData.map(item => {
-                    return (
-                      <tr style={styles.cartItemsTd} key={item.product.name}>
-                        <td>
-                          <img
-                            style={styles.image}
-                            src={item.product.image}
-                            alt={item.product.name}
-                          />
-                        </td>
-                        <td>
-                          <Link
-                            style={styles.link}
-                            to={`/product/${item.product._id}`}
-                          >
-                            {item.product.name}
-                          </Link>
-                        </td>
-                        <td>{numeral(item.product.price).format("$0,0.00")}</td>
-                        <td>{item.quantity}</td>
-                        <td>
-                          {numeral(item.product.price * item.quantity).format(
-                            "$0,0.00"
-                          )}
-                        </td>
-                        <td>
-                          <button
-                            style={styles.cartItemButton}
-                            title="Remove this item from the cart"
-                            onClick={() => this.removeItem(item._id)}
-                            onMouseEnter={e =>
-                              (e.target.style.backgroundColor = "#325999")
-                            }
-                            onMouseLeave={e =>
-                              (e.target.style.backgroundColor = "#ce1e4d")
-                            }
-                          >
-                            X
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              cartData.map(item => {
+                return (
+                  <div style={styles.cartProductCard}>
+                    <img
+                      style={styles.cartProductImg}
+                      src={item.product.image}
+                      alt={item.product.name}
+                    />
+                    <div style={styles.cartProductRight}>
+                      <div>
+                        <h5 style={styles.cartProductHeader}>
+                          {item.product.name}
+                        </h5>
+                      </div>
+                      <div style={styles.cartProductInfo}>
+                        <h6>Price</h6>
+                        <h6>Quantity</h6>
+                      </div>
+                      <div style={styles.productCardDetails}>
+                        <p>{numeral(item.product.price).format("$0,0.00")}</p>
+                        <p>{item.quantity}</p>
+                      </div>
+                    </div>
+                    <div style={styles.productCardDelete}>
+                      <Button
+                        onClick={() => this.removeItem(item._id)}
+                        color="secondary"
+                        variant="contained"
+                      >
+                        <Delete />
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })
             ) : (
               <h1 style={styles.cartHeader}>No items in the cart.</h1>
             )}

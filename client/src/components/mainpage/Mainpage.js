@@ -31,10 +31,9 @@ export default class Mainpage extends Component {
       currentPage: 1,
       totalPages: 0,
       totalProducts: 0,
-      offset: 0,
       sortInput: "",
       limitInput: "5",
-      drawerOpen: false,
+      drawerSortOpen: false,
       drawerShowOpen: false,
       snackbarOpen: false
     };
@@ -49,8 +48,8 @@ export default class Mainpage extends Component {
     );
   }
   //Sort drawer controller
-  toggleDrawer = () => {
-    this.setState({ drawerOpen: !this.state.drawerOpen });
+  toggleSortDrawer = () => {
+    this.setState({ drawerSortOpen: !this.state.drawerSortOpen });
   };
   //Limit drawer controller
   toggleLimitDrawer = () => {
@@ -297,8 +296,8 @@ export default class Mainpage extends Component {
               </Select>
               <Drawer
                 docked={false}
-                open={this.state.drawerOpen}
-                onRequestChange={this.toggleDrawer}
+                open={this.state.drawerSortOpen}
+                onRequestChange={this.toggleSortDrawer}
               />
             </div>
             <div style={styles.search}>
