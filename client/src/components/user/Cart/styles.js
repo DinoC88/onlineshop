@@ -43,7 +43,8 @@ const styles = {
     margin: "8px 32px 0 32px"
   },
   buttonStyle: {
-    margin: 8
+    margin: 8,
+    color: "white"
   },
   cartProductCard: {
     maxHeight: "180px",
@@ -82,9 +83,7 @@ const styles = {
   total: {
     fontSize: "16px"
   },
-  cartInfoBtns: {
-    textAlign: "center"
-  },
+  cartInfoBtns: { textAlign: "center" },
   cartItems: {
     width: "60%"
   },

@@ -29,7 +29,7 @@ const UserSchema = new Schema({
     type: Number,
     default: 0
   },
-  orders: [],
+  orderHistory: [],
   date: {
     type: Date,
     default: Date.now

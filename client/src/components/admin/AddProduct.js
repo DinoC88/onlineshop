@@ -9,7 +9,7 @@ import {
   Drawer
 } from "@material-ui/core";
 import { addNewProduct } from "../../utils/requestManager";
-import { initialProductState, formFields } from "./helpers";
+import { initialProductState, formFields } from "./helper";
 import { styles } from "./styles";
 
 export default class AddProduct extends Component {
@@ -21,11 +21,9 @@ export default class AddProduct extends Component {
       errors: {}
     };
   }
-
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
-
   handleDrawerChange = e => {
     const drawerInput = { ...this.state.product };
     drawerInput[e.target.name] = e.target.value;
@@ -35,9 +33,6 @@ export default class AddProduct extends Component {
     const inputChange = { ...this.state.product };
     inputChange[e.target.name] = e.target.value;
     this.setState({ product: inputChange });
-  };
-  onSelectChange = e => {
-    this.setState({});
   };
   onProductSubmit = e => {
     e.preventDefault();
@@ -50,8 +45,8 @@ export default class AddProduct extends Component {
     const { errors, product } = this.state;
     console.log(product["name"]);
     return (
-      <div style={styles.addProductContainer}>
-        <h3 style={styles.headerStyle}>Add new product</h3>
+      <div style={styles.pageContainer}>
+        <h4 style={styles.headerStyle}>Add new product</h4>
         <form
           noValidate
           onSubmit={this.onProductSubmit}

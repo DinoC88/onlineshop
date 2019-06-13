@@ -99,7 +99,7 @@ router.get(
       email: req.user.email,
       phone: req.user.phone,
       address: req.user.address,
-      orders: req.user.orders
+      orderHistory: req.user.orderHistory
     });
   }
 );

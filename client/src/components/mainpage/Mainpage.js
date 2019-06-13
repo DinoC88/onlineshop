@@ -72,12 +72,7 @@ export default class Mainpage extends Component {
       isLoading: true,
       sortInput: e.target.value
     });
-    this.showFilterResults(
-      this.state.filters,
-      newSort,
-      this.state.limit,
-      this.state.currentPage
-    );
+    this.showFilterResults(this.state.filters, newSort, this.state.limit, 1);
   };
   //Show handle drawer
   handleLimitDrawerChange = e => {
@@ -96,12 +91,7 @@ export default class Mainpage extends Component {
       isLoading: true,
       limitInput: e.target.value
     });
-    this.showFilterResults(
-      this.state.filters,
-      this.state.sort,
-      newLimit,
-      this.state.currentPage
-    );
+    this.showFilterResults(this.state.filters, this.state.sort, newLimit, 1);
   };
   //Searchbox input
   handleSearchInput = e => {
@@ -136,7 +126,6 @@ export default class Mainpage extends Component {
   handlePrice = value => {
     const data = price;
     let array = [];
-    console.log(data);
     for (let key in data) {
       if (data[key]._id === parseInt(value, 10)) {
         array = data[key].array;
@@ -155,14 +144,10 @@ export default class Mainpage extends Component {
       let search = this.state.searchProduct;
       newFilters[category] = search;
     }
-    this.showFilterResults(
-      newFilters,
-      this.state.sort,
-      this.state.limit,
-      this.state.currentPage
-    );
+    this.showFilterResults(newFilters, this.state.sort, this.state.limit, 1);
     this.setState({
-      filters: newFilters
+      filters: newFilters,
+      currentPage: 1
     });
   };
   nextPage = pageNumber => {

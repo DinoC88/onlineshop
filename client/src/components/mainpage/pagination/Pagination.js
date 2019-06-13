@@ -6,7 +6,7 @@ import {
   LastPage,
   FirstPage
 } from "@material-ui/icons";
-import paginator from "./paginator";
+import paginator from "../../../utils/paginator";
 const Pagination = props => {
   const pageLinks = [];
 
@@ -17,7 +17,6 @@ const Pagination = props => {
 
   for (let i = paginationInfo.first_page; i <= paginationInfo.last_page; i++) {
     let active = props.currentPage === i ? "#1a3359" : "";
-    console.log(props.pages);
     pageLinks.push(
       <Button
         style={{

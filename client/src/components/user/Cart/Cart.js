@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import { Button, DialogTitle, DialogActions, Dialog } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
 import {
@@ -19,7 +19,6 @@ export default class Cart extends Component {
       isLoading: false,
       isLoaded: false,
       error: null,
-      openOrderConfirm: false,
       openEmptyConfirm: false
     };
   }
@@ -36,7 +35,6 @@ export default class Cart extends Component {
           isLoaded: true,
           error: null
         });
-        console.log(res.data);
       })
       .catch(err => this.setState({ error: err }));
   }
@@ -58,7 +56,7 @@ export default class Cart extends Component {
     });
   };
   emptyCart = () => {
-    const id = this.state.id;
+    const { id } = this.state;
     deleteCart({ params: { id } }).then(() => {
       getCartData()
         .then(res => {
@@ -87,15 +85,12 @@ export default class Cart extends Component {
       this.setState({ openOrderConfirm: false });
     });
   };
-  handleOrderDialog = () => {
-    this.setState({ openOrderConfirm: !this.state.openOrderConfirm });
-  };
   handleEmptyDialog = () => {
     this.setState({ openEmptyConfirm: !this.state.openEmptyConfirm });
   };
   render() {
     let { cartData, isLoaded, error } = this.state;
-    const cartExists = isLoaded && !error && cartData.length > 0;
+    const cartExists = isLoaded && !error && cartData.length;
     return (
       <div style={styles.cartContainer}>
         <h2 style={styles.cartTitle}>
@@ -151,53 +146,15 @@ export default class Cart extends Component {
                 </div>
               </div>
               <div style={styles.cartInfoBtns}>
-                <div>
-                  <Button
-                    disabled={!cartExists}
-                    color="secondary"
-                    variant="contained"
-                    style={styles.buttonStyle}
-                    onClick={this.handleOrderDialog}
-                  >
-                    Proceed to Checkout
-                  </Button>
-                  <Dialog
-                    disableBackdropClick
-                    disableEscapeKeyDown
-                    maxWidth="sm"
-                    open={this.state.openOrderConfirm}
-                    onClose={this.handleOrderDialog}
-                    aria-labelledby="responsive-dialog-title"
-                  >
-                    <DialogTitle id="responsive-dialog-title">
-                      {
-                        "Please read the list of items in your order and click `Ok` to confirm your order?"
-                      }
-                    </DialogTitle>
-
-                    <DialogActions>
-                      <Button onClick={this.handleOrderDialog} color="primary">
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={this.makeOrder}
-                        color="secondary"
-                        autoFocus
-                      >
-                        Confirm
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-                <div>
-                  <Button
-                    disabled={!cartExists}
-                    variant="contained"
-                    style={styles.buttonStyle}
-                  >
-                    Check out with PayPal
-                  </Button>
-                </div>
+                <Button
+                  disabled={!cartExists}
+                  color="secondary"
+                  variant="contained"
+                  style={styles.buttonStyle}
+                  href={`/checkout`}
+                >
+                  Proceed to Checkout
+                </Button>
               </div>
             </div>
           </div>
@@ -205,7 +162,7 @@ export default class Cart extends Component {
             {cartExists ? (
               cartData.map(item => {
                 return (
-                  <div style={styles.cartProductCard}>
+                  <div key={item.product._id} style={styles.cartProductCard}>
                     <img
                       style={styles.cartProductImg}
                       src={item.product.image}

@@ -1,5 +1,31 @@
 import axios from "axios";
 
+export const getOrders = () => {
+  return axios.post("/api/order/orders");
+};
+
+export const getToken = () => {
+  return axios.get("/api/order/getToken");
+};
+
+export const productPurchaseOnline = (
+  paymentMethodNonce,
+  total,
+  info,
+  product
+) => {
+  return axios.post("/api/order/online", paymentMethodNonce);
+};
+
+export const productPurchaseDelivery = (info, total, product) => {
+  const data = {
+    info,
+    total,
+    product
+  };
+  return axios.post("/api/order/delivery", data);
+};
+
 export const addNewProduct = product => {
   return axios.post("/api/product/addproduct", product);
 };

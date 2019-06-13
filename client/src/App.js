@@ -16,7 +16,8 @@ import Account from "./components/user/Account/Account";
 import EditAccount from "./components/user/EditAccount/EditAccount";
 import Cart from "./components/user/Cart/Cart";
 import AddProduct from "./components/admin/AddProduct";
-
+import Checkout from "./components/checkout/Checkout";
+import Orders from "./components/admin/Orders";
 class App extends Component {
   render() {
     return (
@@ -33,7 +34,9 @@ class App extends Component {
               <PrivateRoute exact path="/users/current" component={Account} />
               <PrivateRoute path="/user/:userId" component={EditAccount} />
               <PrivateRoute path="/cart" component={Cart} />
+              <PrivateRoute path="/checkout" component={Checkout} />
               <AdminRoute path="/addproduct" component={AddProduct} />
+              <AdminRoute path="/orders" component={Orders} />
               <Route component={NotFound} />
             </Switch>
           </div>

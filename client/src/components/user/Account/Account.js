@@ -44,7 +44,7 @@ export default class Account extends Component {
           name: res.data.name,
           address: res.data.address,
           phone: res.data.phone,
-          orders: res.data.orders
+          orders: res.data.orderHistory
         });
       })
       .catch(err =>

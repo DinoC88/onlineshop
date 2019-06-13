@@ -37,6 +37,20 @@ class Navbar extends Component {
             </MenuItem>
           </li>
         ) : null}
+        {checkAdmin() ? (
+          <li>
+            <MenuItem
+              component={Link}
+              style={styles.navBarButton}
+              onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
+              onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
+              to="/orders"
+              selected={"/orders" === pathname}
+            >
+              Orders
+            </MenuItem>
+          </li>
+        ) : null}
         <li>
           <MenuItem
             component={Link}
@@ -50,18 +64,20 @@ class Navbar extends Component {
             Cart
           </MenuItem>
         </li>
-        <li>
-          <MenuItem
-            style={styles.navBarButton}
-            onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
-            component={Link}
-            to="/users/current"
-            selected={"/users/current" === pathname}
-          >
-            Account
-          </MenuItem>
-        </li>
+        {!checkAdmin() ? (
+          <li>
+            <MenuItem
+              style={styles.navBarButton}
+              onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
+              onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
+              component={Link}
+              to="/users/current"
+              selected={"/users/current" === pathname}
+            >
+              Account
+            </MenuItem>
+          </li>
+        ) : null}
         <li>
           <MenuItem
             style={styles.navBarButton}

@@ -10,7 +10,6 @@ const users = require("./routes/users");
 const product = require("./routes/product");
 const cart = require("./routes/cart");
 const orders = require("./routes/orders");
-
 // Bodyparser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -34,7 +33,6 @@ app.use("/api/users", users);
 app.use("/api/product", product);
 app.use("/api/cart", cart);
 app.use("/api/order", orders);
-
 //Server static assets if in production
 if (process.env.NODE_ENV === "production") {
   //Set static folder

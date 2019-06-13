@@ -1,5 +1,5 @@
 const styles = {
-  addProductContainer: {
+  pageContainer: {
     height: "90vh"
   },
   addProductForm: {
@@ -7,15 +7,17 @@ const styles = {
     justifyContent: "space-around"
   },
   inputColumn: {
-    height: "90vh",
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 64
   },
   headerStyle: {
     textAlign: "center"
   },
   buttonStyle: {
-    paddingTop: 25
+    paddingTop: 32
   },
   formStyle: {
     marginTop: 25,
@@ -24,6 +26,12 @@ const styles = {
   warningStyle: {
     color: "red",
     fontSize: "12px"
+  },
+  th: {
+    padding: "5px 5px",
+    backgroundColor: "#325999",
+    color: "white",
+    textAlign: "right"
   }
 };
 export { styles };
