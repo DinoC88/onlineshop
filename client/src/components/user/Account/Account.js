@@ -20,7 +20,7 @@ export default class Account extends Component {
   constructor() {
     super();
     this.state = {
-      userId: "",
+      userid: "",
       email: "",
       name: "",
       address: "",
@@ -40,7 +40,7 @@ export default class Account extends Component {
       .then(res => {
         this.setState({
           email: res.data.email,
-          userId: res.data.id,
+          userid: res.data.id,
           name: res.data.name,
           address: res.data.address,
           phone: res.data.phone,
@@ -141,7 +141,7 @@ export default class Account extends Component {
               </Dialog>
             </div>
           </div>
-          <div className="account-history" style={styles.accountHistory}>
+          <div style={styles.accountHistory}>
             <h2>Order History</h2>
             <Divider />
             <div className="orders">

@@ -113,18 +113,19 @@ router.post(
   (req, res) => {
     //Get fields
     const profileFields = {};
-    profileFields.userid = req.user.id;
     if (req.body.name) profileFields.name = req.body.name;
     if (req.body.email) profileFields.email = req.body.email;
     if (req.body.address) profileFields.address = req.body.address;
     if (req.body.phone) profileFields.phone = req.body.phone;
     //Update
-    User.findOneAndUpdate(
-      { userid: req.user.userid },
+    User.update(
+      { _id: req.body.userid },
       { $set: profileFields },
       { new: true }
     )
-      .then(profile => res.json(profile))
+      .then(profile => {
+        res.json(profile);
+      })
       .catch(errors => res.status(400).json(errors));
   }
 );

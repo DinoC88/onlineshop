@@ -51,19 +51,21 @@ class Navbar extends Component {
             </MenuItem>
           </li>
         ) : null}
-        <li>
-          <MenuItem
-            component={Link}
-            style={styles.navBarButton}
-            onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
-            onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
-            to="/cart"
-            selected={"/cart" === pathname}
-          >
-            <AddShoppingCartIcon />
-            Cart
-          </MenuItem>
-        </li>
+        {!checkAdmin() ? (
+          <li>
+            <MenuItem
+              component={Link}
+              style={styles.navBarButton}
+              onMouseEnter={e => (e.target.style.backgroundColor = "#1a325b")}
+              onMouseLeave={e => (e.target.style.backgroundColor = "#152847")}
+              to="/cart"
+              selected={"/cart" === pathname}
+            >
+              <AddShoppingCartIcon />
+              Cart
+            </MenuItem>
+          </li>
+        ) : null}
         {!checkAdmin() ? (
           <li>
             <MenuItem

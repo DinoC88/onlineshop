@@ -115,6 +115,7 @@ export default class Checkout extends Component {
   };
   render() {
     const { info, cartData, confirmInfo, errors, total } = this.state;
+    console.log(total);
     return (
       <div style={styles.checkout}>
         <h1 style={styles.headerStyle}>Checkout</h1>

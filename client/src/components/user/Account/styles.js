@@ -2,7 +2,6 @@ const styles = {
   accountContainer: {
     minHeight: "100vh",
     margin: "0 6px",
-    marginTop: "20px",
     border: "1px solid #ffffff00"
   },
   account: {

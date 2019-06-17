@@ -1,12 +1,10 @@
 const styles = {
   cartContainer: {
     minHeight: "100vh",
-    margin: "0 6px",
-    marginTop: "-72px",
     border: "1px solid #ffffff00"
   },
   cartTitle: {
-    marginTop: "100px",
+    marginTop: "60px",
     marginBottom: "40px",
     textAlign: "center"
   },
@@ -30,6 +28,7 @@ const styles = {
     boxShadow: "0 0 8px #b7b2b3",
     backgroundColor: "white",
     padding: "8px",
+    marginTop: 8,
     marginBottom: 16
   },
   orderInfo: {

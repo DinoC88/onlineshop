@@ -12,10 +12,14 @@ const orderSchema = new Schema({
     type: String
   },
   products: [],
-  deliveryInfo: [],
+  deliveryInfo: { type: Object },
   date: {
     type: Date,
     default: Date.now()
+  },
+  status: {
+    type: String,
+    default: "Awaiting Shipment"
   }
 });
 

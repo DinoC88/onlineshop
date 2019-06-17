@@ -2,14 +2,13 @@ import React, { Component } from "react";
 import { styles } from "./styles";
 import { getOrders } from "../../utils/requestManager";
 import {
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
   TableHead,
   TableRow,
-  Table
+  Table,
+  TableBody,
+  TableCell
 } from "@material-ui/core";
-import ExpandMore from "@material-ui/icons/ExpandMore";
+import * as moment from "moment";
 
 export default class Orders extends Component {
   constructor(props) {
@@ -31,43 +30,38 @@ export default class Orders extends Component {
       <div style={styles.pageContainer}>
         <h2 style={styles.headerStyle}>Orders</h2>
         <hr />
-        {this.state.orders ? (
-          <div>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Order ID</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Customer</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {this.state.orders.map((order, index) => {
               console.log(order);
               return (
-                <div key={index}>
-                  <ExpansionPanel style={{ width: 500 }}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-                      Order #{index + 1}
-                    </ExpansionPanelSummary>
-                    {order.products.map((product, index) => {
-                      return (
-                        <div key={index}>
-                          <thead>
-                            <tr>
-                              <td style={styles.th}>Date Created</td>
-                              <td style={styles.th}>Product Name</td>
-                              <td style={styles.th}>Price</td>
-                              <td style={styles.th}>Qty</td>
-                              <td style={styles.th}>Total</td>
-                            </tr>
-                          </thead>
-                          <div>
-                            <ExpansionPanelDetails>
-                              <p>{product.name}</p>
-                              <p style={{ marginLeft: 20 }}>{product.price}</p>
-                            </ExpansionPanelDetails>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </ExpansionPanel>
-                </div>
+                <TableRow key={index}>
+                  <TableCell>
+                    <a href={`/order/${order._id}`}>Order #{index + 1}</a>
+                  </TableCell>
+                  <TableCell>{moment(order.date).format("ll")}</TableCell>
+                  <TableCell>
+                    {order.deliveryInfo.firstname +
+                      " " +
+                      order.deliveryInfo.lastname}
+                  </TableCell>
+                  <TableCell>{order.deliveryInfo.phone}</TableCell>
+
+                  <TableCell>{order.status}</TableCell>
+                </TableRow>
               );
             })}
-          </div>
-        ) : null}
+          </TableBody>
+        </Table>
       </div>
     );
   }

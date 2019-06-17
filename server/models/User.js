@@ -20,10 +20,12 @@ const UserSchema = new Schema({
     required: true
   },
   address: {
-    type: String
+    type: String,
+    default: ""
   },
   phone: {
-    type: String
+    type: String,
+    default: ""
   },
   role: {
     type: Number,

@@ -12,7 +12,8 @@ export default class EditAccount extends Component {
       email: "",
       address: "",
       phone: "",
-      password: ""
+      password: "",
+      userId: ""
     };
   }
 
@@ -29,6 +30,7 @@ export default class EditAccount extends Component {
           address: res.data.address,
           phone: res.data.phone
         });
+        console.log(res.data);
       })
       .catch(err =>
         this.setState({
@@ -47,7 +49,8 @@ export default class EditAccount extends Component {
       name: this.state.name,
       email: this.state.email,
       address: this.state.address,
-      phone: this.state.phone
+      phone: this.state.phone,
+      userid: this.state.userId
     };
     editUserInfo(newUserInfo)
       .then(res => this.props.history.push("/users/current"))
@@ -60,7 +63,7 @@ export default class EditAccount extends Component {
           <h3 style={styles.headerStyle}>Edit Account Info</h3>
           <form noValidate onSubmit={this.onSubmit}>
             <div>
-              <FormControl style={styles.formStyle}>
+              <FormControl style={styles.formStyle} required>
                 <InputLabel htmlFor="name">Name</InputLabel>
                 <Input
                   id="name"
@@ -68,6 +71,7 @@ export default class EditAccount extends Component {
                   value={this.state.name}
                   autoComplete="name"
                   onChange={this.onChange}
+                  required
                 />
               </FormControl>
             </div>
@@ -80,6 +84,7 @@ export default class EditAccount extends Component {
                   value={this.state.email}
                   autoComplete="email"
                   onChange={this.onChange}
+                  required
                 />
               </FormControl>
             </div>
@@ -92,6 +97,7 @@ export default class EditAccount extends Component {
                   value={this.state.address}
                   autoComplete="address"
                   onChange={this.onChange}
+                  required
                 />
               </FormControl>
             </div>
@@ -104,6 +110,7 @@ export default class EditAccount extends Component {
                   value={this.state.phone}
                   autoComplete="phone"
                   onChange={this.onChange}
+                  required
                 />
               </FormControl>
             </div>

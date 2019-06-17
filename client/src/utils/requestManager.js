@@ -1,9 +1,33 @@
 import axios from "axios";
 
+export const changeOrderStatus = (status, id) => {
+  const data = {
+    status,
+    id
+  };
+  return axios.post("/api/order/test", data);
+};
+
+export const getTransactionById = transactionId => {
+  const id = {
+    transactionId
+  };
+  return axios.post("/api/order/transaction/", id);
+};
+
+export const getOrderById = orderid => {
+  const id = {
+    orderid
+  };
+  return axios.post("/api/order/orderid", id);
+};
+
 export const getOrders = () => {
   return axios.post("/api/order/orders");
 };
-
+export const getTransactions = () => {
+  return axios.post("/api/order/transactionlist");
+};
 export const getToken = () => {
   return axios.get("/api/order/getToken");
 };

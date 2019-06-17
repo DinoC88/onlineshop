@@ -6,6 +6,7 @@ const { merchantId, publicKey, privateKey } = require("../config/keys");
 const Payment = require("../models/Payment");
 const User = require("../models/User");
 const Order = require("../models/Order");
+var ObjectID = require("mongodb").ObjectID;
 
 var gateway = braintree.connect({
   environment: braintree.Environment.Sandbox,
@@ -13,7 +14,7 @@ var gateway = braintree.connect({
   publicKey,
   privateKey
 });
-
+//user orderhistory
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -24,11 +25,39 @@ router.post(
     });
   }
 );
+//admin orders list
 router.post("/orders", (req, res) => {
   Order.find().exec((err, orders) => {
     res.json({ orders });
   });
 });
+//admin transaction list
+router.post("/transactionlist", (req, res) => {
+  Payment.find().exec((err, transaction) => {
+    res.json({ transaction });
+  });
+});
+// admin get order by id
+router.post("/orderid", (req, res) => {
+  Order.findById(req.body.orderid).then(order => {
+    res.json(order);
+  });
+});
+// admin get transaction by id
+router.post("/transaction", (req, res) => {
+  Payment.find({ transactionId: req.body.transactionId }).then(transaction => {
+    res.json(transaction);
+  });
+});
+// admin change order status
+router.post("/test", (req, res) => {
+  Order.update(
+    { _id: req.body.id },
+    { $set: { status: req.body.status } }
+  ).exec();
+});
+
+//paypal-braintree
 router.get("/braintree", (req, res) => {
   res.send("Braintree works");
 });
@@ -105,7 +134,10 @@ router.post(
                 transactionId: transaction.id,
                 orderId: newOrder._id,
                 amount: transaction.amount,
-                paymentMethod: transaction.paymentInstrumentType,
+                paymentMethod:
+                  transaction.paymentInstrumentType === "credit_card"
+                    ? "Credit card"
+                    : "Paypal",
                 currency: transaction.currencyIsoCode,
                 status: transaction.status,
                 paymentDetails:
@@ -141,7 +173,6 @@ router.post(
         }
       );
     } catch (err) {
-      // Deal with an error
       console.log(err);
       res.send(err);
     }
@@ -152,6 +183,7 @@ router.post(
   "/delivery",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    var transactionId = new ObjectID();
     let productList = req.body.product.map(item => {
       let product = {
         name: item.product.name,
@@ -174,7 +206,7 @@ router.post(
       products: productList,
       amount: req.body.total,
       userId: req.user._id,
-      transactionId: "Paying on delivery",
+      transactionId: transactionId,
       dateBuyed: Date.now()
     });
     User.update(
@@ -183,13 +215,13 @@ router.post(
     ).exec();
     newOrder.save(() => {
       const newPayment = new Payment({
-        transactionId: null,
+        transactionId: transactionId,
         orderId: newOrder._id,
         amount: req.body.total,
         paymentMethod: "Pay on delivery",
         currency: null,
         status: "Pay on delivery",
-        paymentDetails: {},
+        paymentDetails: null,
         date: Date.now()
       });
       newPayment.save(() => res.end());

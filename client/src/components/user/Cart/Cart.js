@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import { Button } from "@material-ui/core";
+import { Button, Divider } from "@material-ui/core";
 import { Delete } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
 import {
@@ -101,6 +101,7 @@ export default class Cart extends Component {
             : ""}
           )
         </h2>
+        <Divider />
         <div style={styles.cart}>
           <div style={styles.cartOrder}>
             <div style={styles.orderCard}>
