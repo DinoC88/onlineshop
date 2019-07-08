@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button, Tooltip } from "@material-ui/core";
 import {
   KeyboardArrowRight,
   KeyboardArrowLeft,
@@ -7,6 +7,7 @@ import {
   FirstPage
 } from "@material-ui/icons";
 import paginator from "../../../utils/paginator";
+import { styles } from "./styles";
 const Pagination = props => {
   const pageLinks = [];
 
@@ -20,10 +21,12 @@ const Pagination = props => {
     pageLinks.push(
       <Button
         style={{
-          height: 32,
           backgroundColor: `${active}`,
-          margin: 8,
-          marginBottom: 0,
+          maxWidth: "38px",
+          maxHeight: "38px",
+          minWidth: "38px",
+          minHeight: "38px",
+          margin: "8px 8px 16px 8px",
           padding: 8
         }}
         color="primary"
@@ -37,76 +40,60 @@ const Pagination = props => {
   }
 
   return (
-    <div style={{ display: "row", textAlign: "center" }}>
-      {props.currentPage > 1 ? (
-        <Button
-          style={{
-            height: 32,
-            margin: 8,
-            marginBottom: 0,
-            padding: 8
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => props.nextPage(1)}
-        >
-          <FirstPage />
-        </Button>
-      ) : (
-        ""
-      )}
-      {props.currentPage > 1 ? (
-        <Button
-          style={{
-            height: 32,
-            margin: 8,
-            marginBottom: 0,
-            padding: 8
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => props.nextPage(props.currentPage - 1)}
-        >
-          <KeyboardArrowLeft />
-        </Button>
-      ) : (
-        ""
-      )}
-      {pageLinks}
-      {props.currentPage < props.pages ? (
-        <Button
-          style={{
-            height: 32,
-            margin: 8,
-            marginBottom: 0,
-            padding: 8
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => props.nextPage(props.currentPage + 1)}
-        >
-          <KeyboardArrowRight />
-        </Button>
-      ) : (
-        ""
-      )}
-      {props.currentPage < props.pages ? (
-        <Button
-          style={{
-            height: 32,
-            margin: 8,
-            marginBottom: 0,
-            padding: 8
-          }}
-          color="primary"
-          variant="contained"
-          onClick={() => props.nextPage(props.pages)}
-        >
-          <LastPage />
-        </Button>
-      ) : (
-        ""
-      )}
+    <div style={styles.buttonPosition}>
+      <Tooltip disableFocusListener title="First page">
+        <div>
+          <Button
+            disabled={props.currentPage > 1 ? false : true}
+            style={styles.buttonStyle}
+            color="primary"
+            variant="contained"
+            onClick={() => props.nextPage(1)}
+          >
+            <FirstPage />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip disableFocusListener title="Back page">
+        <div>
+          <Button
+            disabled={props.currentPage > 1 ? false : true}
+            style={styles.buttonStyle}
+            color="primary"
+            variant="contained"
+            onClick={() => props.nextPage(props.currentPage - 1)}
+          >
+            <KeyboardArrowLeft />
+          </Button>
+        </div>
+      </Tooltip>
+      <div>{pageLinks}</div>
+      <Tooltip disableFocusListener title="Next page">
+        <div>
+          <Button
+            disabled={props.currentPage < props.pages ? false : true}
+            style={styles.buttonStyle}
+            color="primary"
+            variant="contained"
+            onClick={() => props.nextPage(props.currentPage + 1)}
+          >
+            <KeyboardArrowRight />
+          </Button>
+        </div>
+      </Tooltip>
+      <Tooltip disableFocusListener title="Last page">
+        <div>
+          <Button
+            disabled={props.currentPage < props.pages ? false : true}
+            style={styles.buttonStyle}
+            color="primary"
+            variant="contained"
+            onClick={() => props.nextPage(props.pages)}
+          >
+            <LastPage />
+          </Button>
+        </div>
+      </Tooltip>
     </div>
   );
 };

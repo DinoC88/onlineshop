@@ -15,7 +15,7 @@ export default class CheckBoxPrice extends Component {
   constructor() {
     super();
     this.state = {
-      open: false,
+      open: true,
       value: "0"
     };
   }
@@ -34,7 +34,7 @@ export default class CheckBoxPrice extends Component {
     this.props.list
       ? this.props.list.map(value => (
           <FormControlLabel
-            style={styles.checkbox}
+            style={styles.priceCheckbox}
             value={`${value._id}`}
             key={value._id}
             control={<Radio color="primary" />}
@@ -45,7 +45,7 @@ export default class CheckBoxPrice extends Component {
 
   render() {
     return (
-      <List style={styles.listItem}>
+      <List style={styles.priceItem}>
         <ListItem onClick={this.handleCheckboxClick} style={{ width: "100%" }}>
           <ListItemText
             style={{
@@ -57,8 +57,9 @@ export default class CheckBoxPrice extends Component {
           {this.state.open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-          <List disablePadding>
+          <List>
             <RadioGroup
+              style={{ padding: "2px 14px 2px 14px" }}
               aria-label="price"
               name="price"
               value={this.state.value}

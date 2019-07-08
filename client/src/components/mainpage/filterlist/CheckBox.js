@@ -14,7 +14,7 @@ export default class CheckBox extends Component {
   constructor() {
     super();
     this.state = {
-      open: false,
+      open: true,
       checked: []
     };
   }
@@ -48,7 +48,7 @@ export default class CheckBox extends Component {
   renderList = () =>
     this.props.list
       ? this.props.list.map(value => (
-          <ListItem key={value._id}>
+          <ListItem key={value._id} style={styles.checkBox}>
             <ListItemText primary={<i>{value.name}</i>} />
             <ListItemSecondaryAction>
               <Checkbox

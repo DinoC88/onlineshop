@@ -1,0 +1,98 @@
+import React, { Component } from "react";
+import { personalFields, addressFields } from "../helper";
+import {
+  FormControl,
+  Input,
+  InputLabel,
+  Button,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  Grid
+} from "@material-ui/core";
+import { ExpandMore } from "@material-ui/icons";
+import { styles } from "../styles";
+export default class DeliveryInfo extends Component {
+  render() {
+    return (
+      <div>
+        <ExpansionPanel
+          defaultExpanded={true}
+          expanded={!this.props.confirmInfo ? true : false}
+        >
+          <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+            <h5>Step 1: Delivery information</h5>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails style={styles.panelContent}>
+            <form noValidate onSubmit={this.props.onInfoSubmit}>
+              <Grid container>
+                <Grid item xs={12} lg={6}>
+                  <div style={styles.inputColumn}>
+                    <h4>Personal details</h4>
+                    {personalFields.map(i => (
+                      <FormControl
+                        key={i.keyName}
+                        style={styles.formStyle}
+                        required
+                      >
+                        <InputLabel htmlFor={i.keyName}>{i.label}</InputLabel>
+                        <Input
+                          id={i.keyName}
+                          name={i.keyName}
+                          value={this.props.info[i.keyName]}
+                          autoComplete={i.keyName}
+                          onChange={this.props.onInfoChange}
+                        />
+                        {this.props.errors[i.keyName] && (
+                          <div style={styles.warningStyle}>
+                            {this.props.errors[i.keyName]}
+                          </div>
+                        )}
+                      </FormControl>
+                    ))}
+                  </div>
+                </Grid>
+                <Grid item xs={12} lg={6}>
+                  <div style={styles.inputColumn}>
+                    <h4>Your address</h4>
+                    {addressFields.map(i => (
+                      <FormControl
+                        key={i.keyName}
+                        style={styles.formStyle}
+                        required
+                      >
+                        <InputLabel htmlFor={i.keyName}>{i.label}</InputLabel>
+                        <Input
+                          id={i.keyName}
+                          name={i.keyName}
+                          value={this.props.info[i.keyName]}
+                          autoComplete={i.keyName}
+                          onChange={this.props.onInfoChange}
+                        />
+                        {this.props.errors[i.keyName] && (
+                          <div style={styles.warningStyle}>
+                            {this.props.errors[i.keyName]}
+                          </div>
+                        )}
+                      </FormControl>
+                    ))}
+                    <div>
+                      <Button
+                        style={{ margin: 32 }}
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                      >
+                        Confirm
+                      </Button>
+                    </div>
+                  </div>
+                </Grid>
+              </Grid>
+            </form>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
+    );
+  }
+}

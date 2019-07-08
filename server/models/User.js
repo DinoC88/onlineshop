@@ -11,6 +11,14 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  firstName: {
+    type: String,
+    default: ""
+  },
+  lastName: {
+    type: String,
+    default: ""
+  },
   email: {
     type: String,
     required: true
@@ -20,6 +28,14 @@ const UserSchema = new Schema({
     required: true
   },
   address: {
+    type: String,
+    default: ""
+  },
+  city: {
+    type: String,
+    default: ""
+  },
+  zipcode: {
     type: String,
     default: ""
   },

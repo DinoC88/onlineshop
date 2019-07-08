@@ -1,19 +1,11 @@
 import React, { Component } from "react";
 import Spinner from "../../utils/Spinner";
-import ProductItem from "./productcard/ProductCard";
-import CheckBox from "./filterlist/CheckBox";
-import CheckBoxPrice from "./filterlist/CheckBoxPrice";
-import { Select, MenuItem, Button, TextField, Drawer } from "@material-ui/core";
+import ProductCard from "./productcard/ProductCard";
+import FiltersList from "./filterlist/FiltersList";
+import ProductHandle from "./producthandle/ProductHandle";
+import { TextField, Grid } from "@material-ui/core";
 import { getProduct } from "../../utils/requestManager";
-import {
-  brand,
-  ram,
-  price,
-  color,
-  internalMemory,
-  displaySize,
-  displayResolution
-} from "../../utils/filters";
+import { price } from "../../utils/filters";
 import { styles } from "./styles";
 import Pagination from "./pagination/Pagination";
 
@@ -26,21 +18,20 @@ export default class Mainpage extends Component {
       searchProduct: "",
       products: [],
       filters: {},
-      sort: {},
+      sort: { name: "asc" },
       limit: 5,
       currentPage: 1,
       totalPages: 0,
       totalProducts: 0,
-      sortInput: "",
+      sortInput: "Name: A-Z",
       limitInput: "5",
       drawerSortOpen: false,
-      drawerShowOpen: false,
-      snackbarOpen: false
+      drawerShowOpen: false
     };
   }
-  componentWillMount() {
+  async componentWillMount() {
     this.setState({ isLoading: true });
-    this.showFilterResults(
+    await this.showFilterResults(
       this.state.filters,
       this.state.sort,
       this.state.limit,
@@ -105,22 +96,21 @@ export default class Mainpage extends Component {
     }
   };
   //Filter function
-  showFilterResults = (filter, sort, show, currentPage) => {
-    getProduct(filter, sort, show, currentPage)
-      .then(products => {
-        this.setState({
-          products: products.data.products,
-          isLoading: false,
-          totalPages: products.data.totalPages,
-          totalProducts: products.data.totalProducts
-        });
-      })
-      .catch(errors =>
-        this.setState({
-          errors,
-          isLoading: false
-        })
-      );
+  showFilterResults = async (filter, sort, show, currentPage) => {
+    try {
+      const products = await getProduct(filter, sort, show, currentPage);
+      this.setState({
+        products: products.data.products,
+        isLoading: false,
+        totalPages: products.data.totalPages,
+        totalProducts: products.data.totalProducts
+      });
+    } catch (errors) {
+      this.setState({
+        errors,
+        isLoading: false
+      });
+    }
   };
   // handle price function for handleFilters
   handlePrice = value => {
@@ -176,137 +166,68 @@ export default class Mainpage extends Component {
     } else {
       if (products.length > 0) {
         productItems = products.map(product => (
-          <ProductItem key={product._id} product={product} />
+          <ProductCard
+            key={product._id}
+            product={product}
+            getCartNum={this.props.getCartNum}
+          />
         ));
       } else {
         productItems = <h4 style={styles.noProductFound}>No products found</h4>;
       }
     }
     return (
-      <div style={styles.homepageContainer}>
-        <div style={styles.filtersList}>
-          <p style={styles.filtersListHeader}>Search by</p>
-          <div>
-            <CheckBoxPrice
-              title={<b>Price</b>}
-              list={price}
-              handleFilters={filters => this.handleFilters(filters, "price")}
-            />
-          </div>
-          <CheckBox
-            title={<b>Brand</b>}
-            list={brand}
-            handleFilters={filters => this.handleFilters(filters, "brand")}
-          />
-          <CheckBox
-            title={<b>Color</b>}
-            list={color}
-            handleFilters={filters => this.handleFilters(filters, "color")}
-          />
-          <CheckBox
-            title={<b>Internal Memory</b>}
-            list={internalMemory}
-            handleFilters={filters => this.handleFilters(filters, "memory")}
-          />
-          <CheckBox
-            title={<b>RAM</b>}
-            list={ram}
-            handleFilters={filters => this.handleFilters(filters, "ram")}
-          />
-          <CheckBox
-            title={<b>Display size</b>}
-            list={displaySize}
-            handleFilters={filters =>
-              this.handleFilters(filters, "displaySize")
-            }
-          />
-          <CheckBox
-            title={<b>Display Resolution</b>}
-            list={displayResolution}
-            handleFilters={filters =>
-              this.handleFilters(filters, "displayResolution")
-            }
-          />
-        </div>
-        <div style={styles.productList}>
-          <div style={styles.productsHandle}>
-            <div style={styles.productFound}>
-              <b>Products found:</b> {totalProducts}
-            </div>
-            <div>
-              <b>Show:</b>
-              <Select
-                value={this.state.limitInput}
-                onChange={this.handleLimitDrawerChange}
-              >
-                <MenuItem value="5">5</MenuItem>
-                <MenuItem value="10">10</MenuItem>
-                <MenuItem value="20">20</MenuItem>
-                <MenuItem value="50">50</MenuItem>
-              </Select>
-              <Drawer
-                docked={false}
-                open={this.state.drawerShowOpen}
-                onRequestChange={this.toggleLimitDrawer}
-              />
-            </div>
-            <div>
-              <Button
-                style={styles.clearButton}
-                color="primary"
-                variant="contained"
-                href="/dashboard"
-              >
-                Clear filters
-              </Button>
-            </div>
-            <div>
-              <b>Sort By:</b>
-              <Select
-                value={this.state.sortInput}
-                onChange={this.handleDrawerChange}
-              >
-                <MenuItem name="name" id="name" value="Name: A-Z">
-                  Name: A-Z
-                </MenuItem>
-                <MenuItem name="name" id="name" value="Name: Z-A">
-                  Name: Z-A
-                </MenuItem>
-                <MenuItem name="name" id="name" value="Price: Low to High">
-                  Price: Low to High
-                </MenuItem>
-                <MenuItem name="name" id="name" value="Price: High to Low">
-                  Price: High to Low
-                </MenuItem>
-              </Select>
-              <Drawer
-                docked={false}
-                open={this.state.drawerSortOpen}
-                onRequestChange={this.toggleSortDrawer}
-              />
-            </div>
-            <div style={styles.search}>
-              <TextField
-                label="Search phone"
-                type="search"
-                variant="filled"
-                onChange={this.handleSearchInput}
-                onKeyDown={this.enterKey}
-              />
-            </div>
-          </div>
-          {productItems}
-          {totalProducts > limit ? (
-            <Pagination
-              pages={Math.ceil(totalPages)}
-              nextPage={this.nextPage}
-              limit={limit}
-              totalProducts={totalProducts}
-              currentPage={currentPage}
-            />
-          ) : (
-            ""
-          )}
+      <div style={styles.pageContainer}>
+        <div style={styles.homepageContainer}>
+          <Grid container>
+            <Grid item xs={12} lg={3}>
+              <FiltersList handleFilters={this.handleFilters} />
+            </Grid>
+            <Grid item xs={12} lg={9}>
+              <div>
+                <Grid container>
+                  <Grid item xs={12} lg={12}>
+                    <div style={styles.searchStyle}>
+                      <TextField
+                        style={{ width: "100%" }}
+                        inputstyle={{ width: "100%" }}
+                        label="Search phone"
+                        type="search"
+                        variant="standard"
+                        onChange={this.handleSearchInput}
+                        onKeyDown={this.enterKey}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item xs={12} lg={12}>
+                    <ProductHandle
+                      limitInput={this.state.limitInput}
+                      handleLimitDrawerChange={this.handleLimitDrawerChange}
+                      drawerShowOpen={this.state.drawerShowOpen}
+                      toggleLimitDrawer={this.toggleLimitDrawer}
+                      sortInput={this.state.sortInput}
+                      handleDrawerChange={this.handleDrawerChange}
+                      drawerSortOpen={this.state.drawerSortOpen}
+                      toggleSortDrawer={this.toggleSortDrawer}
+                      totalProducts={totalProducts}
+                    />
+                  </Grid>
+                </Grid>
+                {productItems}
+                {totalProducts > limit ? (
+                  <Pagination
+                    pages={Math.ceil(totalPages)}
+                    nextPage={this.nextPage}
+                    limit={limit}
+                    totalProducts={totalProducts}
+                    currentPage={currentPage}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
+            </Grid>
+          </Grid>
         </div>
       </div>
     );

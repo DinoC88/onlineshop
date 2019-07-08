@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import checkAuth from "../../utils/checkAuth";
+import checkAuth from "../../../utils/checkAuth";
 import Button from "@material-ui/core/Button";
-import Logo from "../../utils/Logo";
 import { styles } from "./styles";
 export default class Landing extends Component {
   constructor() {
@@ -29,15 +28,16 @@ export default class Landing extends Component {
   render() {
     const { hoverRegister, hoverLogin } = this.state;
     return (
-      <div style={styles.landingStyle}>
-        <div>
-          <Logo />
+      <div style={styles.pageContainer}>
+        <div style={styles.landingStyle}>
+          <h2 style={styles.headerStyle}>Buy your smart phone</h2>
           <div style={styles.buttonStyle}>
             <Button
               style={hoverRegister ? styles.buttonHover : styles.button}
               onMouseEnter={this.onHoverRegister}
               onMouseLeave={this.onHoverRegister}
               variant="contained"
+              color="primary"
               href="/register"
             >
               Sign Up

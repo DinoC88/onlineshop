@@ -6,10 +6,20 @@ import {
   Snackbar,
   DialogTitle,
   DialogActions,
-  Dialog
+  Dialog,
+  Hidden,
+  Tooltip,
+  Card,
+  Divider,
+  Grid
 } from "@material-ui/core";
 import decode from "jwt-decode";
-import { AddShoppingCart, KeyboardArrowLeft, Delete } from "@material-ui/icons";
+import {
+  AddShoppingCart,
+  KeyboardArrowLeft,
+  Delete,
+  MobileScreenShareTwoTone
+} from "@material-ui/icons";
 import {
   getProductById,
   addProductToCart,
@@ -18,7 +28,8 @@ import {
 import checkAdmin from "../../utils/checkAdmin";
 import setAuthToken from "../../utils/setAuthToken";
 import { styles } from "./styles";
-
+import checkAuth from "../../utils/checkAuth";
+import ProductTable from "./producttable/ProductTable";
 export default class Product extends Component {
   constructor(props) {
     super(props);
@@ -34,48 +45,49 @@ export default class Product extends Component {
       openDeleteConfirm: false
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
     this.setState({ isLoading: true });
-    getProductById(this.props.match.params.id)
-      .then(result => {
-        let token = localStorage.getItem("jwtToken");
-        let decoded = token ? decode(token) : "";
-        this.setState({
-          product: result.data,
-          name: result.data.name,
-          userid: decoded.id,
-          isLoading: false
-        });
-      })
-      .catch(errors =>
-        this.setState({
-          errors,
-          isLoading: false
-        })
-      );
+    try {
+      const product = await getProductById(this.props.match.params.id);
+      let token = localStorage.getItem("jwtToken");
+      let decoded = token ? decode(token) : "";
+      this.setState({
+        product: product.data,
+        name: product.data.name,
+        userid: decoded.id,
+        isLoading: false
+      });
+    } catch (errors) {
+      this.setState({
+        errors,
+        isLoading: false
+      });
+    }
   }
   quantityChange = e => {
     this.setState({
       quantity: e.target.value
     });
   };
-  addToCart = () => {
+  addToCart = async () => {
     let postData = {
       userid: this.state.userid,
       quantity: this.state.quantity,
       productid: this.state.product._id
     };
-    addProductToCart(postData);
+    await addProductToCart(postData);
+    await this.props.getCartNum();
     this.setState({ snackbarOpen: true });
   };
-  onDeleteProduct = () => {
-    deleteProduct(this.state.name)
-      .then(res => {
-        this.props.history.push("/dashboard");
-      })
-      .catch(err => console.log(err));
+  onDeleteProduct = async () => {
+    try {
+      await deleteProduct(this.state.name);
+      await this.props.history.push("/dashboard");
+    } catch (err) {
+      console.log(err);
+    }
   };
   handleDeleteDialog = () => {
     this.setState({ openDeleteConfirm: !this.state.openDeleteConfirm });
@@ -88,61 +100,16 @@ export default class Product extends Component {
     } else {
       productItem = (
         <div style={styles.productDetailsContainer}>
-          <h1 style={styles.productDetailsContainerHeader}>{product.name}</h1>
+          <h3 style={styles.productDetailsHeader}>{product.name}</h3>
           <div style={styles.productDetails}>
-            <img
-              style={styles.productImage}
-              src={product.image}
-              alt={product.name}
-            />
-            <div style={styles.productInfo}>
-              <table>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>Model</td>
-                    <td style={styles.productInfoTd}>{product.name}</td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>Display Size</td>
-                    <td style={styles.productInfoTd}>{product.displaySize}</td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>Display Resolution</td>
-                    <td style={styles.productInfoTd}>
-                      {product.displayResolution}
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>CPU</td>
-                    <td style={styles.productInfoTd}>{product.cpu}</td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>Internal Memory</td>
-                    <td style={styles.productInfoTd}>{product.memory}</td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>RAM</td>
-                    <td style={styles.productInfoTd}>{product.ram}</td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr>
-                    <td style={styles.productInfoTh}>Camera</td>
-                    <td style={styles.productInfoTd}>{product.camera}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <Hidden smDown>
+              <img
+                style={styles.productImage}
+                src={product.image}
+                alt={product.name}
+              />
+            </Hidden>
+            <ProductTable product={product} />
           </div>
           <Snackbar
             open={this.state.snackbarOpen}
@@ -152,24 +119,26 @@ export default class Product extends Component {
             onClose={() => this.setState({ snackbarOpen: false })}
           />
           <div style={styles.productHandle}>
-            <div>
+            <Tooltip disableFocusListener title="Back to catalog">
               <Button
-                style={styles.handleButton}
+                style={styles.buttonStyle}
                 href="/dashboard"
                 color="secondary"
                 variant="contained"
               >
                 <KeyboardArrowLeft />
               </Button>
-            </div>
-            <div style={styles.priceNum}>
-              <span style={styles.priceNum}>
-                {numeral(product.price).format("$0,0.00")}
-              </span>
-            </div>
-            <div>
-              <span style={styles.handleSpanText}>Quantity: </span>
+            </Tooltip>
+            <Hidden smDown>
+              {!checkAdmin() ? (
+                <span style={styles.priceNum}>
+                  {numeral(product.price).format("$0,0.00")}
+                </span>
+              ) : null}
+            </Hidden>
+            {!checkAdmin() ? (
               <span>
+                Quantity:
                 <input
                   style={styles.handleQuantityInput}
                   value={this.state.quantity}
@@ -179,63 +148,82 @@ export default class Product extends Component {
                   max="5"
                 />
               </span>
-            </div>
-            <div>
-              <Button
-                disabled={userid ? false : true}
-                style={styles.handleButton}
-                variant="contained"
-                onClick={this.addToCart}
-                color="primary"
-              >
-                <AddShoppingCart />
-              </Button>
-            </div>
-            <div>
-              {checkAdmin() ? (
+            ) : null}
+            {!checkAdmin() ? (
+              <Tooltip disableFocusListener title="Add to cart">
                 <div>
                   <Button
-                    style={styles.handleButton}
+                    disabled={checkAuth() ? false : true}
+                    style={styles.buttonStyle}
+                    variant="contained"
+                    onClick={this.addToCart}
+                    color="primary"
+                  >
+                    <AddShoppingCart />
+                  </Button>
+                </div>
+              </Tooltip>
+            ) : null}
+            {checkAdmin() ? (
+              <div>
+                <Tooltip disableFocusListener title="Delete product">
+                  <Button
+                    style={styles.buttonStyle}
                     onClick={this.handleDeleteDialog}
                     variant="contained"
                     color="secondary"
                   >
                     <Delete />
                   </Button>
-                  <Dialog
-                    disableBackdropClick
-                    disableEscapeKeyDown
-                    maxWidth="sm"
-                    open={this.state.openDeleteConfirm}
-                    onClose={this.handleDeleteDialog}
-                    aria-labelledby="responsive-dialog-title"
-                  >
-                    <DialogTitle id="responsive-dialog-title">
-                      {"Are you sure you want to delete this product?"}
-                    </DialogTitle>
-                    <DialogActions>
-                      <Button onClick={this.handleDeleteDialog} color="primary">
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={this.onDeleteProduct}
-                        color="secondary"
-                        autoFocus
-                      >
-                        Confirm
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-              ) : null}
-            </div>
+                </Tooltip>
+                <Dialog
+                  disableBackdropClick
+                  disableEscapeKeyDown
+                  maxWidth="sm"
+                  open={this.state.openDeleteConfirm}
+                  onClose={this.handleDeleteDialog}
+                  aria-labelledby="responsive-dialog-title"
+                >
+                  <DialogTitle id="responsive-dialog-title">
+                    {"Are you sure you want to delete this product?"}
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button onClick={this.handleDeleteDialog} color="primary">
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={this.onDeleteProduct}
+                      color="secondary"
+                      autoFocus
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </div>
+            ) : null}
           </div>
         </div>
       );
     }
     return (
-      <div style={styles.productPageContainer}>
-        <div>{productItem}</div>
+      <div style={styles.pageContainer}>
+        <div style={styles.pageMarginTop}>
+          <Grid container>
+            <Card style={styles.infoCardStyle}>
+              <div style={styles.infoStyle}>
+                <Hidden xsDown>
+                  <div style={styles.headerStyle}>
+                    <Divider style={{ marginTop: 50 }} />
+                    <MobileScreenShareTwoTone style={styles.imgStyle} />
+                  </div>
+                </Hidden>
+                {productItem}
+              </div>
+              <Divider />
+            </Card>
+          </Grid>
+        </div>
       </div>
     );
   }

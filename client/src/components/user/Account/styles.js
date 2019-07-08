@@ -1,58 +1,64 @@
 const styles = {
   accountContainer: {
-    minHeight: "100vh",
-    margin: "0 6px",
-    border: "1px solid #ffffff00"
-  },
-  account: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: "20px"
-  },
-  accountInfo: {
-    width: "50%",
-    marginBottom: "30px",
-    marginTop: "20px"
-  },
-  accountContainerTop: {
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  userInfo: {
-    marginTop: "20px"
-  },
-  editButton: {
-    marginRight: "20px",
-    color: "white"
-  },
-  deleteButton: {
-    color: "white"
-  },
-  addButton: {
-    color: "white",
-    marginRight: 20,
-    marginTop: 20
-  },
-  accountHistory: {
-    width: "50%",
-    marginBottom: "50px",
-    marginTop: "20px"
-  },
-  orders: {
     width: "100%",
-    margin: "10px auto",
-    borderSpacing: "0"
+    maxWidth: "auto",
+    maxHeight: "auto",
+    minHeight: "94vh",
+    backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
   },
-  th: {
-    padding: "5px 5px",
-    backgroundColor: "#325999",
+  accountMarginTop: {
+    padding: 16
+  },
+  infoCardStyle: {
+    margin: "auto",
+    width: "1000px",
+    marginTop: 48,
+    borderRadius: 20
+  },
+  infoStyle: {
+    alignItems: "center",
+    textAlign: "center",
+    padding: 32
+  },
+  headerStyle: {
+    textAlign: "center",
+    alignItems: "center",
+    width: "100%"
+  },
+  imgStyle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: -50,
+    backgroundColor: "#1f3b69",
+    color: "white"
+  },
+  dividerPosition: {
+    marginTop: 50
+  },
+  buttonStyle: {
+    minWidth: 100,
+    margin: "32px 0 24px 0",
+    borderRadius: 16,
     color: "white",
-    textAlign: "left"
+    textTransform: "none",
+    fontWeight: "normal"
   },
-  td: {
-    paddingBottom: "12px 5px",
-    textAlign: "left",
-    borderBottom: "1px solid #325999"
+  textFieldStyle: {
+    paddingBottom: 16,
+    margin: "8px 24px 8px 24px",
+    fontWeight: "lighter",
+    fontFamily: "Roboto",
+    width: 250
+  },
+  inputPropsStyle: {
+    style: {
+      fontSize: 22,
+      fontWeight: "lighter",
+      textTransform: "none",
+      paddingBottom: 4,
+      fontFamily: "Roboto"
+    }
   }
 };
 

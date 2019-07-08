@@ -1,16 +1,23 @@
 const styles = {
-  containerStyle: {
-    height: "90vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
+  pageContainer: {
+    width: "100%",
+    maxWidth: "auto",
+    maxHeight: "auto",
+    minHeight: "94vh",
+    backgroundColor: "#ffffff",
+    overflow: "hidden"
   },
   headerStyle: {
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: "Roboto"
+  },
+  fontStyle: {
+    fontFamily: "Roboto"
   },
   warningStyle: {
     color: "red",
-    fontSize: "12px"
+    fontSize: "12px",
+    fontFamily: "Roboto"
   },
   buttonStyle: {
     paddingTop: 25,
@@ -20,7 +27,8 @@ const styles = {
   },
   formStyle: {
     marginTop: 25,
-    width: 350
+    width: 350,
+    fontFamily: "Roboto"
   }
 };
 

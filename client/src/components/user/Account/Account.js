@@ -4,12 +4,16 @@ import {
   Button,
   DialogTitle,
   DialogActions,
-  Dialog
+  Dialog,
+  Grid,
+  Tooltip,
+  TextField,
+  Card,
+  Hidden
 } from "@material-ui/core";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit, Delete, AccountCircle } from "@material-ui/icons";
+import Spinner from "../../../utils/Spinner";
 import setAuthToken from "../../../utils/setAuthToken";
-import * as numeral from "numeral";
-import * as moment from "moment";
 import {
   getCurrentUser,
   deleteCurrentUser
@@ -22,46 +26,52 @@ export default class Account extends Component {
     this.state = {
       userid: "",
       email: "",
-      name: "",
+      username: "",
+      firstName: "",
+      lastName: "",
+      city: "",
+      zipcode: "",
       address: "",
       phone: "",
-      orders: "",
-      isLoading: false,
-      data: null,
       errors: null,
       open: false
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({ isLoading: true });
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
-    getCurrentUser()
-      .then(res => {
-        this.setState({
-          email: res.data.email,
-          userid: res.data.id,
-          name: res.data.name,
-          address: res.data.address,
-          phone: res.data.phone,
-          orders: res.data.orderHistory
-        });
-      })
-      .catch(err =>
-        this.setState({
-          isLoading: false,
-          errors: err
-        })
-      );
+    try {
+      const user = await getCurrentUser();
+      this.setState({
+        email: user.data.email,
+        userId: user.data.id,
+        username: user.data.name,
+        firstName: user.data.firstName,
+        lastName: user.data.lastName,
+        city: user.data.city,
+        zipcode: user.data.zipcode,
+        address: user.data.address,
+        phone: user.data.phone,
+        isLoading: false
+      });
+    } catch (err) {
+      this.setState({
+        isLoading: false,
+        errors: err
+      });
+    }
   }
-  onDeleteClick = () => {
-    deleteCurrentUser()
-      .then(res => {
-        localStorage.removeItem("jwtToken");
-        setAuthToken();
-        this.props.history.push("/login");
-      })
-      .catch(err => this.setState({ errors: err }));
+  onDeleteClick = async () => {
+    try {
+      deleteCurrentUser();
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("isAdmin");
+      setAuthToken();
+      await this.props.history.push("/login");
+    } catch (err) {
+      this.setState({ errors: err });
+    }
   };
 
   handleClickOpen = () => {
@@ -71,114 +81,182 @@ export default class Account extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+  onLeftClick = () => {
+    this.setState({ currentPage: this.state.currentPage - 1 });
+  };
+  onRightClick = () => {
+    this.setState({ currentPage: this.state.currentPage + 1 });
+  };
   render() {
+    const { isLoading } = this.state;
+    let accView;
+    if (isLoading) {
+      accView = <Spinner />;
+    } else {
+      accView = (
+        <form noValidate onSubmit={this.onSubmit}>
+          <Grid container>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="USERNAME"
+                value={this.state.username}
+                margin="normal"
+                name="username"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="EMAIL"
+                value={this.state.email}
+                margin="normal"
+                name="email"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="FIRST NAME"
+                value={this.state.firstName}
+                margin="normal"
+                name="firstName"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="LAST NAME"
+                value={this.state.lastName}
+                margin="normal"
+                name="lastName"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="PHONE"
+                value={this.state.phone}
+                margin="normal"
+                name="phone"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="CITY"
+                value={this.state.city}
+                margin="normal"
+                name="city"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="ADDRESS"
+                value={this.state.address}
+                margin="normal"
+                name="address"
+              />
+            </Grid>
+            <Grid item xs={12} lg={6} sm={6}>
+              <TextField
+                inputProps={styles.inputPropsStyle}
+                style={styles.textFieldStyle}
+                label="ZIP CODE"
+                value={this.state.zipcode}
+                margin="normal"
+                name="zipcode"
+              />
+            </Grid>
+          </Grid>
+        </form>
+      );
+    }
     return (
       <div style={styles.accountContainer}>
-        <h1>Your Account</h1>
-        <div style={styles.account}>
-          <div style={styles.accountInfo}>
-            <div style={styles.accountContainerTop}>
-              <h2>Info</h2>
-            </div>
-            <Divider />
-            <div style={styles.userInfo}>
-              <p>
-                <b>Username: </b>
-                {this.state.name}
-              </p>
-              <p>
-                <b>E-mail: </b>
-                {this.state.email}
-              </p>
-              <p>
-                <b>Address: </b>
-                {this.state.address}
-              </p>
-              <p>
-                <b>Phone: </b>
-                {this.state.phone}
-              </p>
-              <Button
-                style={styles.editButton}
-                variant="contained"
-                color="primary"
-                href={`/user/${this.state.userId}`}
-              >
-                <Edit />
-              </Button>
-              <Button
-                style={styles.deleteButton}
-                variant="contained"
-                color="secondary"
-                onClick={this.handleClickOpen}
-              >
-                <Delete />
-              </Button>
-              <Dialog
-                disableBackdropClick
-                disableEscapeKeyDown
-                maxWidth="xs"
-                open={this.state.open}
-                onClose={this.handleClose}
-                aria-labelledby="responsive-dialog-title"
-              >
-                <DialogTitle id="responsive-dialog-title">
-                  {"Delete Account?"}
-                </DialogTitle>
-
-                <DialogActions>
-                  <Button onClick={this.handleClose} color="primary">
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={this.onDeleteClick}
-                    color="secondary"
-                    autoFocus
+        <div style={styles.accountMarginTop}>
+          <Grid container>
+            <Card style={styles.infoCardStyle}>
+              <div style={styles.infoStyle}>
+                <Hidden xsDown>
+                  <div style={styles.headerStyle}>
+                    <Divider style={styles.dividerPosition} />
+                    <AccountCircle style={styles.imgStyle} />
+                  </div>
+                </Hidden>
+                {accView}
+              </div>
+              <Hidden xsDown>
+                <Divider />
+              </Hidden>
+              <Grid container style={{ textAlign: "center" }}>
+                <Grid item xs={12} lg={6} sm={6}>
+                  <Tooltip disableFocusListener title="Delete Account">
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={this.handleClickOpen}
+                        style={styles.buttonStyle}
+                      >
+                        <Delete />
+                      </Button>
+                    </div>
+                  </Tooltip>
+                  <Dialog
+                    disableBackdropClick
+                    disableEscapeKeyDown
+                    maxWidth="xs"
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    aria-labelledby="responsive-dialog-title"
                   >
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-          </div>
-          <div style={styles.accountHistory}>
-            <h2>Order History</h2>
-            <Divider />
-            <div className="orders">
-              {this.state.orders.length ? (
-                <table style={styles.orders}>
-                  <thead>
-                    <tr>
-                      <td style={styles.th}>Date Created</td>
-                      <td style={styles.th}>Product Name</td>
-                      <td style={styles.th}>Price</td>
-                      <td style={styles.th}>Qty</td>
-                      <td style={styles.th}>Total</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.orders.map((order, index) => {
-                      return (
-                        <tr style={styles.td} key={index}>
-                          <td>{moment(order.dateCreated).format("ll")}</td>
-                          <td>{order.name}</td>
-                          <td>{numeral(order.price).format("$0,0.00")}</td>
-                          <td>{order.quantity}</td>
-                          <td>
-                            {numeral(
-                              parseInt(order.price) * parseInt(order.quantity)
-                            ).format("$0,0.00")}
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              ) : (
-                <h1>No order history</h1>
-              )}
-            </div>
-          </div>
+                    <DialogTitle id="responsive-dialog-title">
+                      {"Delete Account?"}
+                    </DialogTitle>
+
+                    <DialogActions>
+                      <Button onClick={this.handleClose} color="primary">
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={this.onDeleteClick}
+                        color="secondary"
+                        autoFocus
+                      >
+                        Confirm
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Grid>
+                <Grid item xs={12} lg={6} sm={6}>
+                  <Tooltip
+                    disableFocusListener
+                    title="Edit Account Information"
+                  >
+                    <div>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        href={`/user/${this.state.userId}`}
+                        style={styles.buttonStyle}
+                      >
+                        <Edit />
+                      </Button>
+                    </div>
+                  </Tooltip>
+                </Grid>
+              </Grid>
+            </Card>
+          </Grid>
         </div>
       </div>
     );

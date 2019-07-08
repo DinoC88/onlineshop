@@ -2,7 +2,8 @@ const styles = {
   productDetailsContainer: {
     maxHeight: "250px",
     display: "flex",
-    margin: "10px 0",
+    flexDirection: "row",
+    margin: "12px 0",
     boxShadow: "0 0 8px #b7b2b3",
     backgroundColor: "white",
     padding: "8px"
@@ -10,21 +11,30 @@ const styles = {
   productDetailsContainerHover: {
     maxHeight: "250px",
     display: "flex",
-    margin: "10px 0",
+    flexDirection: "row",
+    margin: "12px 0",
     boxShadow: "0 0 32px #d1d3d6",
     backgroundColor: "#f2f5fc",
     padding: "8px",
     cursor: "pointer"
   },
   productImage: {
-    width: "200px",
+    width: 200,
     margin: "15px",
     objectFit: "contain"
   },
   contentLeft: {
-    width: "80%",
+    display: "flex",
+    flexDirection: "column",
     justifyContent: "flex-start",
-    alignSelf: "center"
+    alignSelf: "center",
+    padding: 8
+  },
+  textOverflow: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    width: 500,
+    textOverflow: "ellipsis"
   },
   contentRightPosition: {
     display: "flex",
@@ -35,17 +45,10 @@ const styles = {
     fontSize: "20px",
     color: "green"
   },
-  phoneName: {
-    fontSize: 20
-  },
-  hoverButtons: {
+  buttonPosition: {
     display: "flex",
     justifyContent: "space-around",
     flexDirection: "row"
-  },
-  linkStyle: {
-    textDecoration: "none",
-    color: "#474a4f"
   }
 };
 

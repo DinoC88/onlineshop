@@ -1,40 +1,56 @@
 const styles = {
-  productPageContainer: {
-    display: "flex",
-    justifyContent: "center",
+  pageContainer: {
+    width: "100%",
+    maxWidth: "auto",
+    maxHeight: "auto",
+    minHeight: "94vh",
+    backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
+  },
+
+  pageMarginTop: {
+    padding: 16
+  },
+  infoCardStyle: {
+    margin: "auto",
+    width: "1000px",
+    minHeight: "64vh",
+    marginTop: 48,
+    borderRadius: 20
+  },
+  infoStyle: {
+    textAlign: "center",
+    padding: 32
+  },
+  headerStyle: {
+    textAlign: "center",
     alignItems: "center",
-    minHeight: "90vh"
+    width: "100%"
+  },
+  imgStyle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: -50,
+    backgroundColor: "#1f3b69",
+    color: "white"
   },
   productDetailsContainer: {
     margin: "25px 0px",
-    boxShadow: "0 0 7px #b7b2b3"
+    backgroundColor: "#FFFFFF",
+    fontFamily: "Roboto"
   },
-  productDetailsContainerHeader: {
+  productDetailsHeader: {
     textAlign: "center"
   },
   productDetails: {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center",
-    padding: "8px"
+    padding: "8px",
+    backgroundColor: "#FFFFFF"
   },
   productImage: {
     maxHeight: "364px"
-  },
-  productInfo: {
-    textAlign: "center"
-  },
-  productInfoTh: {
-    backgroundColor: "#325999",
-    color: "white",
-    padding: "3px",
-    textAlign: "left",
-    border: "1px solid white"
-  },
-  productInfoTd: {
-    padding: "3px",
-    textAlign: "left",
-    border: "1px solid #325999"
   },
   productHandle: {
     display: "flex",
@@ -52,7 +68,7 @@ const styles = {
     fontSize: "14px",
     margin: 10
   },
-  handleButton: {
+  buttonStyle: {
     color: "white",
     margin: 10
   }

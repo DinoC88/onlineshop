@@ -1,14 +1,17 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import { Button, Divider } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
-import setAuthToken from "../../../utils/setAuthToken";
+import Spinner from "../../../utils/Spinner";
 import {
-  getCartData,
-  deleteCart,
-  removeOneItem,
-  getOrder
-} from "../../../utils/requestManager";
+  Button,
+  Divider,
+  Tooltip,
+  Grid,
+  Card,
+  Hidden
+} from "@material-ui/core";
+import { Delete, AddShoppingCart } from "@material-ui/icons";
+import setAuthToken from "../../../utils/setAuthToken";
+import { getCartData, removeOneItem } from "../../../utils/requestManager";
 import { styles } from "./styles";
 export default class Cart extends Component {
   constructor() {
@@ -18,188 +21,158 @@ export default class Cart extends Component {
       id: null,
       isLoading: false,
       isLoaded: false,
-      error: null,
-      openEmptyConfirm: false
+      error: null
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
     this.setState({ isLoading: true });
-    getCartData()
-      .then(res => {
-        this.setState({
-          cartData: res.data ? res.data.items : [],
-          id: res.data ? res.data._id : null,
-          isLoading: false,
-          isLoaded: true,
-          error: null
-        });
-      })
-      .catch(err => this.setState({ error: err }));
+    try {
+      const cartData = await getCartData();
+      this.setState({
+        cartData: cartData.data.items ? cartData.data.items : [],
+        id: cartData.data ? cartData.data._id : null,
+        isLoading: false,
+        isLoaded: true,
+        error: null
+      });
+    } catch (err) {
+      this.setState({ error: err });
+    }
   }
-  removeItem = itemId => {
+  removeItem = async itemId => {
     this.setState({ isLoading: true });
-    removeOneItem({
+    await removeOneItem({
       cartId: this.state.id,
       itemId: itemId
-    }).then(res => {
-      getCartData()
-        .then(res => {
-          this.setState({
-            cartData: res.data ? res.data.items : [],
-            id: res.data ? res.data._id : null,
-            isLoading: false
-          });
-        })
-        .catch(err => console.log(err));
     });
-  };
-  emptyCart = () => {
-    const { id } = this.state;
-    deleteCart({ params: { id } }).then(() => {
-      getCartData()
-        .then(res => {
-          this.setState({
-            cartData: res.data ? res.data.items : [],
-            id: res.data ? res.data._id : null,
-            isLoading: false
-          });
-        })
-        .catch(err => console.log(err));
-      this.setState({ openEmptyConfirm: false });
+    const cartData = await getCartData();
+    this.setState({
+      cartData: cartData.data ? cartData.data.items : [],
+      id: cartData.data ? cartData.data._id : null,
+      isLoading: false
     });
+    await this.props.getCartNum();
   };
-  makeOrder = () => {
-    const order = this.state.cartData.map(item => {
-      let order = {
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-        dateCreated: Date.now()
-      };
-      return order;
-    });
-    getOrder({ order: order }).then(res => {
-      this.emptyCart();
-      this.setState({ openOrderConfirm: false });
-    });
-  };
-  handleEmptyDialog = () => {
-    this.setState({ openEmptyConfirm: !this.state.openEmptyConfirm });
-  };
+
   render() {
-    let { cartData, isLoaded, error } = this.state;
+    let { cartData, isLoaded, isLoading, error } = this.state;
     const cartExists = isLoaded && !error && cartData.length;
-    return (
-      <div style={styles.cartContainer}>
-        <h2 style={styles.cartTitle}>
-          Your Cart (
-          {cartExists
-            ? cartData.reduce((acc, item) => (acc += item.quantity), 0) +
-              " item"
-            : ""}
-          )
-        </h2>
-        <Divider />
-        <div style={styles.cart}>
-          <div style={styles.cartOrder}>
-            <div style={styles.orderCard}>
-              <div style={styles.orderHeader}>
-                <h2>Order Summary</h2>
-              </div>
-              <div style={styles.orderInfo}>
-                <div style={styles.cartOrderInfo}>
-                  <p>Item cost</p>
-                  <span style={styles.total}>
-                    {cartExists
-                      ? numeral(
-                          cartData.reduce(
-                            (acc, item) =>
-                              (acc += item.product.price * item.quantity),
-                            0
-                          )
-                        ).format("$0,0.00")
-                      : numeral(0).format("$0,0.00")}
-                  </span>
-                </div>
-                <div style={styles.cartOrderInfo}>
-                  <p>Shipping</p>
-                  <p>Free</p>
-                </div>
-                <div style={styles.cartOrderInfo}>
-                  <p>Tax</p>
-                  <p>estimate</p>
-                </div>
-                <div style={styles.cartOrderInfo}>
-                  <b>Estimated total</b>
-                  <span style={styles.total}>
-                    {cartExists
-                      ? numeral(
-                          cartData.reduce(
-                            (acc, item) =>
-                              (acc += item.product.price * item.quantity),
-                            0
-                          )
-                        ).format("$0,0.00")
-                      : numeral(0).format("$0,0.00")}
-                  </span>
-                </div>
-              </div>
-              <div style={styles.cartInfoBtns}>
-                <Button
-                  disabled={!cartExists}
-                  color="secondary"
-                  variant="contained"
-                  style={styles.buttonStyle}
-                  href={`/checkout`}
-                >
-                  Proceed to Checkout
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div style={styles.cartItems}>
+    let cartView;
+    if (cartData === null || isLoading) {
+      cartView = <Spinner />;
+    } else {
+      cartView = (
+        <div style={styles.cartItemsPosition}>
+          <div style={styles.cartElementsStyle}>
             {cartExists ? (
               cartData.map(item => {
                 return (
-                  <div key={item.product._id} style={styles.cartProductCard}>
-                    <img
-                      style={styles.cartProductImg}
-                      src={item.product.image}
-                      alt={item.product.name}
-                    />
-                    <div style={styles.cartProductRight}>
-                      <div>
-                        <h5 style={styles.cartProductHeader}>
-                          {item.product.name}
-                        </h5>
-                      </div>
-                      <div style={styles.cartProductInfo}>
-                        <h6>Price</h6>
-                        <h6>Quantity</h6>
-                      </div>
-                      <div style={styles.productCardDetails}>
-                        <p>{numeral(item.product.price).format("$0,0.00")}</p>
-                        <p>{item.quantity}</p>
-                      </div>
-                    </div>
-                    <div style={styles.productCardDelete}>
-                      <Button
-                        onClick={() => this.removeItem(item._id)}
-                        color="secondary"
-                        variant="contained"
-                      >
-                        <Delete />
-                      </Button>
-                    </div>
-                  </div>
+                  <Card key={item.product._id} style={styles.cartProductCard}>
+                    <Hidden xsDown>
+                      <img
+                        style={styles.cartProductImg}
+                        src={item.product.image}
+                        alt={item.product.name}
+                      />
+                    </Hidden>
+                    <Grid container>
+                      <Grid item xs={12} lg={4}>
+                        <div style={styles.productInfoStyle}>
+                          <div>Mobile</div>
+                          <div>
+                            <h5>{item.product.name}</h5>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12} lg={4}>
+                        <div style={styles.productInfoStyle}>
+                          <div>Quantity</div>
+                          <div>
+                            <h5>{item.quantity}</h5>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item xs={12} lg={4}>
+                        <div style={styles.productInfoStyle}>
+                          <div>Price</div>
+                          <div>
+                            <h5>
+                              {numeral(item.product.price).format("$0,0.00")}
+                            </h5>
+                            <Tooltip
+                              disableFocusListener
+                              title="Remove product"
+                            >
+                              <div>
+                                <Button
+                                  onClick={() => this.removeItem(item._id)}
+                                  color="secondary"
+                                  variant="contained"
+                                >
+                                  <Delete />
+                                </Button>
+                              </div>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </Card>
                 );
               })
             ) : (
               <h1 style={styles.cartHeader}>No items in the cart.</h1>
             )}
+            <div style={styles.orderTotalPosition}>
+              <div style={styles.orderHeader}>
+                <Divider />
+                <h5>Order Total</h5>
+                <span style={styles.total}>
+                  {cartExists
+                    ? numeral(
+                        cartData.reduce(
+                          (acc, item) =>
+                            (acc += item.product.price * item.quantity),
+                          0
+                        )
+                      ).format("$0,0.00")
+                    : numeral(0).format("$0,0.00")}
+                </span>
+              </div>
+              <Button
+                disabled={!cartExists}
+                color="secondary"
+                variant="contained"
+                style={styles.buttonStyle}
+                href={`/checkout`}
+              >
+                Checkout
+              </Button>
+            </div>
           </div>
+        </div>
+      );
+    }
+    return (
+      <div style={styles.cartContainer}>
+        <div style={styles.pageMarginTop}>
+          <Grid container>
+            <Card style={styles.infoCardStyle}>
+              <div style={styles.infoStyle}>
+                <Hidden xsDown>
+                  <div style={styles.headerStyle}>
+                    <Divider style={styles.dividerPosition} />
+                    <AddShoppingCart style={styles.imgStyle} />
+                  </div>
+                </Hidden>
+                {cartView}
+              </div>
+
+              <Divider />
+            </Card>
+          </Grid>
         </div>
       </div>
     );

@@ -59,7 +59,6 @@ router.get(
         if (!cart) {
           return res.send(null);
         }
-
         res.send(cart);
       });
   }
@@ -78,7 +77,6 @@ router.put(
     });
   }
 );
-
 router.delete(
   "/",
   passport.authenticate("jwt", { session: false }),

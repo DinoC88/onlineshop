@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as numeral from "numeral";
-import { Button, Snackbar } from "@material-ui/core";
+import { Button, Snackbar, Hidden, Tooltip, Card } from "@material-ui/core";
 import { Search, AddShoppingCart } from "@material-ui/icons";
 import checkAuth from "../../../utils/checkAuth";
 import { addProductToCart } from "../../../utils/requestManager";
@@ -16,7 +16,8 @@ export default class Productitem extends Component {
       userid: null,
       quantity: 1,
       isLoading: false,
-      snackbarOpen: false
+      snackbarOpen: false,
+      cartData: []
     };
   }
   componentDidMount() {
@@ -34,20 +35,21 @@ export default class Productitem extends Component {
     });
   };
 
-  addToCart = productid => {
+  addToCart = async productid => {
     let postData = {
       userid: this.state.userid,
       quantity: this.state.quantity,
       productid: productid
     };
-    addProductToCart(postData);
+    await addProductToCart(postData);
+    await this.props.getCartNum();
     this.setState({ snackbarOpen: true });
   };
   render() {
     const { product } = this.props;
     return (
-      <div>
-        <div
+      <div style={{ marginRight: 5 }}>
+        <Card
           onMouseEnter={this.onHover}
           onMouseLeave={this.onHover}
           style={
@@ -62,13 +64,11 @@ export default class Productitem extends Component {
             alt={product.name}
           />
           <div style={styles.contentLeft}>
-            <div>
-              <h5 style={{ fontSize: 22 }}>{product.name}</h5>
-            </div>
-            <div>
-              <h2 style={styles.priceStyle}>
-                {numeral(product.price).format("$0,0.00")}
-              </h2>
+            <h5 style={{ fontSize: 22 }}>{product.name}</h5>
+            <h2 style={styles.priceStyle}>
+              {numeral(product.price).format("$0,0.00")}
+            </h2>
+            <Hidden xsDown>
               <div>
                 <b>Display size: </b>
                 <span>{product.displaySize}</span>
@@ -77,7 +77,7 @@ export default class Productitem extends Component {
                 <b>Display resolution: </b>
                 <span>{product.displayResolution} pixels</span>
               </div>
-              <div>
+              <div style={styles.textOverflow}>
                 <b>CPU: </b>
                 <span>{product.cpu}</span>
               </div>
@@ -89,15 +89,11 @@ export default class Productitem extends Component {
                 <b>RAM: </b>
                 <span>{product.ram}</span>
               </div>
-              <div>
+              <div style={styles.textOverflow}>
                 <b>Camera: </b>
-                <span>
-                  {product.camera < 50
-                    ? product.camera
-                    : product.camera.slice(0, 50) + "..."}
-                </span>
+                <span>{product.camera}</span>
               </div>
-            </div>
+            </Hidden>
           </div>
           <Snackbar
             open={this.state.snackbarOpen}
@@ -107,27 +103,33 @@ export default class Productitem extends Component {
             onClose={() => this.setState({ snackbarOpen: false })}
           />
           <div style={styles.contentRightPosition}>
-            <div style={styles.hoverButtons}>
-              <Button
-                style={{ color: "white" }}
-                color="primary"
-                variant="contained"
-                href={`/product/${product._id}`}
-              >
-                <Search />
-              </Button>
-              <Button
-                disabled={checkAuth() ? false : true}
-                style={{ marginLeft: 10 }}
-                color="primary"
-                variant="contained"
-                onClick={() => this.addToCart(product._id)}
-              >
-                <AddShoppingCart />
-              </Button>
+            <div style={styles.buttonPosition}>
+              <Tooltip disableFocusListener title="View Product">
+                <Button
+                  style={{ color: "white" }}
+                  color="primary"
+                  variant="contained"
+                  href={`/product/${product._id}`}
+                >
+                  <Search />
+                </Button>
+              </Tooltip>
+              <Tooltip disableFocusListener title="Add to cart">
+                <div>
+                  <Button
+                    disabled={checkAuth() ? false : true}
+                    style={{ marginLeft: 10 }}
+                    color="primary"
+                    variant="contained"
+                    onClick={() => this.addToCart(product._id)}
+                  >
+                    <AddShoppingCart />
+                  </Button>
+                </div>
+              </Tooltip>
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     );
   }

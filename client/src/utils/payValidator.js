@@ -15,15 +15,15 @@ export function validatePaymentInput(data) {
   // first name checks
   if (Validator.isEmpty(data.firstName)) {
     errors.firstName = "First name field is required";
-  } else if (!Validator.isLength(data.firstName, { min: 3, max: 12 })) {
-    errors.firstName = "First name must be at least 3 characters";
+  } else if (!Validator.isLength(data.firstName, { min: 3, max: 24 })) {
+    errors.firstName = "First name must be between 3 and 24 characters";
   }
 
   // last name checks
   if (Validator.isEmpty(data.lastName)) {
     errors.lastName = "Last name field is required";
-  } else if (!Validator.isLength(data.lastName, { min: 3, max: 12 })) {
-    errors.lastName = "Last name must be at least 3 characters";
+  } else if (!Validator.isLength(data.lastName, { min: 3, max: 24 })) {
+    errors.lastName = "Last name must be between 3 and 24 characters";
   }
 
   // Email checks
@@ -54,7 +54,7 @@ export function validatePaymentInput(data) {
   // Zipcode check
   if (Validator.isEmpty(data.zipcode)) {
     errors.zipcode = "Zip code field is required";
-  } else if (!Validator.isLength(data.zipcode, { min: 5, max: 10 })) {
+  } else if (!Validator.isLength(data.zipcode, { min: 5, max: 15 })) {
     errors.zipcode = "Zip code must be at least 5 characters";
   } else if (!Validator.isNumeric(data.zipcode)) {
     errors.zipcode = "Zip code must be number";

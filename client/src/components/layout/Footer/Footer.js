@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer style={styles.footer}>
       <Link style={styles.footerLogo} to="/">
-        Mobile Shop App
+        Mobile Shop
       </Link>
     </footer>
   );

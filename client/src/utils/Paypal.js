@@ -32,10 +32,10 @@ class Paypal extends Component {
         total: this.props.toPay,
         info: this.props.information,
         product: this.props.cart
-      }).then(res => {
-        deleteCart({ params: { id } });
-        this.setState({ snackbarOpen: true });
       });
+      await deleteCart({ params: { id } });
+      this.setState({ snackbarOpen: true });
+      await this.props.getCartNum();
       console.log(response);
     } catch (err) {
       console.error(err.response);

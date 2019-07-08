@@ -75,7 +75,7 @@ router.post("/login", (req, res) => {
           res.json({
             success: true,
             token: "Bearer " + token,
-            test: payload
+            userInfo: payload
           });
         });
       } else {
@@ -96,6 +96,10 @@ router.get(
     res.json({
       id: req.user.id,
       name: req.user.name,
+      firstName: req.user.firstName,
+      lastName: req.user.lastName,
+      city: req.user.city,
+      zipcode: req.user.zipcode,
       email: req.user.email,
       phone: req.user.phone,
       address: req.user.address,
@@ -117,6 +121,11 @@ router.post(
     if (req.body.email) profileFields.email = req.body.email;
     if (req.body.address) profileFields.address = req.body.address;
     if (req.body.phone) profileFields.phone = req.body.phone;
+    if (req.body.firstName) profileFields.firstName = req.body.firstName;
+    if (req.body.lastName) profileFields.lastName = req.body.lastName;
+    if (req.body.city) profileFields.city = req.body.city;
+    if (req.body.zipcode) profileFields.zipcode = req.body.zipcode;
+
     //Update
     User.update(
       { _id: req.body.userid },
