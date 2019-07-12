@@ -13,7 +13,7 @@ const styles = {
     margin: "auto",
     width: "1000px",
     marginTop: 48,
-    borderRadius: 20
+    borderRadius: 8
   },
   orderStyle: {
     alignItems: "center",
@@ -22,8 +22,9 @@ const styles = {
   },
   textPosition: {
     textAlign: "left",
-    marginTop: "32px",
-    padding: 16
+    margin: "32px 0px 16px 0px",
+    padding: 16,
+    fontFamily: "Roboto"
   },
   headerStyle: {
     textAlign: "center",
@@ -75,6 +76,17 @@ const styles = {
   ordersContentCenter: {
     display: "flex",
     justifyContent: "center"
+  },
+  disabledInputPropsStyle: {
+    style: {
+      fontSize: 18,
+      color: "#a3a3a3",
+      fontWeight: "lighter",
+      textTransform: "none",
+      paddingBottom: 2,
+      fontFamily: "Roboto",
+      borderBottom: "1px solid #000000"
+    }
   }
 };
 export { styles };

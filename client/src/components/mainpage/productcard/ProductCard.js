@@ -7,7 +7,7 @@ import { addProductToCart } from "../../../utils/requestManager";
 import decode from "jwt-decode";
 import setAuthToken from "../../../utils/setAuthToken";
 import { styles } from "./styles";
-export default class Productitem extends Component {
+export default class ProductCard extends Component {
   constructor() {
     super();
     this.state = {
@@ -99,7 +99,6 @@ export default class Productitem extends Component {
             open={this.state.snackbarOpen}
             message={"Item added to your cart."}
             autoHideDuration={3000}
-            style={{ background: "#64DD17" }}
             onClose={() => this.setState({ snackbarOpen: false })}
           />
           <div style={styles.contentRightPosition}>

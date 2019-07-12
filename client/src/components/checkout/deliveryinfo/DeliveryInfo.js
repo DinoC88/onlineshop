@@ -18,6 +18,7 @@ export default class DeliveryInfo extends Component {
       <div>
         <ExpansionPanel
           defaultExpanded={true}
+          disabled={this.props.confirmInfo ? true : false}
           expanded={!this.props.confirmInfo ? true : false}
         >
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>

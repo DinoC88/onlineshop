@@ -6,15 +6,21 @@ const styles = {
     minHeight: "94vh",
     backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
   },
-  pageMarginTop: {
-    padding: 16
-  },
   ordersCardStyle: {
     margin: "auto",
     width: "1000px",
-    minHeight: "82vh",
-    marginTop: 48,
-    borderRadius: 20
+    minHeight: "64vh",
+    marginTop: "10vh",
+    marginBottom: "10vh",
+    borderRadius: 8,
+    fontFamily: "Roboto"
+  },
+  ordersTableCard: {
+    padding: 8,
+    margin: 8,
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "44vh"
   },
   dividerPosition: {
     marginTop: 50
@@ -43,6 +49,13 @@ const styles = {
     textAlign: "center",
     alignItems: "center",
     width: "100%"
+  },
+  noOrdersHeader: {
+    fontFamily: "Roboto",
+    marginTop: "15vh",
+    color: "rgba(0,0,0,0.87)",
+    fontSize: 38,
+    fontWeight: "normal"
   }
 };
 

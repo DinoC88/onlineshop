@@ -4,7 +4,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     margin: "12px 0",
-    boxShadow: "0 0 8px #b7b2b3",
+    boxShadow: "0 0 8px 0px #b7b2b3",
     backgroundColor: "white",
     padding: "8px"
   },
@@ -13,7 +13,7 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     margin: "12px 0",
-    boxShadow: "0 0 32px #d1d3d6",
+    boxShadow: "2px 2px 4px 2px #c0c2c4",
     backgroundColor: "#f2f5fc",
     padding: "8px",
     cursor: "pointer"
@@ -39,7 +39,8 @@ const styles = {
   contentRightPosition: {
     display: "flex",
     justifyContent: "flex-end",
-    alignItems: "flex-end"
+    alignItems: "flex-end",
+    padding: "0 4px 3px 0"
   },
   priceStyle: {
     fontSize: "20px",

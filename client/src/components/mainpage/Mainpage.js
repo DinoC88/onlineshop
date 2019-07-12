@@ -3,7 +3,8 @@ import Spinner from "../../utils/Spinner";
 import ProductCard from "./productcard/ProductCard";
 import FiltersList from "./filterlist/FiltersList";
 import ProductHandle from "./producthandle/ProductHandle";
-import { TextField, Grid } from "@material-ui/core";
+import { TextField, Grid, InputAdornment, IconButton } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 import { getProduct } from "../../utils/requestManager";
 import { price } from "../../utils/filters";
 import { styles } from "./styles";
@@ -95,6 +96,10 @@ export default class Mainpage extends Component {
       this.handleFilters(filters, "name");
     }
   };
+  //Remove search input
+  removeSearch = () => {
+    this.setState({ searchProduct: "" });
+  };
   //Filter function
   showFilterResults = async (filter, sort, show, currentPage) => {
     try {
@@ -140,6 +145,7 @@ export default class Mainpage extends Component {
       currentPage: 1
     });
   };
+
   nextPage = pageNumber => {
     this.setState({
       currentPage: pageNumber
@@ -192,10 +198,23 @@ export default class Mainpage extends Component {
                         style={{ width: "100%" }}
                         inputstyle={{ width: "100%" }}
                         label="Search phone"
+                        value={this.state.searchProduct}
                         type="search"
                         variant="standard"
                         onChange={this.handleSearchInput}
                         onKeyDown={this.enterKey}
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="Toggle remove search visibility"
+                                onClick={this.removeSearch}
+                              >
+                                {this.state.searchProduct ? <Close /> : null}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
                       />
                     </div>
                   </Grid>

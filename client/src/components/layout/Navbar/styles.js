@@ -15,11 +15,11 @@ const styles = {
     justifyContent: "space-between"
   },
   navBarButton: {
-    color: "white",
+    color: "#ffffff",
     fontFamily: "Roboto"
   },
   navBarLogo: {
-    color: "white",
+    color: "#ffffff",
     textTransform: "uppercase",
     letterSpacing: 2,
     marginLeft: 16,
@@ -29,7 +29,7 @@ const styles = {
     fontFamily: "Roboto"
   },
   mobileButton: {
-    color: "black",
+    color: "#000000",
     fontFamily: "Roboto"
   }
 };

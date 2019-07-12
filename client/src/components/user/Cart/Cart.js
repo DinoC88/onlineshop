@@ -9,10 +9,11 @@ import {
   Card,
   Hidden
 } from "@material-ui/core";
-import { Delete, AddShoppingCart } from "@material-ui/icons";
+import { AddShoppingCart } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
 import { getCartData, removeOneItem } from "../../../utils/requestManager";
 import { styles } from "./styles";
+import CustomizedButton from "./CustomizedButton";
 export default class Cart extends Component {
   constructor() {
     super();
@@ -21,7 +22,8 @@ export default class Cart extends Component {
       id: null,
       isLoading: false,
       isLoaded: false,
-      error: null
+      error: null,
+      hoverCheckout: false
     };
   }
   async componentDidMount() {
@@ -55,76 +57,109 @@ export default class Cart extends Component {
     });
     await this.props.getCartNum();
   };
+  onHoverCheckout = () => {
+    this.setState({
+      hoverCheckout: !this.state.hoverCheckout
+    });
+  };
 
   render() {
-    let { cartData, isLoaded, isLoading, error } = this.state;
+    let { cartData, isLoaded, isLoading, error, hoverCheckout } = this.state;
     const cartExists = isLoaded && !error && cartData.length;
     let cartView;
     if (cartData === null || isLoading) {
       cartView = <Spinner />;
     } else {
       cartView = (
-        <div style={styles.cartItemsPosition}>
-          <div style={styles.cartElementsStyle}>
-            {cartExists ? (
-              cartData.map(item => {
-                return (
-                  <Card key={item.product._id} style={styles.cartProductCard}>
-                    <Hidden xsDown>
-                      <img
-                        style={styles.cartProductImg}
-                        src={item.product.image}
-                        alt={item.product.name}
-                      />
-                    </Hidden>
-                    <Grid container>
-                      <Grid item xs={12} lg={4}>
-                        <div style={styles.productInfoStyle}>
-                          <div>Mobile</div>
-                          <div>
-                            <h5>{item.product.name}</h5>
+        <div style={styles.cartCard}>
+          {cartExists ? (
+            cartData.map(item => {
+              return (
+                <Card key={item.product._id} style={styles.cartProductCard}>
+                  <Hidden xsDown>
+                    <img
+                      style={styles.cartProductImg}
+                      src={item.product.image}
+                      alt={item.product.name}
+                    />
+                  </Hidden>
+                  <Grid
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center"
+                    }}
+                    container
+                  >
+                    <Grid item xs={11} lg={11}>
+                      <Grid
+                        container
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "center",
+                          alignItems: "center"
+                        }}
+                      >
+                        <Grid item xs={12} lg={4}>
+                          <div style={styles.productInfoStyle}>
+                            <Hidden xsDown>
+                              <div>Mobile</div>
+                            </Hidden>
+                            <div>
+                              <h5>{item.product.name}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </Grid>
-                      <Grid item xs={12} lg={4}>
-                        <div style={styles.productInfoStyle}>
-                          <div>Quantity</div>
-                          <div>
-                            <h5>{item.quantity}</h5>
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
+                          <div style={styles.productInfoStyle}>
+                            <div>Quantity</div>
+                            <div>
+                              <h5>{item.quantity}</h5>
+                            </div>
                           </div>
-                        </div>
-                      </Grid>
-                      <Grid item xs={12} lg={4}>
-                        <div style={styles.productInfoStyle}>
-                          <div>Price</div>
-                          <div>
-                            <h5>
-                              {numeral(item.product.price).format("$0,0.00")}
-                            </h5>
-                            <Tooltip
-                              disableFocusListener
-                              title="Remove product"
-                            >
-                              <div>
-                                <Button
-                                  onClick={() => this.removeItem(item._id)}
-                                  color="secondary"
-                                  variant="contained"
-                                >
-                                  <Delete />
-                                </Button>
-                              </div>
-                            </Tooltip>
+                        </Grid>
+                        <Grid item xs={12} lg={4}>
+                          <div style={styles.productInfoStyle}>
+                            <Hidden xsDown>
+                              <div>Price</div>
+                            </Hidden>
+                            <div>
+                              <h5>
+                                {numeral(item.product.price).format("$0,0.00")}
+                              </h5>
+                            </div>
                           </div>
-                        </div>
+                        </Grid>
                       </Grid>
                     </Grid>
-                  </Card>
-                );
-              })
-            ) : (
-              <h1 style={styles.cartHeader}>No items in the cart.</h1>
-            )}
+                    <Grid
+                      style={{ display: "flex", justifyContent: "flex-end" }}
+                      item
+                      xs={1}
+                      lg={1}
+                    >
+                      <Tooltip disableFocusListener title="Remove product">
+                        <CustomizedButton
+                          key={item._id}
+                          itemId={item._id}
+                          removeItem={this.removeItem}
+                        />
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                </Card>
+              );
+            })
+          ) : (
+            <div>
+              <h1 style={styles.cartHeader}>No items in the cart</h1>
+              <h1 style={styles.noItemMessageHeader}>
+                You can add items to the cart from dashboard
+              </h1>
+            </div>
+          )}
+          {cartExists ? (
             <div style={styles.orderTotalPosition}>
               <div style={styles.orderHeader}>
                 <Divider />
@@ -143,37 +178,38 @@ export default class Cart extends Component {
               </div>
               <Button
                 disabled={!cartExists}
-                color="secondary"
+                style={
+                  hoverCheckout
+                    ? styles.onHoverCheckoutButtonStyle
+                    : styles.checkoutButtonStyle
+                }
+                onMouseEnter={this.onHoverCheckout}
+                onMouseLeave={this.onHoverCheckout}
                 variant="contained"
-                style={styles.buttonStyle}
                 href={`/checkout`}
               >
                 Checkout
               </Button>
             </div>
-          </div>
+          ) : null}
         </div>
       );
     }
     return (
       <div style={styles.cartContainer}>
-        <div style={styles.pageMarginTop}>
-          <Grid container>
-            <Card style={styles.infoCardStyle}>
-              <div style={styles.infoStyle}>
-                <Hidden xsDown>
-                  <div style={styles.headerStyle}>
-                    <Divider style={styles.dividerPosition} />
-                    <AddShoppingCart style={styles.imgStyle} />
-                  </div>
-                </Hidden>
-                {cartView}
-              </div>
-
-              <Divider />
-            </Card>
-          </Grid>
-        </div>
+        <Grid style={{ padding: 16 }} container>
+          <Card style={styles.infoCardStyle}>
+            <div style={styles.cartStyle}>
+              <Hidden xsDown>
+                <div style={styles.headerStyle}>
+                  <Divider style={styles.dividerPosition} />
+                  <AddShoppingCart style={styles.imgStyle} />
+                </div>
+              </Hidden>
+              {cartView}
+            </div>
+          </Card>
+        </Grid>
       </div>
     );
   }

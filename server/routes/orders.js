@@ -14,20 +14,15 @@ var gateway = braintree.connect({
   publicKey,
   privateKey
 });
-//user orderhistory
-router.post(
-  "/",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    User.findById(req.user).then(foundUser => {
-      foundUser.orders = foundUser.orders.concat(req.body.order);
-      foundUser.save(() => res.end());
-    });
-  }
-);
 //admin orders list
 router.post("/orders", (req, res) => {
   Order.find().exec((err, orders) => {
+    res.json({ orders });
+  });
+});
+//user orders list
+router.post("/userorders", (req, res) => {
+  Order.find({ userId: req.body.userId }).exec((err, orders) => {
     res.json({ orders });
   });
 });
@@ -106,7 +101,6 @@ router.post(
         },
         function(error, result) {
           if (result) {
-            res.send(result);
             const newOrder = new Order({
               deliveryInfo: {
                 firstname: req.body.info.firstName,
@@ -165,6 +159,7 @@ router.post(
                       },
                 date: Date.now()
               });
+              res.send({ orderId: newOrder._id });
               newPayment.save(() => res.end);
             });
           } else {
@@ -224,6 +219,7 @@ router.post(
         paymentDetails: null,
         date: Date.now()
       });
+      res.send({ orderId: newOrder._id });
       newPayment.save(() => res.end());
     });
   }

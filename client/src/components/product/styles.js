@@ -6,16 +6,14 @@ const styles = {
     minHeight: "94vh",
     backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
   },
-
-  pageMarginTop: {
-    padding: 16
-  },
   infoCardStyle: {
     margin: "auto",
     width: "1000px",
     minHeight: "64vh",
-    marginTop: 48,
-    borderRadius: 20
+    marginTop: "10vh",
+    marginBottom: "10vh",
+    borderRadius: 8,
+    fontFamily: "Roboto"
   },
   infoStyle: {
     textAlign: "center",
@@ -56,7 +54,8 @@ const styles = {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    margin: 10
+    margin: 10,
+    fontFamily: "Roboto"
   },
   priceNum: {
     fontSize: "30px",
@@ -71,6 +70,16 @@ const styles = {
   buttonStyle: {
     color: "white",
     margin: 10
+  },
+  hoverButtonStyle: {
+    color: "white",
+    margin: 10,
+    backgroundColor: "#2b9e82"
+  },
+  onHoverButtonStyle: {
+    color: "white",
+    margin: 10,
+    backgroundColor: "#1e705c"
   }
 };
 

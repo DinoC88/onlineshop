@@ -27,7 +27,8 @@ export default class AddProduct extends Component {
     this.state = {
       drawerOpen: false,
       product: initialProductState,
-      errors: {}
+      errors: {},
+      hoverBack: false
     };
   }
   toggleDrawer = () => {
@@ -52,9 +53,13 @@ export default class AddProduct extends Component {
       this.setState({ errors: err.response.data });
     }
   };
-
+  onHoverBack = () => {
+    this.setState({
+      hoverBack: !this.state.hoverBack
+    });
+  };
   render() {
-    const { errors, product } = this.state;
+    const { errors, product, hoverBack } = this.state;
     return (
       <div style={styles.pageContainer}>
         <div style={styles.pageMarginTop}>
@@ -229,18 +234,21 @@ export default class AddProduct extends Component {
               <Grid container style={{ textAlign: "center" }}>
                 <Grid item xs={12} lg={6} sm={6}>
                   <Tooltip disableFocusListener title="Go back">
-                    <div>
-                      <Button
-                        onClick={() => {
-                          this.props.history.push("/dashboard");
-                        }}
-                        style={styles.buttonStyle}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </div>
+                    <Button
+                      onClick={() => {
+                        this.props.history.push("/dashboard");
+                      }}
+                      variant="contained"
+                      style={
+                        hoverBack
+                          ? styles.onHoverButtonStyle
+                          : styles.hoverButtonStyle
+                      }
+                      onMouseEnter={this.onHoverBack}
+                      onMouseLeave={this.onHoverBack}
+                    >
+                      <KeyboardArrowLeft />
+                    </Button>
                   </Tooltip>
                 </Grid>
                 <Grid item xs={12} lg={6} sm={6}>

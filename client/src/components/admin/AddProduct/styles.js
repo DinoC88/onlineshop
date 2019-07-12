@@ -13,7 +13,7 @@ const styles = {
     margin: "auto",
     width: "1000px",
     marginTop: 48,
-    borderRadius: 20
+    borderRadius: 8
   },
   addProductStyle: {
     alignItems: "center",
@@ -40,6 +40,24 @@ const styles = {
     color: "white",
     textTransform: "none",
     fontWeight: "normal"
+  },
+  hoverButtonStyle: {
+    minWidth: 100,
+    margin: "32px 0 24px 0",
+    borderRadius: 16,
+    color: "white",
+    textTransform: "none",
+    fontWeight: "normal",
+    backgroundColor: "#2b9e82"
+  },
+  onHoverButtonStyle: {
+    minWidth: 100,
+    margin: "32px 0 24px 0",
+    borderRadius: 16,
+    color: "white",
+    textTransform: "none",
+    fontWeight: "normal",
+    backgroundColor: "#1e705c"
   },
   formStyle: {
     padding: "8px 0 8px 0",

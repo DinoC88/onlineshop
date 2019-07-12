@@ -5,10 +5,20 @@ const styles = {
     maxHeight: "auto",
     minHeight: "94vh",
     backgroundColor: "#ffffff",
-    overflow: "hidden"
+    overflow: "hidden",
+    display: "flex"
+  },
+  inputStyle: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
   },
   headerStyle: {
     textAlign: "center",
+    fontSize: 16,
+    letterSpacing: 1,
+    textTransform: "uppercase",
     fontFamily: "Roboto"
   },
   fontStyle: {
@@ -23,7 +33,8 @@ const styles = {
     paddingTop: 25,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    alignItems: "center"
   },
   formStyle: {
     marginTop: 25,

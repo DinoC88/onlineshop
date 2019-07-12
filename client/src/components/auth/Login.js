@@ -62,72 +62,63 @@ export default class Login extends Component {
     return (
       <div style={styles.pageContainer}>
         <Grid container>
-          <Grid item xs={12} lg={4}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                marginTop: "50%"
-              }}
-            >
-              <h3 style={styles.headerStyle}>Sign in</h3>
-              <form noValidate onSubmit={this.onLoginSubmit}>
-                <div>
-                  <FormControl style={styles.formStyle} required>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
-                    <Input
-                      id="email"
-                      name="email"
-                      value={this.state.email}
-                      autoComplete="email"
-                      onChange={this.onLoginChange}
-                    />
-                    {errors.email && (
-                      <div style={styles.warningStyle}>{errors.email}</div>
-                    )}
-                  </FormControl>
-                </div>
-                <div>
-                  <FormControl style={styles.formStyle} required>
-                    <InputLabel htmlFor="password">Password</InputLabel>
-                    <Input
-                      id="password"
-                      name="password"
-                      value={this.state.password}
-                      autoComplete="password"
-                      type={this.state.showPassword ? "text" : "password"}
-                      onChange={this.onLoginChange}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="Toggle password visibility"
-                            onClick={this.handleClickShowPassword}
-                          >
-                            {this.state.showPassword ? (
-                              <Visibility />
-                            ) : (
-                              <VisibilityOff />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    {errors.password && (
-                      <div style={styles.warningStyle}>{errors.password}</div>
-                    )}
-                  </FormControl>
-                </div>
-                <div style={styles.buttonStyle}>
-                  <Button type="submit" variant="contained" color="primary">
-                    Sign in
-                  </Button>
-                  <p style={styles.fontStyle}>
-                    Don't have an account? <Link to="/register">Register</Link>
-                  </p>
-                </div>
-              </form>
-            </div>
+          <Grid style={styles.inputStyle} item xs={12} lg={4}>
+            <h3 style={styles.headerStyle}>Sign in</h3>
+            <form noValidate onSubmit={this.onLoginSubmit}>
+              <div>
+                <FormControl style={styles.formStyle} required>
+                  <InputLabel htmlFor="email">Email Address</InputLabel>
+                  <Input
+                    id="email"
+                    name="email"
+                    value={this.state.email}
+                    autoComplete="email"
+                    onChange={this.onLoginChange}
+                  />
+                  {errors.email && (
+                    <div style={styles.warningStyle}>{errors.email}</div>
+                  )}
+                </FormControl>
+              </div>
+              <div>
+                <FormControl style={styles.formStyle}>
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <Input
+                    id="password"
+                    name="password"
+                    value={this.state.password}
+                    autoComplete="password"
+                    type={this.state.showPassword ? "text" : "password"}
+                    onChange={this.onLoginChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Toggle password visibility"
+                          onClick={this.handleClickShowPassword}
+                        >
+                          {this.state.showPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  {errors.password && (
+                    <div style={styles.warningStyle}>{errors.password}</div>
+                  )}
+                </FormControl>
+              </div>
+              <div style={styles.buttonStyle}>
+                <Button type="submit" variant="contained" color="primary">
+                  Sign in
+                </Button>
+                <span style={styles.fontStyle}>
+                  Don't have an account? <Link to="/register">Register</Link>
+                </span>
+              </div>
+            </form>
           </Grid>
           <Hidden smDown>
             <Grid item lg={8}>

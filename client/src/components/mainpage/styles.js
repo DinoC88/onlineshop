@@ -16,8 +16,7 @@ const styles = {
     fontFamily: "Roboto"
   },
   searchStyle: {
-    margin: 0,
-    padding: "0 8px 0 8px"
+    margin: "10px 8px 0 0"
   },
   noProductFound: {
     fontSize: "48px",

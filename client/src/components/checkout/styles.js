@@ -10,7 +10,7 @@ const styles = {
     margin: "auto",
     width: "1000px",
     minHeight: "48vh",
-    borderRadius: 20
+    borderRadius: 8
   },
   pageMarginTop: {
     padding: 16
@@ -60,6 +60,12 @@ const styles = {
     display: "flex",
     justifyContent: "space-around",
     marginTop: 32
+  },
+  transactionMsgStyle: {
+    fontFamily: "Roboto",
+    color: "rgba(0,0,0,0.87)",
+    fontSize: 28,
+    fontWeight: "normal"
   }
 };
 

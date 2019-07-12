@@ -4,17 +4,11 @@ import { withRouter } from "react-router-dom";
 import setAuthToken from "../../../utils/setAuthToken";
 import checkAuth from "../../../utils/checkAuth";
 import checkAdmin from "../../../utils/checkAdmin";
-import { AddShoppingCart, AccountCircle } from "@material-ui/icons";
+import { AccountCircle } from "@material-ui/icons";
 import MenuIcon from "@material-ui/icons/Menu";
-import {
-  AppBar,
-  Menu,
-  MenuItem,
-  Hidden,
-  Button,
-  Badge
-} from "@material-ui/core";
+import { AppBar, Menu, MenuItem, Hidden, Button } from "@material-ui/core";
 import { styles } from "./styles";
+import CustomizedBadges from "./CustomizedBadges";
 class Navbar extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +23,7 @@ class Navbar extends Component {
     localStorage.removeItem("cartNum");
     setAuthToken(false);
   };
+
   onMenuClick = () => {
     this.setState({ open: !this.state.open });
   };
@@ -87,9 +82,7 @@ class Navbar extends Component {
             to="/cart"
             selected={"/cart" === pathname}
           >
-            <Badge badgeContent={this.props.currentCartNum}>
-              <AddShoppingCart />
-            </Badge>
+            <CustomizedBadges currentCartNum={this.props.currentCartNum} />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -142,12 +135,7 @@ class Navbar extends Component {
             to="/cart"
             selected={"/cart" === pathname}
           >
-            <Badge
-              badgeContent={this.props.currentCartNum}
-              style={{ color: "#ffffff" }}
-            >
-              <AddShoppingCart />
-            </Badge>
+            <CustomizedBadges currentCartNum={this.props.currentCartNum} />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (

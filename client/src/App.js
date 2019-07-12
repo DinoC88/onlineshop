@@ -18,7 +18,7 @@ import Cart from "./components/user/Cart/Cart";
 import AddProduct from "./components/admin/AddProduct/AddProduct";
 import Checkout from "./components/checkout/Checkout";
 import Orders from "./components/admin/Orders/Orders";
-import Order from "./components/admin/Order/Order";
+import Order from "./components/user/Order/Order";
 import OrderHistory from "./components/user/OrderHistory/OrderHistory";
 import { getCartData } from "./utils/requestManager";
 import setAuthToken from "./utils/setAuthToken";
@@ -29,7 +29,7 @@ class App extends Component {
       currentCartNum: 0
     };
   }
-  async componentDidMount() {
+  async componentWillMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
     const cartData = await getCartData();
@@ -86,7 +86,7 @@ class App extends Component {
           />
           <AdminRoute path="/addproduct" component={AddProduct} />
           <AdminRoute path="/orders" component={Orders} />
-          <AdminRoute path="/order/:id" component={Order} />
+          <PrivateRoute path="/order/:id" component={Order} />
           <Route component={NotFound} />
         </Switch>
         <Route path="/(.+)" render={() => <Footer />} />

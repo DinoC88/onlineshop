@@ -42,7 +42,9 @@ export default class Product extends Component {
       name: "",
       quantity: 1,
       snackbarOpen: false,
-      openDeleteConfirm: false
+      openDeleteConfirm: false,
+      hoverBack: false,
+      hoverDelete: false
     };
   }
   async componentDidMount() {
@@ -92,8 +94,18 @@ export default class Product extends Component {
   handleDeleteDialog = () => {
     this.setState({ openDeleteConfirm: !this.state.openDeleteConfirm });
   };
+  onHoverBack = () => {
+    this.setState({
+      hoverBack: !this.state.hoverBack
+    });
+  };
+  onHoverDelete = () => {
+    this.setState({
+      hoverDelete: !this.state.hoverDelete
+    });
+  };
   render() {
-    const { product, isLoading, userid } = this.state;
+    const { product, isLoading, hoverBack, hoverDelete } = this.state;
     let productItem;
     if (product === null || isLoading) {
       productItem = <Spinner />;
@@ -121,7 +133,13 @@ export default class Product extends Component {
           <div style={styles.productHandle}>
             <Tooltip disableFocusListener title="Back to catalog">
               <Button
-                style={styles.buttonStyle}
+                style={
+                  hoverBack
+                    ? styles.onHoverButtonStyle
+                    : styles.hoverButtonStyle
+                }
+                onMouseEnter={this.onHoverBack}
+                onMouseLeave={this.onHoverBack}
                 href="/dashboard"
                 color="secondary"
                 variant="contained"
@@ -137,38 +155,44 @@ export default class Product extends Component {
               ) : null}
             </Hidden>
             {!checkAdmin() ? (
-              <span>
-                Quantity:
-                <input
-                  style={styles.handleQuantityInput}
-                  value={this.state.quantity}
-                  onChange={this.quantityChange}
-                  type="number"
-                  min="1"
-                  max="5"
-                />
-              </span>
+              <div style={{ marginTop: 8 }}>
+                <span>
+                  Quantity:
+                  <input
+                    style={styles.handleQuantityInput}
+                    value={this.state.quantity}
+                    onChange={this.quantityChange}
+                    type="number"
+                    min="1"
+                    max="5"
+                  />
+                </span>
+              </div>
             ) : null}
             {!checkAdmin() ? (
               <Tooltip disableFocusListener title="Add to cart">
-                <div>
-                  <Button
-                    disabled={checkAuth() ? false : true}
-                    style={styles.buttonStyle}
-                    variant="contained"
-                    onClick={this.addToCart}
-                    color="primary"
-                  >
-                    <AddShoppingCart />
-                  </Button>
-                </div>
+                <Button
+                  disabled={checkAuth() ? false : true}
+                  style={styles.buttonStyle}
+                  variant="contained"
+                  onClick={this.addToCart}
+                  color="primary"
+                >
+                  <AddShoppingCart />
+                </Button>
               </Tooltip>
             ) : null}
             {checkAdmin() ? (
               <div>
                 <Tooltip disableFocusListener title="Delete product">
                   <Button
-                    style={styles.buttonStyle}
+                    style={
+                      hoverDelete
+                        ? styles.onHoverButtonStyle
+                        : styles.hoverButtonStyle
+                    }
+                    onMouseEnter={this.onHoverDelete}
+                    onMouseLeave={this.onHoverDelete}
                     onClick={this.handleDeleteDialog}
                     variant="contained"
                     color="secondary"
@@ -208,22 +232,20 @@ export default class Product extends Component {
     }
     return (
       <div style={styles.pageContainer}>
-        <div style={styles.pageMarginTop}>
-          <Grid container>
-            <Card style={styles.infoCardStyle}>
-              <div style={styles.infoStyle}>
-                <Hidden xsDown>
-                  <div style={styles.headerStyle}>
-                    <Divider style={{ marginTop: 50 }} />
-                    <MobileScreenShareTwoTone style={styles.imgStyle} />
-                  </div>
-                </Hidden>
-                {productItem}
-              </div>
-              <Divider />
-            </Card>
-          </Grid>
-        </div>
+        <Grid style={{ padding: 8 }} container>
+          <Card style={styles.infoCardStyle}>
+            <div style={styles.infoStyle}>
+              <Hidden xsDown>
+                <div style={styles.headerStyle}>
+                  <Divider style={{ marginTop: 50 }} />
+                  <MobileScreenShareTwoTone style={styles.imgStyle} />
+                </div>
+              </Hidden>
+              {productItem}
+            </div>
+            <Divider />
+          </Card>
+        </Grid>
       </div>
     );
   }

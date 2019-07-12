@@ -14,13 +14,17 @@ import { ExpandMore } from "@material-ui/icons";
 
 export default class PayingOptions extends Component {
   render() {
+    const { payOptionCheck, confirmInfo } = this.props;
     return (
       <div>
         <ExpansionPanel
-          disabled={!this.props.confirmInfo ? true : false}
-          expanded={!this.props.confirmInfo ? false : true}
+          disabled={!confirmInfo ? true : false}
+          expanded={confirmInfo ? (payOptionCheck ? false : true) : false}
         >
-          <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+          <ExpansionPanelSummary
+            onClick={this.props.onExpandClickPay}
+            expandIcon={<ExpandMore />}
+          >
             <h5>Step 2: Paying options</h5>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={styles.panelContent}>

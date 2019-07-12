@@ -9,7 +9,8 @@ import {
   TableBody,
   TableCell,
   Card,
-  Hidden
+  Hidden,
+  Tooltip
 } from "@material-ui/core";
 import {
   KeyboardArrowLeft,
@@ -17,9 +18,8 @@ import {
   Assignment
 } from "@material-ui/icons";
 import setAuthToken from "../../../utils/setAuthToken";
-import * as numeral from "numeral";
 import * as moment from "moment";
-import { getCurrentUser } from "../../../utils/requestManager";
+import { getCurrentUser, getOrdersByUser } from "../../../utils/requestManager";
 import { styles } from "./styles";
 import Spinner from "../../../utils/Spinner";
 
@@ -27,11 +27,12 @@ export default class Account extends Component {
   constructor() {
     super();
     this.state = {
-      orders: "",
+      orders: [],
       isLoading: false,
       errors: null,
       currentPage: 1,
-      totalPages: 1
+      totalPages: 1,
+      userId: ""
     };
   }
   async componentDidMount() {
@@ -41,9 +42,13 @@ export default class Account extends Component {
     try {
       const orders = await getCurrentUser();
       this.setState({
-        orders: orders.data.orderHistory,
+        userId: orders.data.id
+      });
+      const orderList = await getOrdersByUser(this.state.userId);
+      this.setState({
+        orders: orderList.data.orders,
         isLoading: false,
-        totalPages: orders.data.orderHistory.length / 10
+        totalPages: orderList.data.orders.length / 10
       });
     } catch (err) {
       this.setState({
@@ -53,12 +58,10 @@ export default class Account extends Component {
     }
   }
 
-  onLeftClick = () => {
-    this.setState({ currentPage: this.state.currentPage - 1 });
+  newPage = pageNumber => {
+    this.setState({ currentPage: pageNumber });
   };
-  onRightClick = () => {
-    this.setState({ currentPage: this.state.currentPage + 1 });
-  };
+
   render() {
     const { orders, isLoading, currentPage, totalPages } = this.state;
     let ordersView;
@@ -69,84 +72,93 @@ export default class Account extends Component {
         <div>
           {this.state.orders.length ? (
             <div>
-              <Table style={styles.tableStyle}>
+              <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Product Name</TableCell>
                     <Hidden xsDown>
-                      <TableCell>Price</TableCell>
-                      <TableCell>Qty</TableCell>
-                      <TableCell>Total</TableCell>
+                      <TableCell>Order Details</TableCell>
+                    </Hidden>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Name</TableCell>
+                    <Hidden xsDown>
+                      <TableCell>Phone</TableCell>
+                      <TableCell>Status</TableCell>
                     </Hidden>
                   </TableRow>
                 </TableHead>
-                <TableBody style={styles.tableBodyWidth}>
-                  {this.state.orders
+                <TableBody>
+                  {orders
                     .slice((currentPage - 1) * 10, currentPage * 10)
                     .map((order, index) => {
                       return (
                         <TableRow key={index}>
-                          <TableCell>
-                            {moment(order.dateCreated).format("ll")}
-                          </TableCell>
-                          <TableCell>{order.name}</TableCell>
                           <Hidden xsDown>
                             <TableCell>
-                              {numeral(order.price).format("$0,0.00")}
+                              <a href={`/order/${order._id}`}>View</a>
                             </TableCell>
-                            <TableCell>{order.quantity}</TableCell>
-                            <TableCell>
-                              {numeral(
-                                parseInt(order.price) * parseInt(order.quantity)
-                              ).format("$0,0.00")}
-                            </TableCell>
+                          </Hidden>
+                          <TableCell>
+                            {moment(order.date).format("ll")}
+                          </TableCell>
+                          <TableCell>
+                            {order.deliveryInfo.firstname +
+                              " " +
+                              order.deliveryInfo.lastname}
+                          </TableCell>
+                          <Hidden xsDown>
+                            <TableCell>{order.deliveryInfo.phone}</TableCell>
+
+                            <TableCell>{order.status}</TableCell>
                           </Hidden>
                         </TableRow>
                       );
                     })}
                 </TableBody>
               </Table>
-              <div>
-                <Button
-                  disabled={currentPage === 1 ? true : false}
-                  onClick={this.onLeftClick}
-                >
-                  <KeyboardArrowLeft />
-                </Button>
-                <Button
-                  disabled={
-                    currentPage === Math.ceil(totalPages) ? true : false
-                  }
-                  onClick={this.onRightClick}
-                >
-                  <KeyboardArrowRight />
-                </Button>
-              </div>
+              <Tooltip disableFocusListener title="Go back">
+                <span>
+                  <Button
+                    disabled={currentPage === 1 ? true : false}
+                    onClick={() => this.newPage(currentPage - 1)}
+                  >
+                    <KeyboardArrowLeft />
+                  </Button>
+                </span>
+              </Tooltip>
+              <Tooltip disableFocusListener title="Go next">
+                <span>
+                  <Button
+                    disabled={
+                      currentPage === Math.ceil(totalPages) ? true : false
+                    }
+                    onClick={() => this.newPage(currentPage + 1)}
+                  >
+                    <KeyboardArrowRight />
+                  </Button>
+                </span>
+              </Tooltip>
             </div>
           ) : (
-            <h1>No order history</h1>
+            <h1 style={styles.noOrdersHeader}>No order made</h1>
           )}
         </div>
       );
     }
     return (
       <div style={styles.pageContainer}>
-        <div style={styles.pageMarginTop}>
-          <Grid container>
-            <Card style={styles.ordersCardStyle}>
-              <div style={styles.ordersStyle}>
-                <Hidden xsDown>
-                  <div style={styles.headerStyle}>
-                    <Divider style={styles.dividerPosition} />
-                    <Assignment style={styles.imgStyle} />
-                  </div>
-                </Hidden>
-                {ordersView}
-              </div>
-            </Card>
-          </Grid>
-        </div>
+        <Grid style={{ padding: 16 }} container>
+          <Card style={styles.ordersCardStyle}>
+            <div style={styles.ordersStyle}>
+              <Hidden xsDown>
+                <div style={styles.headerStyle}>
+                  <Divider style={styles.dividerPosition} />
+                  <Assignment style={styles.imgStyle} />
+                </div>
+              </Hidden>
+              {ordersView}
+            </div>
+          </Card>
+        </Grid>
       </div>
     );
   }

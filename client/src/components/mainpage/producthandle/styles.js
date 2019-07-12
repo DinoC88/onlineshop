@@ -5,9 +5,7 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    width: "100%",
-    margin: 0,
-    padding: "0 8px 0 8px"
+    margin: "0 8px 0 0"
   },
   productFound: {
     fontSize: 14,

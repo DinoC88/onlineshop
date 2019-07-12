@@ -6,14 +6,12 @@ const styles = {
     minHeight: "94vh",
     backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
   },
-  accountMarginTop: {
-    padding: 16
-  },
   infoCardStyle: {
     margin: "auto",
     width: "1000px",
-    marginTop: 48,
-    borderRadius: 20
+    marginTop: "10vh",
+    marginBottom: "10vh",
+    borderRadius: 8
   },
   infoStyle: {
     alignItems: "center",
@@ -44,6 +42,24 @@ const styles = {
     textTransform: "none",
     fontWeight: "normal"
   },
+  hoverButtonStyle: {
+    minWidth: 100,
+    margin: "32px 0 24px 0",
+    borderRadius: 16,
+    color: "white",
+    textTransform: "none",
+    fontWeight: "normal",
+    backgroundColor: "#2b9e82"
+  },
+  onHoverButtonStyle: {
+    minWidth: 100,
+    margin: "32px 0 24px 0",
+    borderRadius: 16,
+    color: "white",
+    textTransform: "none",
+    fontWeight: "normal",
+    backgroundColor: "#1e705c"
+  },
   textFieldStyle: {
     paddingBottom: 16,
     margin: "8px 16px 8px 16px",
@@ -53,10 +69,11 @@ const styles = {
   },
   inputPropsStyle: {
     style: {
-      fontSize: 22,
+      fontSize: 16,
+      color: "rgba(0,0,0,0.87)",
       fontWeight: "lighter",
       textTransform: "none",
-      paddingBottom: 4,
+      paddingBottom: 2,
       fontFamily: "Roboto"
     }
   }

@@ -39,9 +39,12 @@ export default class Checkout extends Component {
       confirmInfo: false,
       total: 0,
       isLoading: false,
-      snackbarOpen: false
+      snackbarOpen: false,
+      buyLoading: false,
+      orderId: ""
     };
   }
+
   async componentDidMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
@@ -62,6 +65,7 @@ export default class Checkout extends Component {
         confirmInfo: false,
         info: initialInfo,
         payOptions: "",
+        payOptionCheck: false,
         isLoading: false
       });
       await this.calculateTotal(cartData.data.items);
@@ -69,6 +73,7 @@ export default class Checkout extends Component {
       this.setState({ error: err });
     }
   }
+
   calculateTotal = calc => {
     let total = calc.reduce(
       (acc, item) => (acc += item.product.price * item.quantity),
@@ -76,27 +81,45 @@ export default class Checkout extends Component {
     );
     this.setState({ total });
   };
+
   onInfoChange = e => {
     const inputChange = { ...this.state.info };
     inputChange[e.target.name] = e.target.value;
     this.setState({ info: inputChange });
   };
+
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
+
   handleDrawerChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ [e.target.name]: e.target.value, payOptionCheck: true });
+  };
+
+  onExpandClickInfo = () => {
+    this.setState({
+      confirmInfo: !this.state.confirmInfo
+    });
+  };
+  onExpandClickPay = () => {
+    this.setState({
+      payOptionCheck: !this.state.payOptionCheck
+    });
   };
   onDeliveryPay = async e => {
     const { id } = this.state;
     e.preventDefault();
     try {
-      await productPurchaseDelivery(
+      let response = await productPurchaseDelivery(
         this.state.info,
         this.state.total,
         this.state.cartData
       );
-      this.setState({ snackbarOpen: true });
+      this.setState({
+        snackbarOpen: true,
+        buyLoading: true,
+        orderId: response.data.orderId
+      });
       await deleteCart({ params: { id } });
       await this.props.getCartNum();
     } catch (err) {
@@ -129,7 +152,9 @@ export default class Checkout extends Component {
       errors,
       total,
       orders,
-      isLoading
+      isLoading,
+      buyLoading,
+      orderId
     } = this.state;
     let checkoutView;
     if (orders === null || isLoading) {
@@ -138,6 +163,7 @@ export default class Checkout extends Component {
       checkoutView = (
         <div>
           <DeliveryInfo
+            onExpandClickInfo={this.onExpandClickInfo}
             confirmInfo={confirmInfo}
             info={info}
             errors={errors}
@@ -145,7 +171,9 @@ export default class Checkout extends Component {
             onInfoChange={this.onInfoChange}
           />
           <PayingOptions
+            onExpandClickPay={this.onExpandClickPay}
             confirmInfo={confirmInfo}
+            payOptionCheck={this.state.payOptionCheck}
             payOptions={this.state.payOptions}
             handleDrawerChange={this.handleDrawerChange}
             drawerOpen={this.state.drawerOpen}
@@ -166,10 +194,9 @@ export default class Checkout extends Component {
                     open={this.state.snackbarOpen}
                     message={"You have made order!"}
                     autoHideDuration={3000}
-                    style={{ background: "#64DD17" }}
                     onClose={() => {
                       this.setState({ snackbarOpen: false });
-                      this.props.history.push("/cart");
+                      this.props.history.push(`/order/${orderId}`);
                     }}
                   />
                   <div style={styles.confirmPayStyle}>
@@ -183,13 +210,19 @@ export default class Checkout extends Component {
                       />
                     ) : null}
                     {this.state.payOptions === "Pay on delivery" ? (
-                      <Button
-                        onClick={this.onDeliveryPay}
-                        color="primary"
-                        variant="contained"
-                      >
-                        Pay on Delivery
-                      </Button>
+                      !buyLoading ? (
+                        <Button
+                          onClick={this.onDeliveryPay}
+                          color="primary"
+                          variant="contained"
+                        >
+                          Pay on Delivery
+                        </Button>
+                      ) : (
+                        <h5 style={styles.transactionMsgStyle}>
+                          Transaction Processing. Please wait!
+                        </h5>
+                      )
                     ) : null}
                   </div>
                 </div>

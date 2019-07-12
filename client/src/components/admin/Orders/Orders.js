@@ -21,7 +21,6 @@ import {
 } from "@material-ui/icons";
 import * as moment from "moment";
 import Spinner from "../../../utils/Spinner";
-
 export default class Orders extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +31,7 @@ export default class Orders extends Component {
       currentPage: 1
     };
   }
+
   async componentDidMount() {
     this.setState({ isLoading: true });
     const orderList = await getOrders();
@@ -41,12 +41,11 @@ export default class Orders extends Component {
       totalPages: orderList.data.orders.length / 10
     });
   }
-  onLeftClick = () => {
-    this.setState({ currentPage: this.state.currentPage - 1 });
+
+  newPage = pageNumber => {
+    this.setState({ currentPage: pageNumber });
   };
-  onRightClick = () => {
-    this.setState({ currentPage: this.state.currentPage + 1 });
-  };
+
   render() {
     const { orders, isLoading, currentPage, totalPages } = this.state;
     let ordersView;
@@ -61,7 +60,7 @@ export default class Orders extends Component {
                 <TableHead>
                   <TableRow>
                     <Hidden xsDown>
-                      <TableCell>Order ID</TableCell>
+                      <TableCell>Order Details</TableCell>
                     </Hidden>
                     <TableCell>Date</TableCell>
                     <TableCell>Customer</TableCell>
@@ -79,9 +78,7 @@ export default class Orders extends Component {
                         <TableRow key={index}>
                           <Hidden xsDown>
                             <TableCell>
-                              <a href={`/order/${order._id}`}>
-                                Order #{index + 1}
-                              </a>
+                              <a href={`/order/${order._id}`}>View</a>
                             </TableCell>
                           </Hidden>
                           <TableCell>
@@ -106,7 +103,7 @@ export default class Orders extends Component {
                 <span>
                   <Button
                     disabled={currentPage === 1 ? true : false}
-                    onClick={this.onLeftClick}
+                    onClick={() => this.newPage(currentPage - 1)}
                   >
                     <KeyboardArrowLeft />
                   </Button>
@@ -118,7 +115,7 @@ export default class Orders extends Component {
                     disabled={
                       currentPage === Math.ceil(totalPages) ? true : false
                     }
-                    onClick={this.onRightClick}
+                    onClick={() => this.newPage(currentPage + 1)}
                   >
                     <KeyboardArrowRight />
                   </Button>
@@ -126,7 +123,7 @@ export default class Orders extends Component {
               </Tooltip>
             </div>
           ) : (
-            <h1>No order made</h1>
+            <h1 style={styles.noOrdersHeader}>No order made</h1>
           )}
         </div>
       );

@@ -8,7 +8,9 @@ class Paypal extends Component {
   instance;
   state = {
     clientToken: null,
-    snackbarOpen: false
+    snackbarOpen: false,
+    nonce: "",
+    orderId: ""
   };
 
   async componentDidMount() {
@@ -22,11 +24,15 @@ class Paypal extends Component {
     }
   }
 
-  async buy() {
+  buy = async () => {
     try {
       const id = this.props.id;
       // Send the nonce to your server
       const { nonce } = await this.instance.requestPaymentMethod();
+
+      this.setState({
+        nonce
+      });
       const response = await productPurchaseOnline({
         paymentMethodNonce: nonce,
         total: this.props.toPay,
@@ -34,13 +40,12 @@ class Paypal extends Component {
         product: this.props.cart
       });
       await deleteCart({ params: { id } });
-      this.setState({ snackbarOpen: true });
+      this.setState({ snackbarOpen: true, orderId: response.data.orderId });
       await this.props.getCartNum();
-      console.log(response);
     } catch (err) {
       console.error(err.response);
     }
-  }
+  };
 
   render() {
     if (!this.state.clientToken) {
@@ -76,21 +81,29 @@ class Paypal extends Component {
             open={this.state.snackbarOpen}
             message={"You have made order!"}
             autoHideDuration={3000}
-            style={{ background: "#64DD17" }}
             onClose={() => {
               this.setState({ snackbarOpen: false });
-              this.props.history.push("/cart");
+              this.props.history.push(`/order/${this.state.orderId}`);
             }}
           />
-          <div>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={this.buy.bind(this)}
+          {this.state.nonce === "" ? (
+            <div>
+              <Button color="primary" variant="contained" onClick={this.buy}>
+                Buy
+              </Button>
+            </div>
+          ) : (
+            <h5
+              style={{
+                fontFamily: "Roboto",
+                color: "rgba(0,0,0,0.87)",
+                fontSize: 28,
+                fontWeight: "normal"
+              }}
             >
-              Buy
-            </Button>
-          </div>
+              Transaction processing. Please wait.
+            </h5>
+          )}
         </div>
       );
     }

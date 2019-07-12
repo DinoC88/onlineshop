@@ -6,27 +6,44 @@ const styles = {
     minHeight: "94vh",
     backgroundImage: "linear-gradient(#304361, #284d8a, #304361)"
   },
-  pageMarginTop: {
-    padding: 16
-  },
   infoCardStyle: {
     margin: "auto",
     width: "1000px",
     minHeight: "64vh",
-    marginTop: 48,
-    borderRadius: 20
+    marginTop: "10vh",
+    marginBottom: "10vh",
+    borderRadius: 8,
+    fontFamily: "Roboto",
+    padding: 16
+  },
+  cartStyle: {
+    alignItems: "center",
+    textAlign: "center",
+    padding: 16
   },
   dividerPosition: {
     marginTop: 50
   },
-  infoStyle: {
-    textAlign: "center",
-    padding: 32,
-    fontFamily: "Roboto"
+  cartCard: {
+    padding: 16,
+    margin: 16,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
+    minHeight: "38vh"
+  },
+  cartHeader: {
+    display: "flex",
+    justifyContent: "center",
+    alignSelf: "center",
+    fontFamily: "Roboto",
+    color: "rgba(0,0,0,0.87)",
+    fontSize: 38,
+    fontWeight: "normal"
   },
   headerStyle: {
     textAlign: "center",
-    alignItems: "center",
     width: "100%"
   },
   imgStyle: {
@@ -39,61 +56,74 @@ const styles = {
   },
   productInfoStyle: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    justifyContent: "center",
+    padding: 8
+  },
+  cartProductCard: {
+    maxHeight: "200px",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    boxShadow: "0 0 8px #ededed",
+    padding: "12px 0px 12px 12px",
+    marginBottom: 16
+  },
+  cartProductImg: {
+    width: "20%",
+    minHeight: "190px",
+    maxHeight: "190px",
+    objectFit: "contain"
+  },
+  priceNButtonStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  deleteButtonStyle: {
+    color: "#2b9e82",
+    display: "flex"
+  },
+  checkoutButtonStyle: {
+    margin: "-8px 0 32px 0",
+    padding: 4,
+    color: "white",
+    height: 48,
+    width: 180,
+    backgroundColor: "#2b9e82"
+  },
+  onHoverCheckoutButtonStyle: {
+    margin: "-8px 0 32px 0",
+    padding: 4,
+    color: "white",
+    height: 48,
+    width: 180,
+    backgroundColor: "#1e705c"
   },
   orderTotalPosition: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "flex-end",
     alignItems: "flex-end",
-    marginTop: 32
-  },
-  cartTitle: {
-    padding: 16,
-    textAlign: "center"
+    marginTop: 12
   },
   orderHeader: {
-    margin: "0 64px 32px 0",
+    margin: "0 0 32px 0",
     padding: 8
-  },
-  buttonStyle: {
-    margin: "0 64px 32px 0",
-    padding: 8,
-    color: "white",
-    height: 48,
-    width: 180
-  },
-  cartItemsPosition: {
-    display: "flex",
-    justifyContent: "center",
-    textAlign: "center"
-  },
-  cartElementsStyle: {
-    padding: 16,
-    margin: 16
-  },
-  cartProductCard: {
-    maxHeight: "250px",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    boxShadow: "0 0 8px #ededed",
-    padding: 32,
-    marginBottom: 16
-  },
-  cartProductImg: {
-    width: "20%",
-    objectFit: "contain"
   },
   total: {
     fontSize: "16px",
     marginLeft: 16,
     fontWeight: 500
   },
-  cartHeader: {
-    textAlign: "center",
-    marginTop: "100px"
+  noItemMessageHeader: {
+    fontFamily: "Roboto",
+    display: "flex",
+    justifyContent: "center",
+    alignSelf: "center",
+    color: "rgb(145, 145, 145)",
+    fontSize: 13,
+    fontWeight: "normal"
   }
 };
-
 export { styles };

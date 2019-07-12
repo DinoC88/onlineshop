@@ -46,7 +46,8 @@ export default class ConteditAccountContainer extends Component {
         zipcode: user.data.zipcode,
         address: user.data.address,
         phone: user.data.phone,
-        isLoading: false
+        isLoading: false,
+        hoverDelete: false
       });
     } catch (err) {
       this.setState({
@@ -79,8 +80,13 @@ export default class ConteditAccountContainer extends Component {
       this.setState({ errors: err.response.data });
     }
   };
+  onHoverDelete = () => {
+    this.setState({
+      hoverDelete: !this.state.hoverDelete
+    });
+  };
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, hoverDelete } = this.state;
     let editAccView;
     if (isLoading) {
       editAccView = <Spinner />;
@@ -92,7 +98,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="USERNAME"
+                label="Username"
                 value={this.state.username}
                 margin="normal"
                 onChange={this.onChange}
@@ -103,7 +109,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="EMAIL"
+                label="Email"
                 value={this.state.email}
                 margin="normal"
                 onChange={this.onChange}
@@ -114,7 +120,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="FIRST NAME"
+                label="First Name"
                 value={this.state.firstName}
                 margin="normal"
                 onChange={this.onChange}
@@ -125,7 +131,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="LAST NAME"
+                label="Last Name"
                 value={this.state.lastName}
                 margin="normal"
                 onChange={this.onChange}
@@ -136,7 +142,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="PHONE"
+                label="Phone"
                 value={this.state.phone}
                 margin="normal"
                 onChange={this.onChange}
@@ -147,7 +153,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="CITY"
+                label="City"
                 value={this.state.city}
                 margin="normal"
                 onChange={this.onChange}
@@ -158,7 +164,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="ADDRESS"
+                label="Address"
                 value={this.state.address}
                 margin="normal"
                 onChange={this.onChange}
@@ -169,7 +175,7 @@ export default class ConteditAccountContainer extends Component {
               <TextField
                 inputProps={styles.inputPropsStyle}
                 style={styles.textFieldStyle}
-                label="ZIP CODE"
+                label="Zip Code"
                 value={this.state.zipcode}
                 margin="normal"
                 onChange={this.onChange}
@@ -182,52 +188,53 @@ export default class ConteditAccountContainer extends Component {
     }
     return (
       <div style={styles.accountContainer}>
-        <div style={styles.accountMarginTop}>
-          <Grid container>
-            <Card style={styles.infoCardStyle}>
-              <div style={styles.infoStyle}>
-                <Hidden xsDown>
-                  <div style={styles.headerStyle}>
-                    <Divider style={styles.dividerPosition} />
-                    <AccountCircle style={styles.imgStyle} />
-                  </div>
-                </Hidden>
-                {editAccView}
-              </div>
+        <Grid style={{ padding: 16 }} container>
+          <Card style={styles.infoCardStyle}>
+            <div style={styles.infoStyle}>
               <Hidden xsDown>
-                <Divider />
+                <div style={styles.headerStyle}>
+                  <Divider style={styles.dividerPosition} />
+                  <AccountCircle style={styles.imgStyle} />
+                </div>
               </Hidden>
-              <Grid container style={{ textAlign: "center" }}>
-                <Grid item xs={12} lg={6} sm={6}>
-                  <Tooltip disableFocusListener title="Go back">
-                    <div>
-                      <Button
-                        onClick={() => {
-                          this.props.history.push("/users/current");
-                        }}
-                        style={styles.buttonStyle}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </div>
-                  </Tooltip>
-                </Grid>
-                <Grid item xs={12} lg={6} sm={6}>
+              {editAccView}
+            </div>
+            <Hidden xsDown>
+              <Divider />
+            </Hidden>
+            <Grid container style={{ textAlign: "center" }}>
+              <Grid item xs={12} lg={6} sm={6}>
+                <Tooltip disableFocusListener title="Go back">
                   <Button
-                    style={styles.buttonStyle}
-                    onClick={this.onSubmit}
+                    onClick={() => {
+                      this.props.history.push("/users/current");
+                    }}
+                    style={
+                      hoverDelete
+                        ? styles.onHoverButtonStyle
+                        : styles.hoverButtonStyle
+                    }
+                    onMouseEnter={this.onHoverDelete}
+                    onMouseLeave={this.onHoverDelete}
                     variant="contained"
-                    color="primary"
                   >
-                    Confirm
+                    <KeyboardArrowLeft />
                   </Button>
-                </Grid>
+                </Tooltip>
               </Grid>
-            </Card>
-          </Grid>
-        </div>
+              <Grid item xs={12} lg={6} sm={6}>
+                <Button
+                  style={styles.buttonStyle}
+                  onClick={this.onSubmit}
+                  variant="contained"
+                  color="primary"
+                >
+                  Confirm
+                </Button>
+              </Grid>
+            </Grid>
+          </Card>
+        </Grid>
       </div>
     );
   }

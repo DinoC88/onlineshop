@@ -25,6 +25,14 @@ export const getOrderById = orderid => {
 export const getOrders = () => {
   return axios.post("/api/order/orders");
 };
+
+export const getOrdersByUser = userId => {
+  let data = {
+    userId
+  };
+  return axios.post("api/order/userorders", data);
+};
+
 export const getTransactions = () => {
   return axios.post("/api/order/transactionlist");
 };
@@ -72,10 +80,6 @@ export const deleteCart = cartId => {
 
 export const removeOneItem = (cartId, itemId) => {
   return axios.put("/api/cart", cartId, itemId);
-};
-
-export const getOrder = order => {
-  return axios.post("/api/order", order);
 };
 
 export const editUserInfo = userInfo => {

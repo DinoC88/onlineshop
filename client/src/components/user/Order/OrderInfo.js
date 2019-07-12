@@ -6,18 +6,21 @@ import {
   Drawer,
   Grid,
   Divider,
-  InputLabel
+  InputLabel,
+  TextField
 } from "@material-ui/core";
 import * as moment from "moment";
 import * as numeral from "numeral";
 import { styles } from "./styles";
+import checkAdmin from "../../../utils/checkAdmin";
+
 export default class OrderInfo extends Component {
   render() {
     return (
       <Grid container>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5>Order details</h5>
+            <h5 style={{ marginBottom: 16 }}>Order details</h5>
             <p>
               Name: {this.props.deliveryInfo.firstname}{" "}
               {this.props.deliveryInfo.lastname}
@@ -39,35 +42,46 @@ export default class OrderInfo extends Component {
                 justifyContent: "row"
               }}
             >
-              <FormControl>
-                <InputLabel>Status</InputLabel>
-                <Select
-                  inputProps={{
-                    name: "orderStatus"
-                  }}
+              {checkAdmin() ? (
+                <FormControl>
+                  <InputLabel>Status</InputLabel>
+                  <Select
+                    inputProps={{
+                      name: "orderStatus"
+                    }}
+                    value={this.props.orderStatus}
+                    onChange={this.props.handleDrawerChange}
+                  >
+                    <MenuItem value="Awaiting Shipment">
+                      Awaiting Shipment
+                    </MenuItem>
+                    <MenuItem value="Shipped">Shipped</MenuItem>
+                    <MenuItem value="Completed">Completed</MenuItem>
+                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                    <MenuItem value="Declined">Declined</MenuItem>
+                  </Select>
+                  <Drawer
+                    docked={false}
+                    open={this.props.drawerOpen}
+                    onRequestChange={this.props.toggleDrawer}
+                  />
+                </FormControl>
+              ) : (
+                <TextField
+                  inputProps={styles.disabledInputPropsStyle}
+                  disabled
+                  label="Status"
                   value={this.props.orderStatus}
-                  onChange={this.props.handleDrawerChange}
-                >
-                  <MenuItem value="Awaiting Shipment">
-                    Awaiting Shipment
-                  </MenuItem>
-                  <MenuItem value="Shipped">Shipped</MenuItem>
-                  <MenuItem value="Completed">Completed</MenuItem>
-                  <MenuItem value="Cancelled">Cancelled</MenuItem>
-                  <MenuItem value="Declined">Declined</MenuItem>
-                </Select>
-                <Drawer
-                  docked={false}
-                  open={this.props.drawerOpen}
-                  onRequestChange={this.props.toggleDrawer}
+                  margin="normal"
+                  style={{ width: 150 }}
                 />
-              </FormControl>
+              )}
             </div>
           </div>
         </Grid>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5>Order items</h5>
+            <h5 style={{ marginBottom: 16 }}>Order items</h5>
             {this.props.products.map((product, i) => {
               return (
                 <div key={i}>
@@ -83,7 +97,7 @@ export default class OrderInfo extends Component {
         </Grid>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5>Transaction details</h5>
+            <h5 style={{ marginBottom: 16 }}>Transaction details</h5>
             <p>Transaction ID: {this.props.transaction.transactionId}</p>
             <p>
               Amount: {numeral(this.props.transaction.amount).format("$0,0.00")}

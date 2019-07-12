@@ -14,7 +14,7 @@ const styles = {
     width: "1000px",
     minHeight: "82vh",
     marginTop: 48,
-    borderRadius: 20
+    borderRadius: 8
   },
   ordersStyle: {
     alignItems: "center",
@@ -33,6 +33,12 @@ const styles = {
     textAlign: "center",
     alignItems: "center",
     width: "100%"
+  },
+  noOrdersHeader: {
+    fontFamily: "Roboto",
+    marginTop: "15vh",
+    color: "rgba(0,0,0,0.87)",
+    fontSize: 38
   }
 };
 

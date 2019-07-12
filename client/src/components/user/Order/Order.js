@@ -49,6 +49,7 @@ export default class Order extends Component {
         orderId: orderData.data._id,
         orderStatus: orderData.data.status
       });
+      console.log(orderData);
       await this.calculateTotal(orderData.data.products);
       const trans = await getTransactionById(orderData.data.transactionId);
       this.setState({
@@ -94,7 +95,8 @@ export default class Order extends Component {
       products,
       transaction,
       paymentDetails,
-      isLoading
+      isLoading,
+      total
     } = this.state;
     let orderInfo;
     if (isLoading) {
@@ -110,6 +112,7 @@ export default class Order extends Component {
           products={products}
           transaction={transaction}
           order={order}
+          total={total}
         />
       );
     }

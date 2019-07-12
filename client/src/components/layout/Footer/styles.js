@@ -1,7 +1,10 @@
 const styles = {
   footer: {
     backgroundColor: "#284d8a",
-    height: "4vh"
+    height: "4vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
   },
   footerLogo: {
     color: "white",
@@ -12,6 +15,18 @@ const styles = {
     cursor: "pointer",
     display: "flex",
     justifyContent: "center",
+    alignItems: "center",
+    fontFamily: "Roboto"
+  },
+  footerText: {
+    color: "white",
+    letterSpacing: 1,
+    marginLeft: 8,
+    fontSize: 12,
+    textDecoration: "none",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     fontFamily: "Roboto"
   }
 };
