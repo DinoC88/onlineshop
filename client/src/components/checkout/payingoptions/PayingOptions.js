@@ -25,7 +25,7 @@ export default class PayingOptions extends Component {
             onClick={this.props.onExpandClickPay}
             expandIcon={<ExpandMore />}
           >
-            <h5>Step 2: Paying options</h5>
+            <h5 style={styles.headerStyle}>Step 2: Paying options</h5>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={styles.panelContent}>
             <div>

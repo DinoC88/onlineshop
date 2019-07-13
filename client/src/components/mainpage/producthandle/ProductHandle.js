@@ -9,7 +9,7 @@ export default class ProductHandle extends Component {
           Found {this.props.totalProducts} products
         </p>
         <div>
-          <b style={{ marginRight: 8 }}>Show:</b>
+          <b style={styles.sortNshowStyle}>Show:</b>
           <Select
             variant="filled"
             value={this.props.limitInput}
@@ -28,7 +28,7 @@ export default class ProductHandle extends Component {
         </div>
         <Hidden xsDown>
           <div>
-            <b style={{ marginRight: 8 }}>Sort by:</b>
+            <b style={styles.sortNshowStyle}>Sort by:</b>
             <Select
               variant="filled"
               value={this.props.sortInput}

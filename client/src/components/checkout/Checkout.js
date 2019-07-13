@@ -184,7 +184,7 @@ export default class Checkout extends Component {
             expanded={this.state.payOptions === "" ? false : true}
           >
             <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-              <h5>Step 3: Confirm purchase</h5>
+              <h5 style={styles.headerStyle}>Step 3: Confirm purchase</h5>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails style={styles.panelContent}>
               <div>

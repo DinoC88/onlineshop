@@ -16,39 +16,39 @@ export default class FiltersList extends Component {
     return (
       <div style={styles.filtersList}>
         <CheckBoxPrice
-          title={<b>Price</b>}
+          title={<b style={styles.headerStyle}>Price</b>}
           list={price}
           handleFilters={filters => this.props.handleFilters(filters, "price")}
         />
         <CheckBox
-          title={<b>Brand</b>}
+          title={<b style={styles.headerStyle}>Brand</b>}
           list={brand}
           handleFilters={filters => this.props.handleFilters(filters, "brand")}
         />
         <CheckBox
-          title={<b>Color</b>}
+          title={<b style={styles.headerStyle}>Color</b>}
           list={color}
           handleFilters={filters => this.props.handleFilters(filters, "color")}
         />
         <CheckBox
-          title={<b>Internal Memory</b>}
+          title={<b style={styles.headerStyle}>Internal Memory</b>}
           list={internalMemory}
           handleFilters={filters => this.props.handleFilters(filters, "memory")}
         />
         <CheckBox
-          title={<b>RAM</b>}
+          title={<b style={styles.headerStyle}>RAM</b>}
           list={ram}
           handleFilters={filters => this.props.handleFilters(filters, "ram")}
         />
         <CheckBox
-          title={<b>Display size</b>}
+          title={<b style={styles.headerStyle}>Display size</b>}
           list={displaySize}
           handleFilters={filters =>
             this.props.handleFilters(filters, "displaySize")
           }
         />
         <CheckBox
-          title={<b>Display Resolution</b>}
+          title={<b style={styles.headerStyle}>Display Resolution</b>}
           list={displayResolution}
           handleFilters={filters =>
             this.props.handleFilters(filters, "displayResolution")

@@ -22,14 +22,14 @@ export default class DeliveryInfo extends Component {
           expanded={!this.props.confirmInfo ? true : false}
         >
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-            <h5>Step 1: Delivery information</h5>
+            <h5 style={styles.headerStyle}>Step 1: Delivery information</h5>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={styles.panelContent}>
             <form noValidate onSubmit={this.props.onInfoSubmit}>
               <Grid container>
                 <Grid item xs={12} lg={6}>
                   <div style={styles.inputColumn}>
-                    <h4>Personal details</h4>
+                    <h4 style={styles.headerStyle}>Personal details</h4>
                     {personalFields.map(i => (
                       <FormControl
                         key={i.keyName}
@@ -55,7 +55,7 @@ export default class DeliveryInfo extends Component {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <div style={styles.inputColumn}>
-                    <h4>Your address</h4>
+                    <h4 style={styles.headerStyle}>Your address</h4>
                     {addressFields.map(i => (
                       <FormControl
                         key={i.keyName}

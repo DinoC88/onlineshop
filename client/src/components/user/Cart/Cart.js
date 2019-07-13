@@ -101,7 +101,7 @@ export default class Cart extends Component {
                           alignItems: "center"
                         }}
                       >
-                        <Grid item xs={12} lg={4}>
+                        <Grid item xs={9} lg={4}>
                           <div style={styles.productInfoStyle}>
                             <Hidden xsDown>
                               <div>Mobile</div>

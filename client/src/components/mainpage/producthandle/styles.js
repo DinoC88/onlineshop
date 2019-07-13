@@ -9,10 +9,16 @@ const styles = {
   },
   productFound: {
     fontSize: 14,
-    marginTop: 22
+    marginTop: 22,
+    familyFont: "Roboto"
   },
   clearButton: {
     color: "white"
+  },
+  sortNshowStyle: {
+    marginRight: 8,
+    fontFamily: "Roboto",
+    fontWeight: 590
   }
 };
 export { styles };

@@ -65,16 +65,6 @@ class Navbar extends Component {
             Add product
           </MenuItem>
         ) : null}
-        {checkAdmin() ? (
-          <MenuItem
-            component={Link}
-            style={styles.mobileButton}
-            to="/orders"
-            selected={"/orders" === pathname}
-          >
-            Orders
-          </MenuItem>
-        ) : null}
         {!checkAdmin() ? (
           <MenuItem
             component={Link}
@@ -95,6 +85,25 @@ class Navbar extends Component {
             <AccountCircle />
           </MenuItem>
         ) : null}
+        {checkAdmin() ? (
+          <MenuItem
+            component={Link}
+            style={styles.mobileButton}
+            to="/orders"
+            selected={"/orders" === pathname}
+          >
+            Orders
+          </MenuItem>
+        ) : (
+          <MenuItem
+            component={Link}
+            style={styles.mobileButton}
+            to="/orderhistory"
+            selected={"/orderhistory" === pathname}
+          >
+            Orders
+          </MenuItem>
+        )}
         <MenuItem
           style={styles.mobileButton}
           component={Link}
@@ -116,16 +125,6 @@ class Navbar extends Component {
             selected={"/addproduct" === pathname}
           >
             Add product
-          </MenuItem>
-        ) : null}
-        {checkAdmin() ? (
-          <MenuItem
-            component={Link}
-            style={styles.navBarButton}
-            to="/orders"
-            selected={"/orders" === pathname}
-          >
-            Orders
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -157,7 +156,16 @@ class Navbar extends Component {
           >
             Orders
           </MenuItem>
-        ) : null}
+        ) : (
+          <MenuItem
+            component={Link}
+            style={styles.navBarButton}
+            to="/orders"
+            selected={"/orders" === pathname}
+          >
+            Orders
+          </MenuItem>
+        )}
         <MenuItem
           style={styles.navBarButton}
           component={Link}

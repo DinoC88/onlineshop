@@ -27,6 +27,11 @@ const styles = {
     boxShadow: "0 0 7px #b7b2b3",
     margin: "0 16px 0 2px",
     backgroundColor: "#ffffff"
+  },
+  headerStyle: {
+    fontFamily: "Roboto",
+    fontWeight: 600,
+    color: "rgba(0,0,0,0.87)"
   }
 };
 

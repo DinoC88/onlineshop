@@ -75,12 +75,10 @@ export default class Account extends Component {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <Hidden xsDown>
-                      <TableCell>Order Details</TableCell>
-                    </Hidden>
+                    <TableCell>Order Details</TableCell>
                     <TableCell>Date</TableCell>
-                    <TableCell>Name</TableCell>
                     <Hidden xsDown>
+                      <TableCell>Name</TableCell>
                       <TableCell>Phone</TableCell>
                       <TableCell>Status</TableCell>
                     </Hidden>
@@ -92,22 +90,19 @@ export default class Account extends Component {
                     .map((order, index) => {
                       return (
                         <TableRow key={index}>
-                          <Hidden xsDown>
-                            <TableCell>
-                              <a href={`/order/${order._id}`}>View</a>
-                            </TableCell>
-                          </Hidden>
+                          <TableCell>
+                            <a href={`/order/${order._id}`}>View</a>
+                          </TableCell>
                           <TableCell>
                             {moment(order.date).format("ll")}
                           </TableCell>
-                          <TableCell>
-                            {order.deliveryInfo.firstname +
-                              " " +
-                              order.deliveryInfo.lastname}
-                          </TableCell>
                           <Hidden xsDown>
+                            <TableCell>
+                              {order.deliveryInfo.firstname +
+                                " " +
+                                order.deliveryInfo.lastname}
+                            </TableCell>
                             <TableCell>{order.deliveryInfo.phone}</TableCell>
-
                             <TableCell>{order.status}</TableCell>
                           </Hidden>
                         </TableRow>

@@ -64,33 +64,33 @@ export default class ProductCard extends Component {
             alt={product.name}
           />
           <div style={styles.contentLeft}>
-            <h5 style={{ fontSize: 22 }}>{product.name}</h5>
+            <h5 style={styles.nameStyle}>{product.name}</h5>
             <h2 style={styles.priceStyle}>
               {numeral(product.price).format("$0,0.00")}
             </h2>
             <Hidden xsDown>
-              <div>
-                <b>Display size: </b>
+              <div style={styles.textOverflow}>
+                <b style={styles.phoneDetails}>Display size: </b>
                 <span>{product.displaySize}</span>
               </div>
-              <div>
-                <b>Display resolution: </b>
+              <div style={styles.textOverflow}>
+                <b style={styles.phoneDetails}>Display resolution: </b>
                 <span>{product.displayResolution} pixels</span>
               </div>
               <div style={styles.textOverflow}>
-                <b>CPU: </b>
+                <b style={styles.phoneDetails}>CPU: </b>
                 <span>{product.cpu}</span>
               </div>
-              <div>
-                <b>Internal memory: </b>
+              <div style={styles.textOverflow}>
+                <b style={styles.phoneDetails}>Internal memory: </b>
                 <span>{product.memory}</span>
               </div>
-              <div>
-                <b>RAM: </b>
+              <div style={styles.textOverflow}>
+                <b style={styles.phoneDetails}>RAM: </b>
                 <span>{product.ram}</span>
               </div>
               <div style={styles.textOverflow}>
-                <b>Camera: </b>
+                <b style={styles.phoneDetails}>Camera: </b>
                 <span>{product.camera}</span>
               </div>
             </Hidden>

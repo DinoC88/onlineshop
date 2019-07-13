@@ -34,7 +34,8 @@ const styles = {
     whiteSpace: "nowrap",
     overflow: "hidden",
     width: 500,
-    textOverflow: "ellipsis"
+    textOverflow: "ellipsis",
+    fontFamily: "Roboto"
   },
   contentRightPosition: {
     display: "flex",
@@ -50,6 +51,14 @@ const styles = {
     display: "flex",
     justifyContent: "space-around",
     flexDirection: "row"
+  },
+  phoneDetails: {
+    fontFamily: "Roboto",
+    fontWeight: 590
+  },
+  nameStyle: {
+    fontSize: 22,
+    fontFamily: "Roboto"
   }
 };
 

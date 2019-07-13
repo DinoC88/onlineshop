@@ -50,7 +50,7 @@ const styles = {
   },
   formStyle: {
     marginTop: 25,
-    width: 280
+    width: 240
   },
   warningStyle: {
     color: "red",
@@ -65,6 +65,12 @@ const styles = {
     fontFamily: "Roboto",
     color: "rgba(0,0,0,0.87)",
     fontSize: 28,
+    fontWeight: "normal"
+  },
+  headerStyle: {
+    marginTop: 8,
+    fontFamily: "Roboto",
+    color: "rgba(0,0,0,0.87)",
     fontWeight: "normal"
   }
 };
