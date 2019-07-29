@@ -12,11 +12,13 @@ import {
 } from "@material-ui/core";
 import checkAuth from "../../utils/checkAuth";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { registerSubmit } from "../../utils/requestManager";
+import { registerUser } from "../../actions/authAction";
 import { styles } from "./styles";
-import bg from "../../img/image9.jpg";
+import { FormattedMessage } from "react-intl";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-export default class Register extends Component {
+class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +26,6 @@ export default class Register extends Component {
       email: "",
       password: "",
       password2: "",
-      errors: {},
       showPassword: false
     };
   }
@@ -47,25 +48,25 @@ export default class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
-    try {
-      await registerSubmit(newUser);
-      await this.props.history.push("/login");
-    } catch (err) {
-      this.setState({ errors: err.response.data });
-    }
+    await this.props.registerUser(newUser, this.props.history);
   };
 
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
   render() {
-    const { errors } = this.state;
+    const { errors } = this.props;
 
     return (
       <div style={styles.pageContainer}>
         <Grid container>
           <Grid style={styles.inputStyle} item xs={12} lg={4}>
-            <h3 style={styles.headerStyle}>Create new Account</h3>
+            <h3 style={styles.headerStyle}>
+              <FormattedMessage
+                id="createNewAcc"
+                defaultMessage="Create new account"
+              />
+            </h3>
             <form noValidate onSubmit={this.onRegisterSubmit}>
               <div>
                 <FormControl style={styles.formStyle} required>
@@ -84,7 +85,12 @@ export default class Register extends Component {
               </div>
               <div>
                 <FormControl style={styles.formStyle} required>
-                  <InputLabel htmlFor="email">Email Address</InputLabel>
+                  <InputLabel htmlFor="email">
+                    <FormattedMessage
+                      id="emailAddress"
+                      defaultMessage="Email Address"
+                    />
+                  </InputLabel>
                   <Input
                     id="email"
                     name="email"
@@ -99,7 +105,9 @@ export default class Register extends Component {
               </div>
               <div>
                 <FormControl style={styles.formStyle} required>
-                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <InputLabel htmlFor="password">
+                    <FormattedMessage id="password" defaultMessage="Password" />
+                  </InputLabel>
                   <Input
                     id="password"
                     name="password"
@@ -129,7 +137,12 @@ export default class Register extends Component {
               </div>
               <div>
                 <FormControl style={styles.formStyle} required>
-                  <InputLabel htmlFor="password2">Confirm Password</InputLabel>
+                  <InputLabel htmlFor="password2">
+                    <FormattedMessage
+                      id="confirmPassword"
+                      defaultMessage="Confirm Password"
+                    />
+                  </InputLabel>
                   <Input
                     id="password2"
                     name="password2"
@@ -159,27 +172,23 @@ export default class Register extends Component {
               </div>
               <div style={styles.buttonStyle}>
                 <Button type="submit" variant="contained" color="primary">
-                  Sign up
+                  <FormattedMessage id="signUp" defaultMessage="Sign up" />
                 </Button>
                 <span style={styles.fontStyle}>
-                  Have an account? <Link to="/login">Log in</Link>
+                  <FormattedMessage
+                    id="haveAnAcc"
+                    defaultMessage="Have an account?"
+                  />{" "}
+                  <Link to="/login">
+                    <FormattedMessage id="login" defaultMessage="Login" />
+                  </Link>
                 </span>
               </div>
             </form>
           </Grid>
           <Hidden smDown>
             <Grid item lg={8}>
-              <div
-                style={{
-                  backgroundImage: `url(${bg})`,
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "18% 40%",
-                  height: "100vh",
-                  width: "100%",
-                  zIndex: -10
-                }}
-              />
+              <div style={styles.registerBackgroundStyle} />
             </Grid>
           </Hidden>
         </Grid>
@@ -187,3 +196,17 @@ export default class Register extends Component {
     );
   }
 }
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUser }
+)(Register);

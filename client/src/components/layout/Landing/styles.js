@@ -9,7 +9,8 @@ const styles = {
   navbarStyle: {
     position: "fixed",
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
+    alignItems: "center",
     width: "100%",
     height: "8vh",
     backgroundColor: "#e3e3e3",
@@ -118,15 +119,14 @@ const styles = {
     display: "flex",
     flexDirection: "column",
     minHeight: "95vh",
-    maxHeight: "auto",
-    marginBottom: 1,
-    borderBottom: "5px solid #e3e3e3"
+    maxHeight: "auto"
   },
   authorStyle: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    fontFamily: "Roboto"
+    fontFamily: "Roboto",
+    borderBottom: "3px solid #e3e3e3"
   },
   authorLeftStyle: {
     display: "flex",
@@ -160,7 +160,14 @@ const styles = {
   button: {
     color: "#ffffff",
     margin: 16,
-    width: 118,
+    width: 120,
+    height: 45,
+    borderRadius: 12
+  },
+  buttonView: {
+    color: "#ffffff",
+    margin: 16,
+    width: 148,
     height: 45,
     borderRadius: 12
   }

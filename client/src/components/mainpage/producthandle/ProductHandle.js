@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Select, MenuItem, Button, Drawer, Hidden } from "@material-ui/core";
 import { styles } from "./styles";
+import { FormattedMessage } from "react-intl";
 export default class ProductHandle extends Component {
   render() {
     return (
       <div style={styles.productsHandle}>
         <p style={styles.productFound}>
-          Found {this.props.totalProducts} products
+          {this.props.totalProducts}{" "}
+          <FormattedMessage id="productFound" defaultMessage="product found" />
         </p>
         <div>
           <b style={styles.sortNshowStyle}>Show:</b>
@@ -28,7 +30,9 @@ export default class ProductHandle extends Component {
         </div>
         <Hidden xsDown>
           <div>
-            <b style={styles.sortNshowStyle}>Sort by:</b>
+            <b style={styles.sortNshowStyle}>
+              <FormattedMessage id="sort" defaultMessage="Sort by:" />
+            </b>
             <Select
               variant="filled"
               value={this.props.sortInput}
@@ -59,7 +63,10 @@ export default class ProductHandle extends Component {
             variant="contained"
             href="/dashboard"
           >
-            Clear filters
+            <FormattedMessage
+              id="clearFilters"
+              defaultMessage="Clear filters"
+            />
           </Button>
         </Hidden>
       </div>

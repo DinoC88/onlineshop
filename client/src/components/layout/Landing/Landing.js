@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import checkAuth from "../../../utils/checkAuth";
-import { Button, Hidden, Menu } from "@material-ui/core";
+import { IconButton, Button, Hidden, Menu } from "@material-ui/core";
 import { styles } from "./styles";
 import homePicture from "../../../img/mobiles.png";
 import mobileImage from "../../../img/mobileimage.png";
@@ -8,14 +8,23 @@ import mobileImage1 from "../../../img/mobileimage1.png";
 import { Element, animateScroll as scroll, scroller } from "react-scroll";
 import MenuIcon from "@material-ui/icons/Menu";
 import CustomButton from "./CustomButton";
-export default class Landing extends Component {
+import { FormattedMessage } from "react-intl";
+import { setLocale } from "../../../actions/locale";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import Flag from "react-world-flags";
+import GoogleMaps from "./GoogleMaps";
+class Landing extends Component {
   constructor() {
     super();
     this.state = {
-      open: false
+      open: false,
+      googleMapInfo: false
     };
   }
-
+  onClickMap = () => {
+    this.setState({ googleMapInfo: !this.state.googleMapInfo });
+  };
   componentDidMount() {
     if (checkAuth()) {
       this.props.history.push("/dashboard");
@@ -26,16 +35,8 @@ export default class Landing extends Component {
     scroll.scrollToTop();
   };
 
-  scrollToAuthor = () => {
-    scroller.scrollTo("author", {
-      duration: 500,
-      smooth: true,
-      offset: 0
-    });
-  };
-
-  scrollToAbout = () => {
-    scroller.scrollTo("about", {
+  scrollToLoc = loc => {
+    scroller.scrollTo(loc, {
       duration: 500,
       smooth: true,
       offset: 0
@@ -64,21 +65,28 @@ export default class Landing extends Component {
           variant="outlined"
           onClick={this.scrollToTop}
         >
-          Home
+          <FormattedMessage id="home" defaultMessage="Home" />
         </Button>
         <Button
           style={styles.navbarButtonStyle}
           variant="outlined"
-          onClick={this.scrollToAbout}
+          onClick={() => this.scrollToLoc("about")}
         >
-          About
+          <FormattedMessage id="about" defaultMessage="About" />
         </Button>
         <Button
           style={styles.navbarButtonStyle}
           variant="outlined"
-          onClick={this.scrollToAuthor}
+          onClick={() => this.scrollToLoc("author")}
         >
-          Author
+          <FormattedMessage id="author" defaultMessage="Author" />
+        </Button>
+        <Button
+          style={styles.navbarButtonStyle}
+          variant="outlined"
+          onClick={() => this.scrollToLoc("contact")}
+        >
+          <FormattedMessage id="contact" defaultMessage="Contact" />
         </Button>
         <Button
           style={styles.button}
@@ -86,13 +94,21 @@ export default class Landing extends Component {
           color="primary"
           href="/register"
         >
-          Sign Up
+          <FormattedMessage id="signUp" defaultMessage="Sign up" />
         </Button>
       </div>
     );
     return (
       <div style={styles.pageContainer}>
         <div style={styles.navbarStyle}>
+          <div>
+            <IconButton onClick={() => this.props.setLocale("en")}>
+              <Flag code="gbr" height="14" />
+            </IconButton>
+            <IconButton onClick={() => this.props.setLocale("de")}>
+              <Flag code="de" height="14" />
+            </IconButton>
+          </div>
           <div style={styles.navbarButtonPosition}>
             <Hidden xsDown>{buttonsView}</Hidden>
             <Hidden smUp>
@@ -117,19 +133,31 @@ export default class Landing extends Component {
         </div>
         <div style={styles.landingPage}>
           <div style={styles.leftLandingStyle}>
-            <h2 style={styles.landingHeaderStyle}>Buy phone today</h2>
+            <h2 style={styles.landingHeaderStyle}>
+              <FormattedMessage
+                id="landingHomeText1"
+                defaultMessage="Buy phone!"
+              />
+            </h2>
             <p style={styles.textStyle}>
-              We got the newest smartphones from Apple, Samsung, LG, Huawei and
-              more.
+              <FormattedMessage
+                id="landingHomeText2"
+                defaultMessage="We got the newest smartphones from Apple, Samsung, LG, Huawei and more."
+              />
             </p>
-            <p style={styles.textStyle}>Free shipping in two business days.</p>
+            <p style={styles.textStyle}>
+              <FormattedMessage
+                id="landingHomeText3"
+                defaultMessage="Free shipping in two business days."
+              />
+            </p>
             <Button
               style={styles.button}
               color="primary"
               href="/dashboard"
               variant="contained"
             >
-              See More
+              <FormattedMessage id="seeMore" defaultMessage="See more" />
             </Button>
           </div>
           <div style={styles.rightLandingStyle}>
@@ -155,30 +183,42 @@ export default class Landing extends Component {
               </Hidden>
             </div>
             <div style={styles.rightAboutStyle}>
-              <h1 style={styles.aboutHeader}>Mobile Shop</h1>
+              <h1 style={styles.aboutHeader}>
+                <FormattedMessage
+                  id="mobileShop"
+                  defaultMessage="Mobile shop"
+                />
+              </h1>
               <p style={styles.aboutText}>
-                This mobile shop is an example of a web application highlighting
+                <FormattedMessage
+                  id="aboutText1"
+                  defaultMessage="This mobile shop is an example of a web application highlighting
                 some of the modern technologies. The web application is based on
                 MERN stack - MongoDB, Express.js, and Node.js for back-end and
-                React.js for front-end.
+                React.js  with Redux for front-end."
+                />
               </p>
               <p style={styles.aboutText}>
-                Web application is contained of login system supported with
-                Passportjs authentication, product list backed with various
-                filters and pagination, cart and checkout screen with Paypal
-                paying option supported with Braintree, user account review/edit
-                screen aswell with orders history and admin options like adding
-                new products, deleting products that are listed and dealing with
-                made orders. The user interface is responsive and it is mainly
-                dealt with inline CSS and Material UI - React UI framework.
+                <FormattedMessage
+                  id="aboutText2"
+                  defaultMessage="Web application is contained of login system supported with
+                  Passportjs authentication, product list backed with various
+                  filters and pagination, cart and checkout screen with Paypal
+                  paying option supported with Braintree, user account review/edit
+                  screen aswell with orders history and admin options like adding
+                  new products, deleting products that are listed and dealing with
+                  made orders, internationalization for 
+                  English and German, and GoogleMaps. The user interface is responsive and it is mainly
+                  dealt with inline CSS and Material UI - React UI framework."
+                />
               </p>
               <Button
                 onClick={this.codeRedirect}
-                style={styles.button}
+                style={styles.buttonView}
                 variant="contained"
                 color="primary"
               >
-                View Code
+                <FormattedMessage id="viewCode" defaultMessage="View Code" />
               </Button>
             </div>
           </div>
@@ -186,12 +226,20 @@ export default class Landing extends Component {
         <Element name="author" id="author" style={styles.authorPage}>
           <div style={styles.authorStyle}>
             <div style={styles.authorLeftStyle}>
-              <h1 style={styles.authorHeader}>Author</h1>
+              <h1 style={styles.authorHeader}>
+                <FormattedMessage id="author" defaultMessage="Author" />
+              </h1>
               <p style={styles.authorText}>
-                My name is Dino. I am a self-taught web designer/developer from
-                Bosnia with a master degree in History Science.
+                <FormattedMessage
+                  id="authorText1"
+                  defaultMessage=" My name is Dino. I am a self-taught web designer/developer from
+                Bosnia with a master degree in History Science."
+                />
               </p>
               <p style={styles.authorText}>
+                <FormattedMessage
+                  id="authorText2"
+                  defaultMessage="
                 How did I start to code? As a certain hobby, I had an interest
                 in web development during my studies when I met the basics of
                 HTML and CSS. However, with a more serious approach and
@@ -204,7 +252,8 @@ export default class Landing extends Component {
                 APIs, Ajax requests, ReactJS, NodeJS and ExpressJS, MongoDB, Git
                 / Github, Braintree / Paypal integration, etc. On this web
                 application, I started working in mid-April 2019. I'm currently
-                learning Redux.
+                learning Redux."
+                />
               </p>
               <CustomButton variant="contained" cvRedirect={this.cvRedirect} />
             </div>
@@ -219,7 +268,56 @@ export default class Landing extends Component {
             </div>
           </div>
         </Element>
+        <Element
+          name="contact"
+          id="contact"
+          style={{
+            minHeight: "100vh",
+            maxHeight: "auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <h1 style={{ fontFamily: "Roboto", color: "rgba(0,0,0,0.87)" }}>
+            <FormattedMessage id="contact" defaultMessage="Contact" />
+          </h1>
+          <div style={{ display: "flex", flexDirection: "row", padding: 16 }}>
+            <Flag code="bih" height="44" />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                padding: "0px 16px 0px 16px",
+                fontFamily: "Roboto",
+                color: "rgba(0,0,0,0.87)",
+                fontWeight: "normal"
+              }}
+            >
+              <h6>Tuzla, BiH</h6>
+              <span>ZAVNOBIH-a, 11</span>
+              <span>(+000) 00 - 000 - 000</span>
+              <span>mobileshop@mobileshop.com</span>
+            </div>
+          </div>
+          <div>
+            <GoogleMaps
+              onClickMap={this.onClickMap}
+              googleMapInfo={this.state.googleMapInfo}
+            />
+          </div>
+        </Element>
       </div>
     );
   }
 }
+
+Landing.propTypes = {
+  setLocale: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  { setLocale }
+)(Landing);

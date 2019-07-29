@@ -3,11 +3,14 @@ import * as numeral from "numeral";
 import { Button, Snackbar, Hidden, Tooltip, Card } from "@material-ui/core";
 import { Search, AddShoppingCart } from "@material-ui/icons";
 import checkAuth from "../../../utils/checkAuth";
-import { addProductToCart } from "../../../utils/requestManager";
 import decode from "jwt-decode";
 import setAuthToken from "../../../utils/setAuthToken";
 import { styles } from "./styles";
-export default class ProductCard extends Component {
+import { connect } from "react-redux";
+import { fetchCart, addCart } from "../../../actions/cartActions";
+import { FormattedMessage } from "react-intl";
+
+class ProductCard extends Component {
   constructor() {
     super();
     this.state = {
@@ -41,8 +44,7 @@ export default class ProductCard extends Component {
       quantity: this.state.quantity,
       productid: productid
     };
-    await addProductToCart(postData);
-    await this.props.getCartNum();
+    await this.props.addCart(postData);
     this.setState({ snackbarOpen: true });
   };
   render() {
@@ -70,19 +72,38 @@ export default class ProductCard extends Component {
             </h2>
             <Hidden xsDown>
               <div style={styles.textOverflow}>
-                <b style={styles.phoneDetails}>Display size: </b>
+                <b style={styles.phoneDetails}>
+                  <FormattedMessage
+                    id="displaySize"
+                    defaultMessage="Display Size"
+                  />
+                  :{" "}
+                </b>
                 <span>{product.displaySize}</span>
               </div>
               <div style={styles.textOverflow}>
-                <b style={styles.phoneDetails}>Display resolution: </b>
-                <span>{product.displayResolution} pixels</span>
+                <b style={styles.phoneDetails}>
+                  {" "}
+                  <FormattedMessage
+                    id="displayResolution"
+                    defaultMessage="Display Resolution"
+                  />
+                  :{" "}
+                </b>
+                <span>{product.displayResolution} pixel</span>
               </div>
               <div style={styles.textOverflow}>
                 <b style={styles.phoneDetails}>CPU: </b>
                 <span>{product.cpu}</span>
               </div>
               <div style={styles.textOverflow}>
-                <b style={styles.phoneDetails}>Internal memory: </b>
+                <b style={styles.phoneDetails}>
+                  <FormattedMessage
+                    id="internalMemory"
+                    defaultMessage="Internal Memory"
+                  />
+                  :{" "}
+                </b>
                 <span>{product.memory}</span>
               </div>
               <div style={styles.textOverflow}>
@@ -90,20 +111,35 @@ export default class ProductCard extends Component {
                 <span>{product.ram}</span>
               </div>
               <div style={styles.textOverflow}>
-                <b style={styles.phoneDetails}>Camera: </b>
+                <b style={styles.phoneDetails}>
+                  <FormattedMessage id="camera" defaultMessage="Camera" />:{" "}
+                </b>
                 <span>{product.camera}</span>
               </div>
             </Hidden>
           </div>
           <Snackbar
             open={this.state.snackbarOpen}
-            message={"Item added to your cart."}
+            message={
+              <FormattedMessage
+                id="addToCartSnack"
+                defaultMessage="Item added to your cart."
+              />
+            }
             autoHideDuration={3000}
             onClose={() => this.setState({ snackbarOpen: false })}
           />
           <div style={styles.contentRightPosition}>
             <div style={styles.buttonPosition}>
-              <Tooltip disableFocusListener title="View Product">
+              <Tooltip
+                disableFocusListener
+                title={
+                  <FormattedMessage
+                    id="viewProduct"
+                    defaultMessage="View Product"
+                  />
+                }
+              >
                 <Button
                   style={{ color: "white" }}
                   color="primary"
@@ -113,7 +149,15 @@ export default class ProductCard extends Component {
                   <Search />
                 </Button>
               </Tooltip>
-              <Tooltip disableFocusListener title="Add to cart">
+              <Tooltip
+                disableFocusListener
+                title={
+                  <FormattedMessage
+                    id="addToCart"
+                    defaultMessage="Add to cart"
+                  />
+                }
+              >
                 <div>
                   <Button
                     disabled={checkAuth() ? false : true}
@@ -133,3 +177,8 @@ export default class ProductCard extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  { fetchCart, addCart }
+)(ProductCard);

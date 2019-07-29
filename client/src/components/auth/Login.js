@@ -10,22 +10,28 @@ import {
   Grid,
   Hidden
 } from "@material-ui/core";
-import setAuthToken from "../../utils/setAuthToken";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { loginSubmit } from "../../utils/requestManager";
 import { styles } from "./styles";
-import bg1 from "../../img/image6.jpg";
+import { FormattedMessage } from "react-intl";
+import { connect } from "react-redux";
+import { logginUser } from "../../actions/authAction";
+import PropTypes from "prop-types";
+import checkAuth from "../../utils/checkAuth";
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
       password: "",
-      errors: {},
-      isAuth: false,
       showPassword: false
     };
+  }
+
+  componentDidMount() {
+    if (checkAuth()) {
+      this.props.history.push("/dashboard");
+    }
   }
 
   onLoginChange = e => {
@@ -38,36 +44,31 @@ export default class Login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-    try {
-      let login = await loginSubmit(user);
-      this.setState({ logged: true });
-      localStorage.setItem("isAdmin", login.data.userInfo.isAdmin);
-      // Take token from data
-      const { token } = login.data;
-      // Set token to localStorage
-      localStorage.setItem("jwtToken", token);
-      // Set token to Auth header
-      setAuthToken(token);
-      //Redirect to dashboard
-      this.props.history.push("/dashboard");
-    } catch (err) {
-      this.setState({ errors: err.response.data });
-    }
+    await this.props.logginUser(user, this.props.history);
   };
+
   handleClickShowPassword = () => {
     this.setState({ showPassword: !this.state.showPassword });
   };
+
   render() {
-    const { errors } = this.state;
+    const { errors } = this.props;
     return (
       <div style={styles.pageContainer}>
         <Grid container>
           <Grid style={styles.inputStyle} item xs={12} lg={4}>
-            <h3 style={styles.headerStyle}>Sign in</h3>
+            <h3 style={styles.headerStyle}>
+              <FormattedMessage id="signIn" defaultMessage="Sign in" />
+            </h3>
             <form noValidate onSubmit={this.onLoginSubmit}>
               <div>
                 <FormControl style={styles.formStyle} required>
-                  <InputLabel htmlFor="email">Email Address</InputLabel>
+                  <InputLabel htmlFor="email">
+                    <FormattedMessage
+                      id="emailAddress"
+                      defaultMessage="Email Address"
+                    />
+                  </InputLabel>
                   <Input
                     id="email"
                     name="email"
@@ -82,7 +83,9 @@ export default class Login extends Component {
               </div>
               <div>
                 <FormControl style={styles.formStyle}>
-                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <InputLabel htmlFor="password">
+                    <FormattedMessage id="password" defaultMessage="Password" />
+                  </InputLabel>
                   <Input
                     id="password"
                     name="password"
@@ -112,26 +115,23 @@ export default class Login extends Component {
               </div>
               <div style={styles.buttonStyle}>
                 <Button type="submit" variant="contained" color="primary">
-                  Sign in
+                  <FormattedMessage id="signIn" defaultMessage="Sign in" />{" "}
                 </Button>
                 <span style={styles.fontStyle}>
-                  Don't have an account? <Link to="/register">Register</Link>
+                  <FormattedMessage
+                    id="dontHaveAnAccount"
+                    defaultMessage="Don't have an account?"
+                  />{" "}
+                  <Link to="/register">
+                    <FormattedMessage id="register" defaultMessage="Register" />
+                  </Link>
                 </span>
               </div>
             </form>
           </Grid>
           <Hidden smDown>
             <Grid item lg={8}>
-              <div
-                style={{
-                  backgroundImage: `url(${bg1})`,
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                  backgroundPosition: "40% 40%",
-                  height: "100vh",
-                  width: "100%"
-                }}
-              />
+              <div style={styles.logginBackgroundStyle} />
             </Grid>
           </Hidden>
         </Grid>
@@ -139,3 +139,17 @@ export default class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  logginUser: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors
+});
+
+export default connect(
+  mapStateToProps,
+  { logginUser }
+)(Login);

@@ -10,7 +10,7 @@ import {
   FormControlLabel
 } from "@material-ui/core";
 import { styles } from "./styles";
-
+import { FormattedMessage } from "react-intl";
 export default class CheckBoxPrice extends Component {
   constructor() {
     super();
@@ -38,7 +38,9 @@ export default class CheckBoxPrice extends Component {
             value={`${value._id}`}
             key={value._id}
             control={<Radio color="primary" />}
-            label={value.name}
+            label={
+              <FormattedMessage id={value.name} defaultMessage={value.name} />
+            }
           />
         ))
       : null;

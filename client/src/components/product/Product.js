@@ -1,45 +1,22 @@
 import React, { Component } from "react";
 import Spinner from "../../utils/Spinner";
-import * as numeral from "numeral";
-import {
-  Button,
-  Snackbar,
-  DialogTitle,
-  DialogActions,
-  Dialog,
-  Hidden,
-  Tooltip,
-  Card,
-  Divider,
-  Grid
-} from "@material-ui/core";
+import { Snackbar, Hidden, Card, Divider, Grid } from "@material-ui/core";
 import decode from "jwt-decode";
-import {
-  AddShoppingCart,
-  KeyboardArrowLeft,
-  Delete,
-  MobileScreenShareTwoTone
-} from "@material-ui/icons";
-import {
-  getProductById,
-  addProductToCart,
-  deleteProduct
-} from "../../utils/requestManager";
-import checkAdmin from "../../utils/checkAdmin";
+import { MobileScreenShareTwoTone } from "@material-ui/icons";
 import setAuthToken from "../../utils/setAuthToken";
 import { styles } from "./styles";
-import checkAuth from "../../utils/checkAuth";
 import ProductTable from "./producttable/ProductTable";
-export default class Product extends Component {
+import { connect } from "react-redux";
+import { fetchCart, addCart } from "../../actions/cartActions";
+import { fetchProduct, deleteProd } from "../../actions/productAction";
+import { FormattedMessage } from "react-intl";
+import PropTypes from "prop-types";
+import ProductHandle from "./ProductHandle/ProductHandle";
+class Product extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      product: null,
-      isLoading: false,
-      errors: null,
       userid: "",
-      productid: "",
-      name: "",
       quantity: 1,
       snackbarOpen: false,
       openDeleteConfirm: false,
@@ -50,46 +27,35 @@ export default class Product extends Component {
   async componentDidMount() {
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
-    this.setState({ isLoading: true });
-    try {
-      const product = await getProductById(this.props.match.params.id);
-      let token = localStorage.getItem("jwtToken");
-      let decoded = token ? decode(token) : "";
-      this.setState({
-        product: product.data,
-        name: product.data.name,
-        userid: decoded.id,
-        isLoading: false
-      });
-    } catch (errors) {
-      this.setState({
-        errors,
-        isLoading: false
-      });
-    }
+    let decoded = token ? decode(token) : "";
+    this.setState({
+      userid: decoded.id
+    });
+    await this.props.fetchProduct(this.props.match.params.id);
+    await this.props.fetchCart();
   }
   quantityChange = e => {
     this.setState({
       quantity: e.target.value
     });
   };
-  addToCart = async () => {
-    let postData = {
+  addToCart = async e => {
+    e.preventDefault();
+    let cartData = {
       userid: this.state.userid,
       quantity: this.state.quantity,
-      productid: this.state.product._id
+      productid: this.props.productId
     };
-    await addProductToCart(postData);
-    await this.props.getCartNum();
+    await this.props.addCart(cartData);
     this.setState({ snackbarOpen: true });
   };
   onDeleteProduct = async () => {
     try {
-      await deleteProduct(this.state.name);
-      await this.props.history.push("/dashboard");
+      await this.props.deleteProd(this.props.productName);
     } catch (err) {
       console.log(err);
     }
+    this.props.history.push("/dashboard");
   };
   handleDeleteDialog = () => {
     this.setState({ openDeleteConfirm: !this.state.openDeleteConfirm });
@@ -105,9 +71,10 @@ export default class Product extends Component {
     });
   };
   render() {
-    const { product, isLoading, hoverBack, hoverDelete } = this.state;
+    const { product, isLoading } = this.props;
+    const { hoverBack, hoverDelete, quantity, openDeleteConfirm } = this.state;
     let productItem;
-    if (product === null || isLoading) {
+    if (product === undefined || isLoading) {
       productItem = <Spinner />;
     } else {
       productItem = (
@@ -125,108 +92,28 @@ export default class Product extends Component {
           </div>
           <Snackbar
             open={this.state.snackbarOpen}
-            message={"Item added to your cart."}
+            message={
+              <FormattedMessage
+                id="addToCartSnack"
+                defaultMessage="Item added to your cart."
+              />
+            }
             autoHideDuration={3000}
-            style={{ background: "#64DD17" }}
             onClose={() => this.setState({ snackbarOpen: false })}
           />
-          <div style={styles.productHandle}>
-            <Tooltip disableFocusListener title="Back to catalog">
-              <Button
-                style={
-                  hoverBack
-                    ? styles.onHoverButtonStyle
-                    : styles.hoverButtonStyle
-                }
-                onMouseEnter={this.onHoverBack}
-                onMouseLeave={this.onHoverBack}
-                href="/dashboard"
-                color="secondary"
-                variant="contained"
-              >
-                <KeyboardArrowLeft />
-              </Button>
-            </Tooltip>
-            <Hidden smDown>
-              {!checkAdmin() ? (
-                <span style={styles.priceNum}>
-                  {numeral(product.price).format("$0,0.00")}
-                </span>
-              ) : null}
-            </Hidden>
-            {!checkAdmin() ? (
-              <div style={{ marginTop: 8 }}>
-                <span>
-                  Quantity:
-                  <input
-                    style={styles.handleQuantityInput}
-                    value={this.state.quantity}
-                    onChange={this.quantityChange}
-                    type="number"
-                    min="1"
-                    max="5"
-                  />
-                </span>
-              </div>
-            ) : null}
-            {!checkAdmin() ? (
-              <Tooltip disableFocusListener title="Add to cart">
-                <Button
-                  disabled={checkAuth() ? false : true}
-                  style={styles.buttonStyle}
-                  variant="contained"
-                  onClick={this.addToCart}
-                  color="primary"
-                >
-                  <AddShoppingCart />
-                </Button>
-              </Tooltip>
-            ) : null}
-            {checkAdmin() ? (
-              <div>
-                <Tooltip disableFocusListener title="Delete product">
-                  <Button
-                    style={
-                      hoverDelete
-                        ? styles.onHoverButtonStyle
-                        : styles.hoverButtonStyle
-                    }
-                    onMouseEnter={this.onHoverDelete}
-                    onMouseLeave={this.onHoverDelete}
-                    onClick={this.handleDeleteDialog}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    <Delete />
-                  </Button>
-                </Tooltip>
-                <Dialog
-                  disableBackdropClick
-                  disableEscapeKeyDown
-                  maxWidth="sm"
-                  open={this.state.openDeleteConfirm}
-                  onClose={this.handleDeleteDialog}
-                  aria-labelledby="responsive-dialog-title"
-                >
-                  <DialogTitle id="responsive-dialog-title">
-                    {"Are you sure you want to delete this product?"}
-                  </DialogTitle>
-                  <DialogActions>
-                    <Button onClick={this.handleDeleteDialog} color="primary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={this.onDeleteProduct}
-                      color="secondary"
-                      autoFocus
-                    >
-                      Confirm
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </div>
-            ) : null}
-          </div>
+          <ProductHandle
+            product={product}
+            hoverDelete={hoverDelete}
+            onHoverDelete={this.onHoverDelete}
+            hoverBack={hoverBack}
+            onHoverBack={this.onHoverBack}
+            quantity={quantity}
+            quantityChange={this.quantityChange}
+            addToCart={this.addToCart}
+            openDeleteConfirm={openDeleteConfirm}
+            handleDeleteDialog={this.handleDeleteDialog}
+            onDeleteProduct={this.onDeleteProduct}
+          />
         </div>
       );
     }
@@ -250,3 +137,22 @@ export default class Product extends Component {
     );
   }
 }
+
+Product.propTypes = {
+  addCart: PropTypes.func.isRequired,
+  fetchCart: PropTypes.func.isRequired,
+  deleteProd: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  product: state.product.product,
+  productName: state.product.productName,
+  productId: state.product.productId,
+  isLoading: state.product.isLoading,
+  cart: state.cart.cartItems
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, addCart, fetchProduct, deleteProd }
+)(Product);

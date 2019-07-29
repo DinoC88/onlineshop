@@ -11,6 +11,7 @@ import {
   ExpansionPanelDetails
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
+import { FormattedMessage } from "react-intl";
 
 export default class PayingOptions extends Component {
   render() {
@@ -25,14 +26,29 @@ export default class PayingOptions extends Component {
             onClick={this.props.onExpandClickPay}
             expandIcon={<ExpandMore />}
           >
-            <h5 style={styles.headerStyle}>Step 2: Paying options</h5>
+            <h5 style={styles.headerStyle}>
+              <FormattedMessage
+                id="checkOutText2"
+                defaultMessage="Step 2: Paying options"
+              />
+            </h5>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={styles.panelContent}>
             <div>
-              <h5 style={styles.headerStyle}>Please choose option</h5>
+              <h5 style={styles.headerStyle}>
+                <FormattedMessage
+                  id="choosePayOpt"
+                  defaultMessage="Please choose option"
+                />
+              </h5>
               <div style={styles.informationStyle}>
                 <FormControl style={styles.formStyle} required>
-                  <InputLabel>Pay option</InputLabel>
+                  <InputLabel>
+                    <FormattedMessage
+                      id="payOption"
+                      defaultMessage="Pay option"
+                    />
+                  </InputLabel>
                   <Select
                     inputProps={{
                       name: "payOptions"
@@ -40,8 +56,18 @@ export default class PayingOptions extends Component {
                     value={this.props.payOptions}
                     onChange={this.props.handleDrawerChange}
                   >
-                    <MenuItem value="Pay on delivery">Pay on delivery</MenuItem>
-                    <MenuItem value="Pay on web">Pay on web</MenuItem>
+                    <MenuItem value="Pay on delivery">
+                      <FormattedMessage
+                        id="payOnDelivery"
+                        defaultMessage="Pay on delivery"
+                      />
+                    </MenuItem>
+                    <MenuItem value="Pay on web">
+                      <FormattedMessage
+                        id="payOnWeb"
+                        defaultMessage="Pay on web"
+                      />
+                    </MenuItem>
                   </Select>
                   <Drawer
                     docked={false}

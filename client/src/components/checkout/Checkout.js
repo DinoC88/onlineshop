@@ -1,31 +1,22 @@
 import React, { Component } from "react";
-import Paypal from "../../utils/Paypal";
-import {
-  Button,
-  Snackbar,
-  ExpansionPanel,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  Grid,
-  Card,
-  Hidden,
-  Divider
-} from "@material-ui/core";
+import { Grid, Card, Hidden, Divider } from "@material-ui/core";
 import { styles } from "./styles";
-import {
-  getCartData,
-  deleteCart,
-  productPurchaseDelivery,
-  getCurrentUser
-} from "../../utils/requestManager";
-import { ExpandMore, ShoppingCartTwoTone } from "@material-ui/icons";
+import { ShoppingCartTwoTone } from "@material-ui/icons";
 import setAuthToken from "../../utils/setAuthToken";
 import { validatePaymentInput } from "../../utils/payValidator";
 import { initialInfo } from "./helper";
 import Spinner from "../../utils/Spinner";
 import DeliveryInfo from "./deliveryinfo/DeliveryInfo";
 import PayingOptions from "./payingoptions/PayingOptions";
-export default class Checkout extends Component {
+import { connect } from "react-redux";
+import { fetchCart, delCart } from "../../actions/cartActions";
+import { fetchCurrentUser } from "../../actions/userActions";
+import { fetchDeliveryPurchase } from "../../actions/orderAction";
+import PropTypes from "prop-types";
+import decode from "jwt-decode";
+import ConfirmPurchase from "./confirmpurchase/ConfirmPurchase";
+
+class Checkout extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,47 +31,48 @@ export default class Checkout extends Component {
       total: 0,
       isLoading: false,
       snackbarOpen: false,
-      buyLoading: false,
-      orderId: ""
+      buyLoading: false
     };
   }
 
   async componentDidMount() {
+    this.setState({ isLoading: true });
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
-    this.setState({ isLoading: true });
-    try {
-      const info = await getCurrentUser();
-      initialInfo.email = info.data.email;
-      initialInfo.address = info.data.address;
-      initialInfo.phone = info.data.phone;
-      initialInfo.firstName = info.data.firstName;
-      initialInfo.lastName = info.data.lastName;
-      initialInfo.zipcode = info.data.zipcode;
-      initialInfo.city = info.data.city;
-      const cartData = await getCartData();
-      this.setState({
-        cartData: cartData.data ? cartData.data.items : [],
-        id: cartData.data ? cartData.data._id : null,
-        confirmInfo: false,
-        info: initialInfo,
-        payOptions: "",
-        payOptionCheck: false,
-        isLoading: false
-      });
-      await this.calculateTotal(cartData.data.items);
-    } catch (err) {
-      this.setState({ error: err });
-    }
+    let decoded = decode(token);
+    this.setState({
+      payOptions: "",
+      payOptionCheck: false,
+      isLoading: false,
+      confirmInfo: false
+    });
+    await this.props.fetchCurrentUser();
+    await this.props.fetchCart(decoded._id);
   }
 
-  calculateTotal = calc => {
-    let total = calc.reduce(
-      (acc, item) => (acc += item.product.price * item.quantity),
-      0
-    );
-    this.setState({ total });
-  };
+  async componentWillReceiveProps(nextProps) {
+    if (nextProps.userInfo) {
+      const userInfo = nextProps.userInfo;
+      initialInfo.email = userInfo.email;
+      initialInfo.address = userInfo.address;
+      initialInfo.phone = userInfo.phone;
+      initialInfo.firstName = userInfo.firstName;
+      initialInfo.lastName = userInfo.lastName;
+      initialInfo.zipcode = userInfo.zipcode;
+      initialInfo.city = userInfo.city;
+    }
+    if (nextProps.cart) {
+      const cart = nextProps.cart;
+      this.setState({
+        cartData: cart.items,
+        id: cart._id,
+        info: initialInfo
+      });
+    }
+    if (nextProps.total) {
+      this.setState({ total: nextProps.total });
+    }
+  }
 
   onInfoChange = e => {
     const inputChange = { ...this.state.info };
@@ -101,31 +93,28 @@ export default class Checkout extends Component {
       confirmInfo: !this.state.confirmInfo
     });
   };
+
   onExpandClickPay = () => {
     this.setState({
       payOptionCheck: !this.state.payOptionCheck
     });
   };
+
   onDeliveryPay = async e => {
     const { id } = this.state;
     e.preventDefault();
-    try {
-      let response = await productPurchaseDelivery(
-        this.state.info,
-        this.state.total,
-        this.state.cartData
-      );
-      this.setState({
-        snackbarOpen: true,
-        buyLoading: true,
-        orderId: response.data.orderId
-      });
-      await deleteCart({ params: { id } });
-      await this.props.getCartNum();
-    } catch (err) {
-      console.log(err);
-    }
+    await this.props.fetchDeliveryPurchase(
+      this.state.info,
+      this.state.total,
+      this.state.cartData
+    );
+    this.setState({
+      snackbarOpen: true,
+      buyLoading: true
+    });
+    await this.props.delCart({ params: { id } });
   };
+
   onInfoSubmit = e => {
     e.preventDefault();
     const info = {
@@ -144,6 +133,11 @@ export default class Checkout extends Component {
       this.setState({ info, confirmInfo: true });
     }
   };
+
+  onSnackbarClose = () => {
+    this.setState({ snackbarOpen: false });
+    this.props.history.push(`/order/${this.props.orderId}`);
+  };
   render() {
     const {
       info,
@@ -151,13 +145,11 @@ export default class Checkout extends Component {
       confirmInfo,
       errors,
       total,
-      orders,
       isLoading,
-      buyLoading,
-      orderId
+      buyLoading
     } = this.state;
     let checkoutView;
-    if (orders === null || isLoading) {
+    if (isLoading) {
       checkoutView = <Spinner />;
     } else {
       checkoutView = (
@@ -179,56 +171,19 @@ export default class Checkout extends Component {
             drawerOpen={this.state.drawerOpen}
             toggleDrawer={this.toggleDrawer}
           />
-          <ExpansionPanel
-            disabled={this.state.payOptions === "" ? true : false}
-            expanded={this.state.payOptions === "" ? false : true}
-          >
-            <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-              <h5 style={styles.headerStyle}>Step 3: Confirm purchase</h5>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails style={styles.panelContent}>
-              <div>
-                <h5 style={styles.headerStyle}>Please confirm purchase</h5>
-                <div style={styles.informationStyle}>
-                  <Snackbar
-                    open={this.state.snackbarOpen}
-                    message={"You have made order!"}
-                    autoHideDuration={3000}
-                    onClose={() => {
-                      this.setState({ snackbarOpen: false });
-                      this.props.history.push(`/order/${orderId}`);
-                    }}
-                  />
-                  <div style={styles.confirmPayStyle}>
-                    {this.state.payOptions === "Pay on web" ? (
-                      <Paypal
-                        getCartNum={this.props.getCartNum}
-                        information={info}
-                        toPay={total}
-                        cart={cartData}
-                        id={this.state.id}
-                      />
-                    ) : null}
-                    {this.state.payOptions === "Pay on delivery" ? (
-                      !buyLoading ? (
-                        <Button
-                          onClick={this.onDeliveryPay}
-                          color="primary"
-                          variant="contained"
-                        >
-                          Pay on Delivery
-                        </Button>
-                      ) : (
-                        <h5 style={styles.transactionMsgStyle}>
-                          Transaction Processing. Please wait!
-                        </h5>
-                      )
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
+          <ConfirmPurchase
+            payOptions={this.state.payOptions}
+            snackbarOpen={this.state.snackbarOpen}
+            onSnackbarClose={this.onSnackbarClose}
+            info={info}
+            id={this.state.id}
+            cartData={cartData}
+            total={total}
+            fetchCart={this.props.fetchCart}
+            onDeliveryPay={this.onDeliveryPay}
+            buyLoading={buyLoading}
+            orderId={this.props.orderId}
+          />
         </div>
       );
     }
@@ -253,3 +208,27 @@ export default class Checkout extends Component {
     );
   }
 }
+
+Checkout.propTypes = {
+  fetchCurrentUser: PropTypes.func.isRequired,
+  delCart: PropTypes.func.isRequired,
+  fetchCart: PropTypes.func.isRequired,
+  fetchDeliveryPurchase: PropTypes.func.isRequired,
+  errors: PropTypes.object.isRequired,
+  userInfo: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  errors: state.errors,
+  userInfo: state.user.userInfo,
+  cartItems: state.cart.cartItems,
+  cart: state.cart.cart,
+  total: state.cart.total,
+  userId: state.user.userId,
+  orderId: state.order.orderId
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, fetchCurrentUser, fetchDeliveryPurchase, delCart }
+)(Checkout);

@@ -12,6 +12,8 @@ import {
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
 import { styles } from "../styles";
+import { FormattedMessage } from "react-intl";
+
 export default class DeliveryInfo extends Component {
   render() {
     return (
@@ -22,21 +24,38 @@ export default class DeliveryInfo extends Component {
           expanded={!this.props.confirmInfo ? true : false}
         >
           <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-            <h5 style={styles.headerStyle}>Step 1: Delivery information</h5>
+            <h5 style={styles.headerStyle}>
+              <FormattedMessage
+                id="checkOutText1"
+                defaultMessage="Step 1: Delivery information"
+              />
+            </h5>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails style={styles.panelContent}>
             <form noValidate onSubmit={this.props.onInfoSubmit}>
               <Grid container>
                 <Grid item xs={12} lg={6}>
                   <div style={styles.inputColumn}>
-                    <h4 style={styles.headerStyle}>Personal details</h4>
+                    <h4 style={styles.headerStyle}>
+                      <FormattedMessage
+                        id="personalDetails"
+                        defaultMessage="Personal details"
+                      />
+                    </h4>
                     {personalFields.map(i => (
                       <FormControl
                         key={i.keyName}
                         style={styles.formStyle}
                         required
                       >
-                        <InputLabel htmlFor={i.keyName}>{i.label}</InputLabel>
+                        <InputLabel htmlFor={i.keyName}>
+                          {
+                            <FormattedMessage
+                              id={i.keyName}
+                              defaultMessage={i.label}
+                            />
+                          }
+                        </InputLabel>
                         <Input
                           id={i.keyName}
                           name={i.keyName}
@@ -55,14 +74,26 @@ export default class DeliveryInfo extends Component {
                 </Grid>
                 <Grid item xs={12} lg={6}>
                   <div style={styles.inputColumn}>
-                    <h4 style={styles.headerStyle}>Your address</h4>
+                    <h4 style={styles.headerStyle}>
+                      <FormattedMessage
+                        id="yourAddress"
+                        defaultMessage="Your address"
+                      />
+                    </h4>
                     {addressFields.map(i => (
                       <FormControl
                         key={i.keyName}
                         style={styles.formStyle}
                         required
                       >
-                        <InputLabel htmlFor={i.keyName}>{i.label}</InputLabel>
+                        <InputLabel htmlFor={i.keyName}>
+                          {
+                            <FormattedMessage
+                              id={i.keyName}
+                              defaultMessage={i.label}
+                            />
+                          }
+                        </InputLabel>
                         <Input
                           id={i.keyName}
                           name={i.keyName}
@@ -84,7 +115,10 @@ export default class DeliveryInfo extends Component {
                         color="primary"
                         variant="contained"
                       >
-                        Confirm
+                        <FormattedMessage
+                          id="confirm"
+                          defaultMessage="Confirm"
+                        />
                       </Button>
                     </div>
                   </div>

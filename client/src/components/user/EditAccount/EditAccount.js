@@ -1,19 +1,16 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import {
-  Grid,
-  Divider,
-  Card,
-  TextField,
-  Tooltip,
-  Hidden
-} from "@material-ui/core";
+import { Grid, Divider, Card, Hidden } from "@material-ui/core";
 import setAuthToken from "../../../utils/setAuthToken";
-import { getCurrentUser, editUserInfo } from "../../../utils/requestManager";
 import { styles } from "./styles";
-import Spinner from "../../../utils/Spinner";
-import { KeyboardArrowLeft, AccountCircle } from "@material-ui/icons";
-export default class ConteditAccountContainer extends Component {
+import { AccountCircle } from "@material-ui/icons";
+import { connect } from "react-redux";
+import { fetchCart } from "../../../actions/cartActions";
+import { fetchCurrentUser, changeUserInfo } from "../../../actions/userActions";
+import PropTypes from "prop-types";
+import EditAccountInfo from "./EditAccountInfo/EditAccountInfo";
+import EditAccountHandle from "./EditAccountHandle/EditAccountHandle";
+
+class EditAccount extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,37 +23,34 @@ export default class ConteditAccountContainer extends Component {
       zipcode: "",
       phone: "",
       password: "",
-      userId: ""
+      userId: "",
+      errors: ""
     };
   }
 
   async componentDidMount() {
-    this.setState({ isLoading: true });
     let token = localStorage.getItem("jwtToken");
     setAuthToken(token);
-    try {
-      const user = await getCurrentUser();
-      this.setState({
-        email: user.data.email,
-        userId: user.data.id,
-        username: user.data.name,
-        firstName: user.data.firstName,
-        lastName: user.data.lastName,
-        city: user.data.city,
-        zipcode: user.data.zipcode,
-        address: user.data.address,
-        phone: user.data.phone,
-        isLoading: false,
-        hoverDelete: false
-      });
-    } catch (err) {
-      this.setState({
-        isLoading: false,
-        errors: err
-      });
-    }
+    await this.props.fetchCurrentUser();
   }
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.userInfo) {
+      const userInfo = nextProps.userInfo;
+      this.setState({
+        email: userInfo.email,
+        userId: userInfo.id,
+        username: userInfo.name,
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        city: userInfo.city,
+        zipcode: userInfo.zipcode,
+        address: userInfo.address,
+        phone: userInfo.phone,
+        hoverBack: false
+      });
+    }
+  };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -73,119 +67,30 @@ export default class ConteditAccountContainer extends Component {
       phone: this.state.phone,
       userid: this.state.userId
     };
-    try {
-      await editUserInfo(newUserInfo);
-      await this.props.history.push("/users/current");
-    } catch (err) {
-      this.setState({ errors: err.response.data });
-    }
+    await this.props.changeUserInfo(newUserInfo, this.props.history);
   };
-  onHoverDelete = () => {
+  onHoverBack = () => {
     this.setState({
-      hoverDelete: !this.state.hoverDelete
+      hoverBack: !this.state.hoverBack
     });
   };
+  onBackClick = () => {
+    this.props.history.push("/users/current");
+  };
   render() {
-    const { isLoading, hoverDelete } = this.state;
-    let editAccView;
-    if (isLoading) {
-      editAccView = <Spinner />;
-    } else {
-      editAccView = (
-        <form noValidate onSubmit={this.onSubmit}>
-          <Grid container>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Username"
-                value={this.state.username}
-                margin="normal"
-                onChange={this.onChange}
-                name="username"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Email"
-                value={this.state.email}
-                margin="normal"
-                onChange={this.onChange}
-                name="email"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="First Name"
-                value={this.state.firstName}
-                margin="normal"
-                onChange={this.onChange}
-                name="firstName"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Last Name"
-                value={this.state.lastName}
-                margin="normal"
-                onChange={this.onChange}
-                name="lastName"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Phone"
-                value={this.state.phone}
-                margin="normal"
-                onChange={this.onChange}
-                name="phone"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="City"
-                value={this.state.city}
-                margin="normal"
-                onChange={this.onChange}
-                name="city"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Address"
-                value={this.state.address}
-                margin="normal"
-                onChange={this.onChange}
-                name="address"
-              />
-            </Grid>
-            <Grid item xs={12} lg={6} sm={6}>
-              <TextField
-                inputProps={styles.inputPropsStyle}
-                style={styles.textFieldStyle}
-                label="Zip Code"
-                value={this.state.zipcode}
-                margin="normal"
-                onChange={this.onChange}
-                name="zipcode"
-              />
-            </Grid>
-          </Grid>
-        </form>
-      );
-    }
+    const { isLoading } = this.props;
+    const {
+      hoverBack,
+      username,
+      email,
+      firstName,
+      lastName,
+      phone,
+      address,
+      city,
+      zipcode
+    } = this.state;
+
     return (
       <div style={styles.accountContainer}>
         <Grid style={{ padding: 16 }} container>
@@ -197,45 +102,49 @@ export default class ConteditAccountContainer extends Component {
                   <AccountCircle style={styles.imgStyle} />
                 </div>
               </Hidden>
-              {editAccView}
+              <EditAccountInfo
+                isLoading={isLoading}
+                username={username}
+                email={email}
+                firstName={firstName}
+                lastName={lastName}
+                phone={phone}
+                address={address}
+                city={city}
+                zipcode={zipcode}
+                onChange={this.onChange}
+                onSubmit={this.onSubmit}
+              />
             </div>
             <Hidden xsDown>
               <Divider />
             </Hidden>
-            <Grid container style={{ textAlign: "center" }}>
-              <Grid item xs={12} lg={6} sm={6}>
-                <Tooltip disableFocusListener title="Go back">
-                  <Button
-                    onClick={() => {
-                      this.props.history.push("/users/current");
-                    }}
-                    style={
-                      hoverDelete
-                        ? styles.onHoverButtonStyle
-                        : styles.hoverButtonStyle
-                    }
-                    onMouseEnter={this.onHoverDelete}
-                    onMouseLeave={this.onHoverDelete}
-                    variant="contained"
-                  >
-                    <KeyboardArrowLeft />
-                  </Button>
-                </Tooltip>
-              </Grid>
-              <Grid item xs={12} lg={6} sm={6}>
-                <Button
-                  style={styles.buttonStyle}
-                  onClick={this.onSubmit}
-                  variant="contained"
-                  color="primary"
-                >
-                  Confirm
-                </Button>
-              </Grid>
-            </Grid>
+            <EditAccountHandle
+              hoverBack={hoverBack}
+              onHoverBack={this.onHoverBack}
+              onSubmit={this.onSubmit}
+              onBackClick={this.onBackClick}
+            />
           </Card>
         </Grid>
       </div>
     );
   }
 }
+
+EditAccount.propTypes = {
+  fetchCurrentUser: PropTypes.func.isRequired,
+  fetchCart: PropTypes.func.isRequired,
+  changeUserInfo: PropTypes.func.isRequired,
+  userInfo: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  userInfo: state.user.userInfo,
+  isLoading: state.user.isLoading
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, fetchCurrentUser, changeUserInfo }
+)(EditAccount);

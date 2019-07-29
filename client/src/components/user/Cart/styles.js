@@ -124,6 +124,17 @@ const styles = {
     color: "rgb(145, 145, 145)",
     fontSize: 13,
     fontWeight: "normal"
+  },
+  cartProductCardGridStyle: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  cartProductCardStyle: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 };
 export { styles };

@@ -1,3 +1,6 @@
+import bg1 from "../../img/image6.jpg";
+import bg from "../../img/image9.jpg";
+
 const styles = {
   pageContainer: {
     width: "100%",
@@ -13,6 +16,23 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center"
+  },
+  logginBackgroundStyle: {
+    backgroundImage: `url(${bg1})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "40% 40%",
+    height: "100vh",
+    width: "100%"
+  },
+  registerBackgroundStyle: {
+    backgroundImage: `url(${bg})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "18% 40%",
+    height: "100vh",
+    width: "100%",
+    zIndex: -10
   },
   headerStyle: {
     textAlign: "center",

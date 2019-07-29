@@ -1,83 +1,48 @@
 import React, { Component } from "react";
-import {
-  getOrderById,
-  getTransactionById,
-  changeOrderStatus
-} from "../../../utils/requestManager";
+import { changeOrderStatus } from "../../../utils/requestManager";
 import { styles } from "./styles";
-import {
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Grid,
-  Card,
-  Hidden,
-  Divider,
-  Tooltip
-} from "@material-ui/core";
+import { Grid, Card, Hidden, Divider } from "@material-ui/core";
 import OrderInfo from "./OrderInfo";
-import { KeyboardArrowLeft, Payment } from "@material-ui/icons";
+import { Payment } from "@material-ui/icons";
 import Spinner from "../../../utils/Spinner";
+import { fetchOrder, fetchTransaction } from "../../../actions/orderAction";
+import { fetchCart } from "../../../actions/cartActions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import OrderHandle from "./OrderHandle/OrderHandle";
+import decode from "jwt-decode";
+import setAuthToken from "../../../utils/setAuthToken";
 
-export default class Order extends Component {
+class Order extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      order: [],
-      deliveryInfo: {},
-      transaction: [],
-      products: [],
-      paymentDetails: [],
-      orderId: "",
-      orderStatus: "",
       drawerOpen: false,
-      total: 0,
-      open: false,
-      isLoading: false
+      open: false
     };
   }
-  async componentDidMount() {
-    this.setState({ isLoading: true });
-    try {
-      const orderData = await getOrderById(this.props.match.params.id);
-      this.setState({
-        order: orderData.data,
-        products: orderData.data.products,
-        deliveryInfo: orderData.data.deliveryInfo,
-        orderId: orderData.data._id,
-        orderStatus: orderData.data.status
-      });
-      console.log(orderData);
-      await this.calculateTotal(orderData.data.products);
-      const trans = await getTransactionById(orderData.data.transactionId);
-      this.setState({
-        transaction: trans.data[0],
-        paymentDetails: trans.data[0].paymentDetails
-          ? trans.data[0].paymentDetails
-          : "",
-        isLoading: false
-      });
-    } catch (err) {
-      console.log(err);
-    }
+
+  async componentWillMount() {
+    let token = localStorage.getItem("jwtToken");
+    setAuthToken(token);
+    let decoded = token ? decode(token) : "";
+    await this.props.fetchCart(decoded._id);
+
+    await this.props.fetchOrder(this.props.match.params.id);
+    setTimeout(() => {
+      this.props.fetchTransaction(this.props.transactionId);
+    }, 500);
   }
-  calculateTotal = calc => {
-    let total = calc.reduce(
-      (acc, item) => (acc += item.price * item.quantity),
-      0
-    );
-    this.setState({ total });
-  };
 
   toggleDrawer = () => {
     this.setState({ drawerOpen: !this.state.drawerOpen });
   };
-  handleDrawerChange = async e => {
-    this.setState({ orderStatus: e.target.value });
-    await changeOrderStatus(e.target.value, this.state.orderId);
+
+  handleDrawerChange = e => {
+    changeOrderStatus(e.target.value, this.props.order._id);
+    this.props.history.push("/orderhistory");
   };
+
   handleClickOpen = () => {
     this.setState({
       open: true
@@ -88,31 +53,26 @@ export default class Order extends Component {
     this.setState({ open: false });
   };
 
+  onBackClick = () => {
+    this.props.history.push("/orderhistory");
+  };
+
   render() {
-    const {
-      deliveryInfo,
-      order,
-      products,
-      transaction,
-      paymentDetails,
-      isLoading,
-      total
-    } = this.state;
+    const { order, isLoading, transaction, paymentDetails } = this.props;
     let orderInfo;
     if (isLoading) {
       orderInfo = <Spinner />;
     } else {
       orderInfo = (
         <OrderInfo
-          deliveryInfo={deliveryInfo}
-          orderStatus={this.state.orderStatus}
+          deliveryInfo={order.deliveryInfo}
+          orderStatus={order.status}
           handleDrawerChange={this.handleDrawerChange}
           drawerOpen={this.state.drawerOpen}
           toggleDrawer={this.toggleDrawer}
-          products={products}
+          products={order.products}
           transaction={transaction}
           order={order}
-          total={total}
         />
       );
     }
@@ -133,89 +93,13 @@ export default class Order extends Component {
               <Hidden xsDown>
                 <Divider />
               </Hidden>
-              <Grid container style={{ textAlign: "center" }}>
-                <Grid item xs={12} lg={6} sm={6}>
-                  <Tooltip disableFocusListener title="Go back">
-                    <span>
-                      <Button
-                        onClick={() => {
-                          this.props.history.push("/orders");
-                        }}
-                        style={styles.buttonStyle}
-                        variant="contained"
-                        color="secondary"
-                      >
-                        <KeyboardArrowLeft />
-                      </Button>
-                    </span>
-                  </Tooltip>
-                </Grid>
-                <Grid item xs={12} lg={6} sm={6}>
-                  {paymentDetails.bin || paymentDetails.payerEmail ? (
-                    <div>
-                      <Tooltip disableFocusListener title="Payment details">
-                        <span>
-                          <Button
-                            style={styles.buttonStyle}
-                            variant="contained"
-                            color="primary"
-                            onClick={this.handleClickOpen}
-                          >
-                            <Payment />
-                          </Button>
-                        </span>
-                      </Tooltip>
-                      <Dialog
-                        onClose={this.handleClose}
-                        aria-labelledby="customized-dialog-title"
-                        open={this.state.open}
-                      >
-                        <DialogTitle>Payment Details</DialogTitle>
-                        {paymentDetails.bin ? (
-                          <DialogContent>
-                            <p>Bin: {paymentDetails.bin}</p>
-                            <p>Card type: {paymentDetails.cardType}</p>
-                            <p>
-                              Expiration date: {paymentDetails.expirationDate}
-                            </p>
-                            <p>
-                              Customer location:{" "}
-                              {paymentDetails.customerLocation}
-                            </p>
-                            <p>Last 4: {paymentDetails.last4}</p>
-                            <p>Masked number: {paymentDetails.maskedNumber}</p>
-                          </DialogContent>
-                        ) : (
-                          <DialogContent>
-                            <p>Payer ID: {paymentDetails.payerId}</p>
-                            <p>Payment ID: {paymentDetails.paymentId}</p>
-                            <p>
-                              Authorization ID: {paymentDetails.authorizationId}
-                            </p>
-                            <p>Payer email: {paymentDetails.payerEmail}</p>
-                            <p>
-                              Payer name:{" "}
-                              {paymentDetails.payerFirstName +
-                                " " +
-                                paymentDetails.payerLastName}
-                            </p>
-                            <p>Payer status: {paymentDetails.payerStatus}</p>
-                            <p>
-                              Transaction fee: {paymentDetails.transactionFee}
-                              {paymentDetails.transactionFeeCurrency}
-                            </p>
-                          </DialogContent>
-                        )}
-                        <DialogActions>
-                          <Button onClick={this.handleClose} color="primary">
-                            Close
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
-                    </div>
-                  ) : null}
-                </Grid>
-              </Grid>
+              <OrderHandle
+                open={this.state.open}
+                paymentDetails={paymentDetails ? paymentDetails : "Empty"}
+                handleClickOpen={this.handleClickOpen}
+                handleClose={this.handleClose}
+                onBackClick={this.onBackClick}
+              />
             </Card>
           </Grid>
         </div>
@@ -223,3 +107,23 @@ export default class Order extends Component {
     );
   }
 }
+
+Order.propTypes = {
+  fetchOrder: PropTypes.func.isRequired,
+  fetchCart: PropTypes.func.isRequired,
+  order: PropTypes.object.isRequired,
+  transaction: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.order.isLoading,
+  order: state.order.order,
+  transaction: state.order.transaction,
+  transactionId: state.order.transactionId,
+  paymentDetails: state.order.paymentDetails
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, fetchOrder, fetchTransaction }
+)(Order);

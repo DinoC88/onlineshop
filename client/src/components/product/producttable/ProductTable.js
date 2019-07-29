@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { styles } from "./styles";
+import { FormattedMessage } from "react-intl";
+
 export default class ProductTable extends Component {
   render() {
     return (
@@ -8,13 +10,20 @@ export default class ProductTable extends Component {
           <table style={styles.tableWidth}>
             <tbody>
               <tr>
-                <td style={styles.productInfoTh}>Model</td>
+                <td style={styles.productInfoTh}>
+                  <FormattedMessage id="model" defaultMessage="Model" />
+                </td>
                 <td style={styles.productInfoTd}>{this.props.product.name}</td>
               </tr>
             </tbody>
             <tbody>
               <tr>
-                <td style={styles.productInfoTh}>Display Size</td>
+                <td style={styles.productInfoTh}>
+                  <FormattedMessage
+                    id="displaySize"
+                    defaultMessage="Display Size"
+                  />
+                </td>
                 <td style={styles.productInfoTd}>
                   {this.props.product.displaySize}
                 </td>
@@ -22,7 +31,12 @@ export default class ProductTable extends Component {
             </tbody>
             <tbody>
               <tr>
-                <td style={styles.productInfoTh}>Display Resolution</td>
+                <td style={styles.productInfoTh}>
+                  <FormattedMessage
+                    id="displayResolution"
+                    defaultMessage="Display Resolution"
+                  />
+                </td>
                 <td style={styles.productInfoTd}>
                   {this.props.product.displayResolution}
                 </td>
@@ -36,7 +50,12 @@ export default class ProductTable extends Component {
             </tbody>
             <tbody>
               <tr>
-                <td style={styles.productInfoTh}>Internal Memory</td>
+                <td style={styles.productInfoTh}>
+                  <FormattedMessage
+                    id="internalMemory"
+                    defaultMessage="Internal Memory"
+                  />
+                </td>
                 <td style={styles.productInfoTd}>
                   {this.props.product.memory}
                 </td>
@@ -50,7 +69,9 @@ export default class ProductTable extends Component {
             </tbody>
             <tbody>
               <tr>
-                <td style={styles.productInfoTh}>Camera</td>
+                <td style={styles.productInfoTh}>
+                  <FormattedMessage id="camera" defaultMessage="Camera" />
+                </td>
                 <td style={styles.productInfoTd}>
                   {this.props.product.camera}
                 </td>

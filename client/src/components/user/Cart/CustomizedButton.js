@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { Button, Tooltip } from "@material-ui/core";
 import { purple } from "@material-ui/core/colors";
 import { Delete } from "@material-ui/icons";
-
+import { FormattedMessage } from "react-intl";
 const DeleteCartButton = withStyles(theme => ({
   root: {
     color: theme.palette.getContrastText(purple[500]),
@@ -26,12 +26,22 @@ export default class CustomizedButton extends Component {
   render() {
     return (
       <div>
-        <DeleteCartButton
-          variant="contained"
-          onClick={async () => await this.props.removeItem(this.props.itemId)}
+        <Tooltip
+          disableFocusListener
+          title={
+            <FormattedMessage
+              id="removeProduct"
+              defaultMessage="Remove product"
+            />
+          }
         >
-          <Delete style={{ fontSize: 30 }} />
-        </DeleteCartButton>
+          <DeleteCartButton
+            variant="contained"
+            onClick={async () => await this.props.removeItem(this.props.itemId)}
+          >
+            <Delete style={{ fontSize: 30 }} />
+          </DeleteCartButton>
+        </Tooltip>
       </div>
     );
   }

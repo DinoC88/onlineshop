@@ -3,8 +3,14 @@ import { withRouter } from "react-router-dom";
 import "braintree-web";
 import { Button, Snackbar } from "@material-ui/core";
 import DropIn from "braintree-web-drop-in-react";
-import { getToken, productPurchaseOnline, deleteCart } from "./requestManager";
-class Paypal extends Component {
+import {
+  getToken,
+  productPurchaseOnline,
+  deleteCart
+} from "../../../utils/requestManager";
+import { FormattedMessage } from "react-intl";
+
+class PayonWeb extends Component {
   instance;
   state = {
     clientToken: null,
@@ -79,7 +85,12 @@ class Paypal extends Component {
           />
           <Snackbar
             open={this.state.snackbarOpen}
-            message={"You have made order!"}
+            message={
+              <FormattedMessage
+                id="madeOrderSnack"
+                defaultMessage="You have made the order"
+              />
+            }
             autoHideDuration={3000}
             onClose={() => {
               this.setState({ snackbarOpen: false });
@@ -89,7 +100,7 @@ class Paypal extends Component {
           {this.state.nonce === "" ? (
             <div>
               <Button color="primary" variant="contained" onClick={this.buy}>
-                Buy
+                <FormattedMessage id="confirm" defaultMessage="Confirm" />
               </Button>
             </div>
           ) : (
@@ -101,7 +112,10 @@ class Paypal extends Component {
                 fontWeight: "normal"
               }}
             >
-              Transaction processing. Please wait.
+              <FormattedMessage
+                id="transMsg"
+                defaultMessage="Transaction Processing. Please wait!"
+              />
             </h5>
           )}
         </div>
@@ -110,4 +124,4 @@ class Paypal extends Component {
   }
 }
 
-export default withRouter(Paypal);
+export default withRouter(PayonWeb);

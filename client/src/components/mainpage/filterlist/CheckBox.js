@@ -9,7 +9,7 @@ import {
   List
 } from "@material-ui/core";
 import { styles } from "./styles";
-
+import { FormattedMessage } from "react-intl";
 export default class CheckBox extends Component {
   constructor() {
     super();
@@ -49,7 +49,16 @@ export default class CheckBox extends Component {
     this.props.list
       ? this.props.list.map(value => (
           <ListItem key={value._id} style={styles.checkBox}>
-            <ListItemText primary={<i>{value.name}</i>} />
+            <ListItemText
+              primary={
+                <i>
+                  <FormattedMessage
+                    id={value.name}
+                    defaultMessage={value.name}
+                  />
+                </i>
+              }
+            />
             <ListItemSecondaryAction>
               <Checkbox
                 color="primary"

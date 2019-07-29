@@ -8,6 +8,8 @@ import {
 } from "@material-ui/icons";
 import paginator from "../../../utils/paginator";
 import { styles } from "./styles";
+import { FormattedMessage } from "react-intl";
+
 const Pagination = props => {
   const pageLinks = [];
 
@@ -41,7 +43,10 @@ const Pagination = props => {
 
   return (
     <div style={styles.buttonPosition}>
-      <Tooltip disableFocusListener title="First page">
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id="firstPage" defaultMessage="First page" />}
+      >
         <div>
           <Button
             disabled={props.currentPage > 1 ? false : true}
@@ -54,7 +59,10 @@ const Pagination = props => {
           </Button>
         </div>
       </Tooltip>
-      <Tooltip disableFocusListener title="Back page">
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id="backPage" defaultMessage="Back page" />}
+      >
         <div>
           <Button
             disabled={props.currentPage > 1 ? false : true}
@@ -68,7 +76,10 @@ const Pagination = props => {
         </div>
       </Tooltip>
       <div>{pageLinks}</div>
-      <Tooltip disableFocusListener title="Next page">
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id="nextPage" defaultMessage="Next page" />}
+      >
         <div>
           <Button
             disabled={props.currentPage < props.pages ? false : true}
@@ -81,7 +92,10 @@ const Pagination = props => {
           </Button>
         </div>
       </Tooltip>
-      <Tooltip disableFocusListener title="Last page">
+      <Tooltip
+        disableFocusListener
+        title={<FormattedMessage id="lastPage" defaultMessage="Last page" />}
+      >
         <div>
           <Button
             disabled={props.currentPage < props.pages ? false : true}

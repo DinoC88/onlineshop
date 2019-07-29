@@ -29,11 +29,6 @@ const styles = {
     color: "white",
     backgroundColor: "#1f3b69"
   },
-  headerStyle: {
-    textAlign: "center",
-    alignItems: "center",
-    width: "100%"
-  },
   informationStyle: {
     display: "flex",
     justifyContent: "space-around"

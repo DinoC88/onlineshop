@@ -3,14 +3,20 @@ import Spinner from "../../utils/Spinner";
 import ProductCard from "./productcard/ProductCard";
 import FiltersList from "./filterlist/FiltersList";
 import ProductHandle from "./producthandle/ProductHandle";
-import { TextField, Grid, InputAdornment, IconButton } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import { getProduct } from "../../utils/requestManager";
+import { Grid } from "@material-ui/core";
 import { price } from "../../utils/filters";
 import { styles } from "./styles";
 import Pagination from "./pagination/Pagination";
-
-export default class Mainpage extends Component {
+import { FormattedMessage } from "react-intl";
+import { connect } from "react-redux";
+import { fetchCart, addCart } from "../../actions/cartActions";
+import { fetchProducts } from "../../actions/productAction";
+import { fetchCurrentUser } from "../../actions/userActions";
+import setAuthToken from "../../utils/setAuthToken";
+import PropTypes from "prop-types";
+import SearchBar from "./SearchBar/SearchBar";
+import decode from "jwt-decode";
+class Mainpage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,14 +36,20 @@ export default class Mainpage extends Component {
       drawerShowOpen: false
     };
   }
+
   async componentWillMount() {
     this.setState({ isLoading: true });
+    let token = localStorage.getItem("jwtToken");
+    setAuthToken(token);
+    let decoded = decode(token);
     await this.showFilterResults(
       this.state.filters,
       this.state.sort,
       this.state.limit,
       this.state.currentPage
     );
+    await this.props.fetchCart(decoded._id);
+    await this.props.fetchCurrentUser();
   }
   //Sort drawer controller
   toggleSortDrawer = () => {
@@ -103,12 +115,12 @@ export default class Mainpage extends Component {
   //Filter function
   showFilterResults = async (filter, sort, show, currentPage) => {
     try {
-      const products = await getProduct(filter, sort, show, currentPage);
+      await this.props.fetchProducts(filter, sort, show, currentPage);
       this.setState({
-        products: products.data.products,
-        isLoading: false,
-        totalPages: products.data.totalPages,
-        totalProducts: products.data.totalProducts
+        products: this.props.products,
+        isLoading: this.props.isLoading,
+        totalPages: this.props.totalPages,
+        totalProducts: this.props.totalProducts
       });
     } catch (errors) {
       this.setState({
@@ -160,26 +172,24 @@ export default class Mainpage extends Component {
 
   render() {
     let productItems;
-    const {
-      products,
-      totalProducts,
-      currentPage,
-      limit,
-      totalPages
-    } = this.state;
-    if (products === null || this.state.isLoading) {
+    const { products, totalProducts, totalPages } = this.props;
+    const { currentPage, limit } = this.state;
+    if (products === null || products === undefined || this.props.isLoading) {
       productItems = <Spinner />;
     } else {
       if (products.length > 0) {
         productItems = products.map(product => (
-          <ProductCard
-            key={product._id}
-            product={product}
-            getCartNum={this.props.getCartNum}
-          />
+          <ProductCard key={product._id} product={product} />
         ));
       } else {
-        productItems = <h4 style={styles.noProductFound}>No products found</h4>;
+        productItems = (
+          <h4 style={styles.noProductFound}>
+            <FormattedMessage
+              id="productNotFound"
+              defaultMessage="No products found"
+            />
+          </h4>
+        );
       }
     }
     return (
@@ -193,30 +203,12 @@ export default class Mainpage extends Component {
               <div>
                 <Grid container>
                   <Grid item xs={12} lg={12}>
-                    <div style={styles.searchStyle}>
-                      <TextField
-                        style={{ width: "100%" }}
-                        inputstyle={{ width: "100%" }}
-                        label="Search phone"
-                        value={this.state.searchProduct}
-                        type="search"
-                        variant="standard"
-                        onChange={this.handleSearchInput}
-                        onKeyDown={this.enterKey}
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="Toggle remove search visibility"
-                                onClick={this.removeSearch}
-                              >
-                                {this.state.searchProduct ? <Close /> : null}
-                              </IconButton>
-                            </InputAdornment>
-                          )
-                        }}
-                      />
-                    </div>
+                    <SearchBar
+                      searchProduct={this.state.searchProduct}
+                      handleSearchInput={this.handleSearchInput}
+                      enterKey={this.enterKey}
+                      removeSearch={this.removeSearch}
+                    />
                   </Grid>
                   <Grid item xs={12} lg={12}>
                     <ProductHandle
@@ -252,3 +244,22 @@ export default class Mainpage extends Component {
     );
   }
 }
+
+Mainpage.propTypes = {
+  addCart: PropTypes.func.isRequired,
+  fetchCart: PropTypes.func.isRequired,
+  fetchProducts: PropTypes.func.isRequired,
+  fetchCurrentUser: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  products: state.product.products,
+  isLoading: state.product.isLoading,
+  totalPages: state.product.totalPages,
+  totalProducts: state.product.totalProducts
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, fetchProducts, addCart, fetchCurrentUser }
+)(Mainpage);

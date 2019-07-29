@@ -13,26 +13,40 @@ import * as moment from "moment";
 import * as numeral from "numeral";
 import { styles } from "./styles";
 import checkAdmin from "../../../utils/checkAdmin";
+import { FormattedMessage } from "react-intl";
 
 export default class OrderInfo extends Component {
   render() {
+    const total = this.props.products.reduce(
+      (acc, item) => (acc += item.price * item.quantity),
+      0
+    );
     return (
       <Grid container>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5 style={{ marginBottom: 16 }}>Order details</h5>
+            <h5 style={{ marginBottom: 16 }}>
+              <FormattedMessage
+                id="orderDetails"
+                defaultMessage="Order details"
+              />
+            </h5>
             <p>
               Name: {this.props.deliveryInfo.firstname}{" "}
               {this.props.deliveryInfo.lastname}
             </p>
-            <p>Phone: {this.props.deliveryInfo.phone}</p>
+            <p>
+              <FormattedMessage id="phone" defaultMessage="Phone" />:{" "}
+              {this.props.deliveryInfo.phone}
+            </p>
             <p>Email: {this.props.deliveryInfo.email}</p>
             <p>
-              Address: {this.props.deliveryInfo.address},{" "}
-              {this.props.deliveryInfo.city}, {this.props.deliveryInfo.zipcode}
+              <FormattedMessage id="address" defaultMessage="Address" />:{" "}
+              {this.props.deliveryInfo.address}, {this.props.deliveryInfo.city},{" "}
+              {this.props.deliveryInfo.zipcode}
             </p>
             <p>
-              Date:{" "}
+              <FormattedMessage id="date" defaultMessage="Date" />:{" "}
               {moment(this.props.order.date).format("MMMM Do YYYY, h:mm:ss a")}
             </p>
             <div
@@ -57,7 +71,7 @@ export default class OrderInfo extends Component {
                     </MenuItem>
                     <MenuItem value="Shipped">Shipped</MenuItem>
                     <MenuItem value="Completed">Completed</MenuItem>
-                    <MenuItem value="Cancelled">Cancelled</MenuItem>
+                    <MenuItem value="Cancelled">Canceled</MenuItem>
                     <MenuItem value="Declined">Declined</MenuItem>
                   </Select>
                   <Drawer
@@ -81,37 +95,66 @@ export default class OrderInfo extends Component {
         </Grid>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5 style={{ marginBottom: 16 }}>Order items</h5>
+            <h5 style={{ marginBottom: 16 }}>
+              <FormattedMessage id="orderItems" defaultMessage="Order items" />
+            </h5>
             {this.props.products.map((product, i) => {
               return (
                 <div key={i}>
                   <p>Mobile: {product.name}</p>
-                  <p>Price: {numeral(product.price).format("$0,0.00")}</p>
-                  <p>Quantity: {product.quantity}</p>
+                  <p>
+                    <FormattedMessage id="price" defaultMessage="Price" />:{" "}
+                    {numeral(product.price).format("$0,0.00")}
+                  </p>
+                  <p>
+                    <FormattedMessage id="quantity" defaultMessage="Quantity" />
+                    : {product.quantity}
+                  </p>
                   <Divider />
                 </div>
               );
             })}
-            <p>Total: {numeral(this.props.total).format("$0,0.00")}</p>
+            <p>
+              <FormattedMessage id="total" defaultMessage="Total" />:{" "}
+              {numeral(total).format("$0,0.00")}
+            </p>
           </div>
         </Grid>
         <Grid item xs={12} lg={4}>
           <div style={styles.textPosition}>
-            <h5 style={{ marginBottom: 16 }}>Transaction details</h5>
-            <p>Transaction ID: {this.props.transaction.transactionId}</p>
+            <h5 style={{ marginBottom: 16 }}>
+              <FormattedMessage
+                id="transDetails"
+                defaultMessage="Transaction details"
+              />
+            </h5>
             <p>
-              Amount: {numeral(this.props.transaction.amount).format("$0,0.00")}
+              <FormattedMessage id="transId" defaultMessage="Transaction ID" />:{" "}
+              {this.props.transaction.transactionId}
+            </p>
+            <p>
+              <FormattedMessage id="amount" defaultMessage="Amount" />:{" "}
+              {numeral(this.props.transaction.amount).format("$0,0.00")}
             </p>
             {this.props.transaction.currency ? (
-              <p>Currency: {this.props.transaction.currency}</p>
+              <p>
+                <FormattedMessage id="currency" defaultMessage="Currency" />:{" "}
+                {this.props.transaction.currency}
+              </p>
             ) : null}
             <p>
-              Date:{" "}
+              <FormattedMessage id="date" defaultMessage="Date" />:{" "}
               {moment(this.props.transaction.date).format(
                 "MMMM Do YYYY, h:mm:ss a"
               )}
             </p>
-            <p>Payment method: {this.props.transaction.paymentMethod}</p>
+            <p>
+              <FormattedMessage
+                id="paymentMethod"
+                defaultMessage="Payment method"
+              />
+              : {this.props.transaction.paymentMethod}
+            </p>
             <p>Status: {this.props.transaction.status}</p>
           </div>
         </Grid>

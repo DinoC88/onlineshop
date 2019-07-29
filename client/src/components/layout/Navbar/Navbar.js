@@ -9,14 +9,29 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { AppBar, Menu, MenuItem, Hidden, Button } from "@material-ui/core";
 import { styles } from "./styles";
 import CustomizedBadges from "./CustomizedBadges";
+import { connect } from "react-redux";
+import { fetchCart } from "../../../actions/cartActions";
+import PropTypes from "prop-types";
+import { setLocale } from "../../../actions/locale";
+import { FormattedMessage } from "react-intl";
+
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      langMenu: false,
+      showLang: "EN"
     };
   }
-
+  componentDidMount() {
+    this.props.fetchCart();
+    if (localStorage.hubLang === "en") {
+      this.setState({ showLang: "EN" });
+    } else {
+      this.setState({ showLang: "DE" });
+    }
+  }
   onLogoutClick = e => {
     localStorage.removeItem("jwtToken");
     localStorage.removeItem("isAdmin");
@@ -27,11 +42,22 @@ class Navbar extends Component {
   onMenuClick = () => {
     this.setState({ open: !this.state.open });
   };
+  onMenuLangClick = e => {
+    this.setState({ langMenu: !this.state.langMenu });
+  };
+  onChangeLangClick = async (showLang, lang) => {
+    await this.props.setLocale(lang);
+    await this.setState({ showLang, langMenu: !this.state.langMenu });
+  };
 
   render() {
     const {
+      cart,
       location: { pathname }
     } = this.props;
+    let cartNum = cart
+      ? cart.reduce((acc, item) => (acc += item.quantity), 0)
+      : 0;
     const mobileGuestLinks = (
       <div>
         <MenuItem
@@ -40,7 +66,7 @@ class Navbar extends Component {
           to="/register"
           selected={"/register" === pathname}
         >
-          Sign Up
+          <FormattedMessage id="signUp" defaultMessage="Sign up" />
         </MenuItem>
         <MenuItem
           style={styles.mobileButton}
@@ -48,7 +74,7 @@ class Navbar extends Component {
           to="/login"
           selected={"/login" === pathname}
         >
-          Login
+          <FormattedMessage id="login" defaultMessage="Login" />
         </MenuItem>
       </div>
     );
@@ -62,7 +88,7 @@ class Navbar extends Component {
             to="/addproduct"
             selected={"/addproduct" === pathname}
           >
-            Add product
+            <FormattedMessage id="addProduct" defaultMessage="Add product" />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -72,7 +98,7 @@ class Navbar extends Component {
             to="/cart"
             selected={"/cart" === pathname}
           >
-            <CustomizedBadges currentCartNum={this.props.currentCartNum} />
+            <CustomizedBadges currentCartNum={cartNum} />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -85,38 +111,26 @@ class Navbar extends Component {
             <AccountCircle />
           </MenuItem>
         ) : null}
-        {checkAdmin() ? (
-          <MenuItem
-            component={Link}
-            style={styles.mobileButton}
-            to="/orders"
-            selected={"/orders" === pathname}
-          >
-            Orders
-          </MenuItem>
-        ) : (
-          <MenuItem
-            component={Link}
-            style={styles.mobileButton}
-            to="/orderhistory"
-            selected={"/orderhistory" === pathname}
-          >
-            Orders
-          </MenuItem>
-        )}
+        <MenuItem
+          component={Link}
+          style={styles.mobileButton}
+          to="/orderhistory"
+          selected={"/orderhistory" === pathname}
+        >
+          <FormattedMessage id="orders" defaultMessage="Orders" />
+        </MenuItem>
         <MenuItem
           style={styles.mobileButton}
           component={Link}
           to="/login"
           onClick={this.onLogoutClick}
         >
-          Logout
+          <FormattedMessage id="logout" defaultMessage="Logout" />
         </MenuItem>
       </div>
     );
     const authLinks = (
       <div style={{ display: "flex" }}>
-        {" "}
         {checkAdmin() ? (
           <MenuItem
             component={Link}
@@ -124,7 +138,7 @@ class Navbar extends Component {
             to="/addproduct"
             selected={"/addproduct" === pathname}
           >
-            Add product
+            <FormattedMessage id="addProduct" defaultMessage="Add product" />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -134,7 +148,7 @@ class Navbar extends Component {
             to="/cart"
             selected={"/cart" === pathname}
           >
-            <CustomizedBadges currentCartNum={this.props.currentCartNum} />
+            <CustomizedBadges currentCartNum={cartNum} />
           </MenuItem>
         ) : null}
         {!checkAdmin() ? (
@@ -147,25 +161,15 @@ class Navbar extends Component {
             <AccountCircle />
           </MenuItem>
         ) : null}
-        {!checkAdmin() ? (
-          <MenuItem
-            style={styles.navBarButton}
-            component={Link}
-            to="/orderhistory"
-            selected={"/orderhistory" === pathname}
-          >
-            Orders
-          </MenuItem>
-        ) : (
-          <MenuItem
-            component={Link}
-            style={styles.navBarButton}
-            to="/orders"
-            selected={"/orders" === pathname}
-          >
-            Orders
-          </MenuItem>
-        )}
+        <MenuItem
+          style={styles.navBarButton}
+          component={Link}
+          to="/orderhistory"
+          selected={"/orderhistory" === pathname}
+        >
+          <FormattedMessage id="orders" defaultMessage="Orders" />
+        </MenuItem>
+
         <MenuItem
           style={styles.navBarButton}
           component={Link}
@@ -173,7 +177,7 @@ class Navbar extends Component {
           onClick={this.onLogoutClick}
           className="nav-link"
         >
-          Logout
+          <FormattedMessage id="logout" defaultMessage="Logout" />
         </MenuItem>
       </div>
     );
@@ -185,7 +189,7 @@ class Navbar extends Component {
           to="/register"
           selected={"/register" === pathname}
         >
-          Sign Up
+          <FormattedMessage id="signUp" defaultMessage="Sign up" />
         </MenuItem>
         <MenuItem
           style={{ color: "#ffffff" }}
@@ -193,7 +197,7 @@ class Navbar extends Component {
           to="/login"
           selected={"/login" === pathname}
         >
-          Login
+          <FormattedMessage id="login" defaultMessage="Login" />
         </MenuItem>
       </div>
     );
@@ -203,27 +207,61 @@ class Navbar extends Component {
           <div style={styles.appBarWidth}>
             <div style={styles.appBarLinks}>
               <Link style={styles.navBarLogo} to="/">
-                Mobile Shop
+                <FormattedMessage
+                  id="mobileShop"
+                  defaultMessage="Mobile Shop"
+                />
               </Link>
-              <Hidden xsDown>{checkAuth() ? authLinks : guestLinks}</Hidden>
-              <Hidden smUp>
+              <div style={{ display: "flex" }}>
+                <Hidden xsDown>{checkAuth() ? authLinks : guestLinks}</Hidden>
+                <Hidden smUp>
+                  <Button
+                    onClick={this.onMenuClick}
+                    style={{ cursor: "pointer", color: "#ffffff" }}
+                  >
+                    <MenuIcon />
+                  </Button>
+                  <Menu
+                    keepMounted
+                    open={this.state.open}
+                    getContentAnchorEl={null}
+                    onClose={this.onMenuClick}
+                    anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                    transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  >
+                    {checkAuth() ? mobileAuthLinks : mobileGuestLinks}
+                  </Menu>
+                </Hidden>
                 <Button
-                  onClick={this.onMenuClick}
+                  onClick={this.onMenuLangClick}
                   style={{ cursor: "pointer", color: "#ffffff" }}
                 >
-                  <MenuIcon />
+                  {this.state.showLang}
                 </Button>
                 <Menu
                   keepMounted
-                  open={this.state.open}
+                  open={this.state.langMenu}
                   getContentAnchorEl={null}
-                  onClose={this.onMenuClick}
+                  onClose={this.onMenuLangClick}
                   anchorOrigin={{ vertical: "top", horizontal: "right" }}
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
                 >
-                  {checkAuth() ? mobileAuthLinks : mobileGuestLinks}
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Button
+                      onClick={() => this.onChangeLangClick("EN", "en")}
+                      href={checkAuth() ? "/dashboard" : "/login"}
+                    >
+                      EN-English
+                    </Button>
+                    <Button
+                      onClick={() => this.onChangeLangClick("DE", "de")}
+                      href={checkAuth() ? "/dashboard" : "/login"}
+                    >
+                      DE-Deutsch
+                    </Button>
+                  </div>
                 </Menu>
-              </Hidden>
+              </div>
             </div>
           </div>
         </AppBar>
@@ -231,4 +269,16 @@ class Navbar extends Component {
     );
   }
 }
-export default withRouter(Navbar);
+
+Navbar.propTypes = {
+  setLocale: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  cart: state.cart.cartItems
+});
+
+export default connect(
+  mapStateToProps,
+  { fetchCart, setLocale }
+)(withRouter(Navbar));

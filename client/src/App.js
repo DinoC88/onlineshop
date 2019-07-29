@@ -17,82 +17,55 @@ import EditAccount from "./components/user/EditAccount/EditAccount";
 import Cart from "./components/user/Cart/Cart";
 import AddProduct from "./components/admin/AddProduct/AddProduct";
 import Checkout from "./components/checkout/Checkout";
-import Orders from "./components/admin/Orders/Orders";
 import Order from "./components/user/Order/Order";
 import OrderHistory from "./components/user/OrderHistory/OrderHistory";
-import { getCartData } from "./utils/requestManager";
-import setAuthToken from "./utils/setAuthToken";
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentCartNum: 0
-    };
-  }
-  async componentWillMount() {
-    let token = localStorage.getItem("jwtToken");
-    setAuthToken(token);
-    const cartData = await getCartData();
-    let cartQuantity = cartData.data.items
-      ? cartData.data.items.reduce((acc, item) => (acc += item.quantity), 0)
-      : 0;
-    this.setState({ currentCartNum: cartQuantity });
-  }
-  getCartNum = async () => {
-    const cartData = await getCartData();
-    let cartQuantity = cartData.data.items
-      ? cartData.data.items.reduce((acc, item) => (acc += item.quantity), 0)
-      : 0;
-    this.setState({ currentCartNum: cartQuantity });
-  };
+import { IntlProvider } from "react-intl";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import english from "./utils/english";
+import german from "./utils/german";
 
+import { setLocale } from "./actions/locale";
+class App extends Component {
   render() {
+    const { lang } = this.props;
     return (
-      <BrowserRouter>
-        <Route
-          path="/(.+)"
-          render={() => <Navbar currentCartNum={this.state.currentCartNum} />}
-        />
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Route
-            exact
-            path="/dashboard"
-            render={props => (
-              <Mainpage {...props} getCartNum={this.getCartNum} />
-            )}
-          />
-          <Route
-            exact
-            path="/product/:id"
-            render={props => (
-              <Product {...props} getCartNum={this.getCartNum} />
-            )}
-          />
-          <PrivateRoute exact path="/users/current" component={Account} />
-          <PrivateRoute path="/user/:userId" component={EditAccount} />
-          <PrivateRoute path="/orderhistory" component={OrderHistory} />
-          <PrivateRoute
-            path="/cart"
-            component={Cart}
-            getCartNum={this.getCartNum}
-          />
-          <PrivateRoute
-            path="/checkout"
-            component={Checkout}
-            getCartNum={this.getCartNum}
-          />
-          <AdminRoute path="/addproduct" component={AddProduct} />
-          <AdminRoute path="/orders" component={Orders} />
-          <PrivateRoute path="/order/:id" component={Order} />
-          <Route component={NotFound} />
-        </Switch>
-        <Route path="/(.+)" render={() => <Footer />} />
-      </BrowserRouter>
+      <IntlProvider
+        locale={this.props.lang}
+        messages={lang === "de" ? german : english}
+      >
+        <BrowserRouter>
+          <Route path="/(.+)" render={() => <Navbar />} />
+          <Switch>
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/dashboard" component={Mainpage} />
+            <Route exact path="/product/:id" component={Product} />
+            <PrivateRoute exact path="/users/current" component={Account} />
+            <PrivateRoute path="/user/:userId" component={EditAccount} />
+            <PrivateRoute path="/orderhistory" component={OrderHistory} />
+            <PrivateRoute path="/cart" component={Cart} />
+            <PrivateRoute path="/checkout" component={Checkout} />
+            <AdminRoute path="/addproduct" component={AddProduct} />
+            <PrivateRoute path="/order/:id" component={Order} />
+            <Route component={NotFound} />
+          </Switch>
+          <Route path="/(.+)" render={() => <Footer />} />
+        </BrowserRouter>
+      </IntlProvider>
     );
   }
 }
 
-export default App;
+App.propType = {
+  lang: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  lang: state.locale.lang
+});
+export default connect(
+  mapStateToProps,
+  { setLocale }
+)(App);
