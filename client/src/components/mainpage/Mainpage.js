@@ -39,15 +39,15 @@ class Mainpage extends Component {
 
   async componentWillMount() {
     this.setState({ isLoading: true });
-    let token = localStorage.getItem("jwtToken");
-    setAuthToken(token);
-    let decoded = decode(token);
     await this.showFilterResults(
       this.state.filters,
       this.state.sort,
       this.state.limit,
       this.state.currentPage
     );
+    let token = localStorage.getItem("jwtToken");
+    setAuthToken(token);
+    let decoded = decode(token);
     await this.props.fetchCart(decoded._id);
     await this.props.fetchCurrentUser();
   }
