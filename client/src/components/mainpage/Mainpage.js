@@ -39,15 +39,15 @@ class Mainpage extends Component {
 
   async componentWillMount() {
     this.setState({ isLoading: true });
-    let token = localStorage.getItem("jwtToken");
-    setAuthToken(token);
-    let decoded = decode(token);
     await this.showFilterResults(
       this.state.filters,
       this.state.sort,
       this.state.limit,
       this.state.currentPage
     );
+    let token = localStorage.getItem("jwtToken");
+    setAuthToken(token);
+    let decoded = decode(token);
     await this.props.fetchCart(decoded._id);
     await this.props.fetchCurrentUser();
   }
@@ -118,9 +118,9 @@ class Mainpage extends Component {
       await this.props.fetchProducts(filter, sort, show, currentPage);
       this.setState({
         products: this.props.products,
-        isLoading: this.props.isLoading,
         totalPages: this.props.totalPages,
-        totalProducts: this.props.totalProducts
+        totalProducts: this.props.totalProducts,
+        isLoading: false
       });
     } catch (errors) {
       this.setState({
